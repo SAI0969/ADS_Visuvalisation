@@ -1,0 +1,4200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tree Visualizer | AVL Tree & B-Tree Interactive Explorer</title>
+  <style>
+/* Modern Dark Theme - Interactive Multi-Tree Visualizer (AVL Tree & B-Tree) */
+:root {
+  --bg-primary: #070d19;
+  --bg-secondary: #0f172a;
+  --bg-tertiary: #1e293b;
+  --bg-card: #131d31;
+  --border-color: #27354f;
+  --border-focus: #6366f1;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --accent-primary: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-light: #818cf8;
+  --success: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.18);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.18);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.18);
+  --purple: #a855f7;
+  --purple-bg: rgba(168, 85, 247, 0.18);
+  --cyan: #06b6d4;
+  --cyan-bg: rgba(6, 182, 212, 0.18);
+  --node-bg: #1e293b;
+  --node-border: #475569;
+  --key-bg: #0f172a;
+  --key-border: #334155;
+  --key-text: #f1f5f9;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* ============================================================ */
+/* HEADER & PROMINENT MIDDLE TREE SELECTOR                      */
+/* ============================================================ */
+header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  z-index: 10;
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-badge {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: white;
+  font-weight: 800;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.app-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.app-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* TWO PROMINENT OPTIONS IN MIDDLE OF THE PAGE */
+.tree-hero-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto;
+}
+
+.tree-card-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--bg-tertiary);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+}
+
+.tree-card-option:hover {
+  border-color: var(--accent-light);
+  background-color: #26354f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.tree-card-option.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25));
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.45);
+}
+
+.tree-card-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.tree-card-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.tree-card-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 0.3px;
+}
+
+.tree-card-option.active .tree-card-title {
+  color: #a5b4fc;
+}
+
+.tree-card-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Header Stats Chips */
+.stats-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stat-chip {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-label {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.stat-value {
+  color: var(--accent-light);
+  font-family: var(--font-mono);
+  font-weight: 800;
+}
+
+.stat-value.balanced {
+  color: var(--success);
+}
+
+.stat-value.unbalanced {
+  color: var(--danger);
+}
+
+/* ============================================================ */
+/* CONTROL PANEL (DIRECT EXPLICIT INPUTS ONLY)                  */
+/* ============================================================ */
+.control-panel {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--bg-card);
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.control-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-right: 4px;
+}
+
+/* Order Selector */
+.order-pills {
+  display: flex;
+  gap: 4px;
+}
+
+.order-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.order-btn:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+}
+
+.order-btn.active {
+  background-color: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+}
+
+/* Inputs and Buttons */
+input[type="number"],
+input[type="text"] {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+}
+
+input[type="number"] {
+  width: 90px;
+}
+
+.bulk-input {
+  width: 320px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background-color: #475569;
+  border-color: #64748b;
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn-success {
+  background-color: #059669;
+  border-color: #059669;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #10b981;
+}
+
+.btn-danger {
+  background-color: #dc2626;
+  border-color: #dc2626;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #ef4444;
+}
+
+.btn-search {
+  background-color: #0284c7;
+  border-color: #0284c7;
+  color: white;
+}
+
+.btn-search:hover {
+  background-color: #0ea5e9;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+}
+
+/* ============================================================ */
+/* MAIN WORKSPACE LAYOUT (CANVAS + EXPANSIVE STEPS SIDEBAR)     */
+/* ============================================================ */
+.main-layout {
+  height: 600px;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Tree Canvas Area */
+.canvas-wrapper {
+  flex: 1;
+  position: relative;
+  background-color: #060b16;
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.06) 1px, transparent 0);
+  background-size: 24px 24px;
+  overflow: hidden;
+}
+
+#tree-svg {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+#tree-svg:active {
+  cursor: grabbing;
+}
+
+/* Canvas Floating Toolbar */
+.canvas-toolbar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: rgba(19, 29, 49, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+}
+
+.canvas-tool-btn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.15s;
+}
+
+.canvas-tool-btn:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* Empty State */
+.empty-state {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--text-muted);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  opacity: 0.6;
+}
+
+.empty-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.empty-hint {
+  font-size: 13px;
+  max-width: 360px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* ============================================================ */
+/* ALGORITHMIC STEPS SIDEBAR (EXPANDED & BEAUTIFULLY STYLED)   */
+/* ============================================================ */
+.sidebar {
+  width: 440px; /* Spacious width to ensure complete visibility */
+  min-width: 380px;
+  background-color: var(--bg-secondary);
+  border-left: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 8;
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.25);
+}
+
+.sidebar-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-step-counter {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: var(--accent-light);
+}
+
+/* Current Step Callout Card (Highlighted & High Visibility) */
+.step-callout {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+}
+
+.step-callout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.step-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.6px;
+}
+
+.step-type-insert { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.4); }
+.step-type-delete { background: var(--danger-bg); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+.step-type-search { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.4); }
+.step-type-split  { background: var(--purple-bg); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4); }
+.step-type-borrow, .step-type-merge { background: var(--cyan-bg); color: #67e8f9; border: 1px solid rgba(6, 182, 212, 0.4); }
+.step-type-success { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.4); }
+.step-type-error  { background: var(--danger-bg); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+.step-type-info   { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.4); }
+
+.step-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #ffffff;
+  font-weight: 500;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* History / Log List */
+.log-list-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.log-list-header {
+  padding: 10px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-primary);
+}
+
+.log-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.log-item {
+  font-size: 13px;
+  padding: 12px 14px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.log-item:hover {
+  background-color: #1a2842;
+  border-color: #3b82f6;
+  transform: translateX(2px);
+}
+
+.log-item.active-step {
+  border-color: var(--accent-light);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.15));
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.35);
+}
+
+.log-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.log-step-num {
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #93c5fd;
+  font-size: 12px;
+}
+
+.log-text {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.log-item.active-step .log-text {
+  color: #ffffff;
+}
+
+/* In-Order Traversal Bar */
+.inorder-bar {
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: 10px 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+}
+
+.inorder-label {
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.inorder-keys {
+  font-family: var(--font-mono);
+  color: var(--accent-light);
+  font-weight: 700;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 3px 0;
+}
+
+/* Bottom Animation Playback Bar */
+.playback-bar {
+  background-color: var(--bg-card);
+  border-top: 1px solid var(--border-color);
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  z-index: 10;
+}
+
+.playback-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-indicator {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  min-width: 90px;
+  text-align: center;
+}
+
+.playback-scrubber {
+  flex: 1;
+  max-width: 360px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--bg-primary);
+  border-radius: 3px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  border: 2px solid white;
+  transition: transform 0.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ============================================================ */
+/* DIRECTLY INTEGRATED THEORY & COMPLEXITY SECTION (PROMINENT)  */
+/* ============================================================ */
+.theory-container {
+  background-color: var(--bg-secondary);
+  border-top: 2px solid var(--border-color);
+  padding: 32px 28px;
+}
+
+.theory-header {
+  margin-bottom: 24px;
+}
+
+.theory-main-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.theory-main-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Theory Tabs */
+.theory-nav-tabs {
+  display: flex;
+  gap: 8px;
+  background-color: var(--bg-primary);
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.theory-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theory-tab-btn:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-tertiary);
+}
+
+.theory-tab-btn.active {
+  background: linear-gradient(135deg, var(--accent-primary), #4f46e5);
+  color: white;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+}
+
+/* Tab Panels */
+.theory-panel {
+  display: none;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  line-height: 1.6;
+}
+
+.theory-panel.active {
+  display: block;
+}
+
+.theory-panel h3 {
+  font-size: 18px;
+  color: var(--accent-light);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theory-panel h4 {
+  font-size: 15px;
+  color: var(--text-primary);
+  margin-top: 18px;
+  margin-bottom: 8px;
+}
+
+.theory-panel p {
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+
+/* Complexity Table */
+.complexity-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+}
+
+.complexity-table th,
+.complexity-table td {
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.complexity-table th {
+  background-color: var(--bg-primary);
+  color: var(--accent-light);
+  font-weight: 700;
+}
+
+.complexity-table tr:nth-child(even) {
+  background-color: rgba(7, 13, 25, 0.4);
+}
+
+.complexity-badge {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.badge-green { background: var(--success-bg); color: var(--success); }
+.badge-blue { background: rgba(99, 102, 241, 0.25); color: #a5b4fc; }
+.badge-yellow { background: var(--warning-bg); color: var(--warning); }
+
+/* Rotations Grid */
+.rotations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 18px;
+  margin: 16px 0;
+}
+
+.rotation-card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.rotation-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.rotation-card-title {
+  font-weight: 800;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.rotation-diagram {
+  font-family: var(--font-mono);
+  background-color: #030712;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid #1e293b;
+  color: #38bdf8;
+  font-size: 11px;
+  white-space: pre;
+  overflow-x: auto;
+  line-height: 1.4;
+  margin-top: 10px;
+}
+
+/* ============================================================ */
+/* SVG NODE & LINK GRAPHICS                                     */
+/* ============================================================ */
+.tree-link {
+  fill: none;
+  stroke: #475569;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  transition: stroke 0.3s ease, stroke-width 0.3s ease;
+}
+
+.tree-link.active {
+  stroke: var(--accent-light);
+  stroke-width: 3px;
+}
+
+/* B-Tree Nodes */
+.node-group {
+  cursor: pointer;
+}
+
+.node-box {
+  fill: var(--node-bg);
+  stroke: var(--node-border);
+  stroke-width: 1.5px;
+  rx: 8px;
+  ry: 8px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  transition: all 0.3s ease;
+}
+
+.node-group.node-active .node-box {
+  stroke: var(--warning);
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.6));
+}
+
+.node-group.node-visited .node-box {
+  stroke: var(--accent-light);
+  stroke-width: 2px;
+}
+
+.node-group.node-split .node-box {
+  stroke: var(--purple);
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.6));
+}
+
+.node-group.node-merge .node-box {
+  stroke: var(--cyan);
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.6));
+}
+
+.node-group.node-success .node-box {
+  stroke: var(--success);
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.6));
+}
+
+.node-group.node-error .node-box {
+  stroke: var(--danger);
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.6));
+}
+
+.node-group.node-target .node-box {
+  stroke: var(--danger);
+  stroke-width: 2.5px;
+  stroke-dasharray: 4 2;
+  filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.5));
+}
+
+.key-box {
+  fill: var(--key-bg);
+  stroke: var(--key-border);
+  stroke-width: 1px;
+  rx: 6px;
+  ry: 6px;
+  transition: all 0.25s ease;
+}
+
+.key-text {
+  fill: var(--key-text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.key-cell:hover .key-box {
+  stroke: var(--accent-light);
+  fill: rgba(99, 102, 241, 0.2);
+}
+
+.key-cell.key-compared .key-box {
+  stroke: var(--warning);
+  fill: rgba(245, 158, 11, 0.3);
+}
+
+.key-cell.key-inserted .key-box {
+  stroke: var(--success);
+  fill: rgba(16, 185, 129, 0.4);
+}
+
+.key-cell.key-promoted .key-box {
+  stroke: var(--purple);
+  fill: rgba(168, 85, 247, 0.4);
+}
+
+.key-cell.key-swapped .key-box {
+  stroke: var(--cyan);
+  fill: rgba(6, 182, 212, 0.4);
+}
+
+.key-cell.key-found .key-box {
+  stroke: var(--success);
+  fill: rgba(16, 185, 129, 0.5);
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.8));
+}
+
+.key-cell.key-target .key-box {
+  stroke: var(--danger);
+  fill: rgba(239, 68, 68, 0.35);
+}
+
+.node-id-label {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-anchor: middle;
+}
+
+/* AVL Tree Nodes */
+.avl-node-group {
+  cursor: pointer;
+}
+
+.avl-node-circle {
+  fill: var(--node-bg);
+  stroke: var(--node-border);
+  stroke-width: 2px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+  transition: all 0.3s ease;
+}
+
+.avl-node-key {
+  fill: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 800;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.avl-badge-bg {
+  stroke-width: 1px;
+  rx: 4px;
+  ry: 4px;
+}
+
+.avl-badge-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.avl-badge-height .avl-badge-bg {
+  fill: rgba(99, 102, 241, 0.3);
+  stroke: rgba(99, 102, 241, 0.6);
+}
+.avl-badge-height .avl-badge-text {
+  fill: #c7d2fe;
+}
+
+.avl-badge-bf.bf-zero .avl-badge-bg {
+  fill: rgba(148, 163, 184, 0.2);
+  stroke: rgba(148, 163, 184, 0.5);
+}
+.avl-badge-bf.bf-zero .avl-badge-text {
+  fill: #cbd5e1;
+}
+
+.avl-badge-bf.bf-balanced .avl-badge-bg {
+  fill: rgba(16, 185, 129, 0.3);
+  stroke: rgba(16, 185, 129, 0.6);
+}
+.avl-badge-bf.bf-balanced .avl-badge-text {
+  fill: #a7f3d0;
+}
+
+.avl-badge-bf.bf-unbalanced .avl-badge-bg {
+  fill: rgba(239, 68, 68, 0.5);
+  stroke: var(--danger);
+  animation: pulseBadge 1s infinite alternate;
+}
+.avl-badge-bf.bf-unbalanced .avl-badge-text {
+  fill: #ffffff;
+}
+
+@keyframes pulseBadge {
+  0% { filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.5)); }
+  100% { filter: drop-shadow(0 0 8px rgba(239, 68, 68, 1)); }
+}
+
+.avl-node-group.node-active .avl-node-circle {
+  stroke: var(--warning);
+  stroke-width: 3.5px;
+  filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.7));
+}
+
+.avl-node-group.node-visited .avl-node-circle {
+  stroke: var(--accent-light);
+  stroke-width: 2.5px;
+}
+
+.avl-node-group.node-unbalanced .avl-node-circle {
+  stroke: var(--danger);
+  stroke-width: 4px;
+  filter: drop-shadow(0 0 18px rgba(239, 68, 68, 0.85));
+}
+
+.avl-node-group.node-rotating .avl-node-circle {
+  stroke: var(--purple);
+  stroke-width: 4px;
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.85));
+}
+
+.avl-node-group.node-success .avl-node-circle {
+  stroke: var(--success);
+  stroke-width: 3.5px;
+  filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.85));
+}
+
+.avl-node-group.node-error .avl-node-circle {
+  stroke: var(--danger);
+  stroke-width: 3.5px;
+  filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.75));
+}
+
+.avl-node-group.node-target .avl-node-circle {
+  stroke: var(--danger);
+  stroke-width: 3.5px;
+  stroke-dasharray: 4 2;
+  filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.75));
+}
+
+.avl-node-group:hover .avl-node-circle {
+  stroke: var(--accent-light);
+  fill: #1e293b;
+}
+
+.avl-branch-label {
+  fill: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  text-anchor: middle;
+}
+
+/* Key Popover */
+.key-action-popover {
+  position: absolute;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 100;
+  transform: translate(-50%, -100%);
+  margin-top: -12px;
+}
+
+.key-action-popover::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--border-color);
+}
+
+.popover-header {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  padding: 2px 4px;
+}
+
+.popover-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: none;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  font-weight: 600;
+}
+
+.popover-btn:hover {
+  background: var(--accent-primary);
+}
+
+.popover-btn.delete-btn:hover {
+  background: var(--danger);
+}
+
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top App Header -->
+  <header>
+    <div class="logo-group">
+      <div class="logo-badge">TREES</div>
+      <div>
+        <h1 class="app-title">Tree Visualizer</h1>
+        <div class="app-subtitle">Interactive Educational Data Structures</div>
+      </div>
+    </div>
+
+    <!-- TWO PROMINENT OPTIONS IN MIDDLE OF THE PAGE -->
+    <div class="tree-hero-selector">
+      <button class="tree-card-option active" data-mode="avl" id="opt-avl" title="Switch to Self-Balancing AVL Binary Search Tree">
+        <span class="tree-card-icon">⚖️</span>
+        <div class="tree-card-text">
+          <span class="tree-card-title">AVL Tree</span>
+          <span class="tree-card-desc">Height-Balanced BST (|BF| ≤ 1)</span>
+        </div>
+      </button>
+
+      <button class="tree-card-option" data-mode="btree" id="opt-btree" title="Switch to Multi-Way B-Tree">
+        <span class="tree-card-icon">🌳</span>
+        <div class="tree-card-text">
+          <span class="tree-card-title">B-Tree</span>
+          <span class="tree-card-desc">Multi-Way Balanced Tree (Order M)</span>
+        </div>
+      </button>
+    </div>
+
+    <!-- Dynamic Stats Displays -->
+    <!-- AVL Tree Stats (Active by default) -->
+    <div class="stats-container" id="avl-stats">
+      <div class="stat-chip">
+        <span class="stat-label">Height:</span>
+        <span class="stat-value" id="avl-stat-height">0</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Total Nodes:</span>
+        <span class="stat-value" id="avl-stat-nodes">0</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Status:</span>
+        <span class="stat-value balanced" id="avl-stat-balance">Balanced</span>
+      </div>
+    </div>
+
+    <!-- B-Tree Stats (Shown when B-Tree mode is active) -->
+    <div class="stats-container" id="btree-stats" style="display: none;">
+      <div class="stat-chip">
+        <span class="stat-label">Order (M):</span>
+        <span class="stat-value" id="stat-order">3</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Height:</span>
+        <span class="stat-value" id="stat-height">0</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Total Keys:</span>
+        <span class="stat-value" id="stat-keys">0</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Total Nodes:</span>
+        <span class="stat-value" id="stat-nodes">0</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Min Keys:</span>
+        <span class="stat-value" id="stat-min-keys">1</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Max Keys:</span>
+        <span class="stat-value" id="stat-max-keys">2</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Control Panel (Explicit User Inputs Only) -->
+  <div class="control-panel">
+    <!-- Row 1: Key Operations & Configuration -->
+    <div class="control-row">
+      <!-- B-Tree Order Selector (Hidden in AVL mode) -->
+      <div class="control-group" id="btree-order-group" style="display: none;">
+        <span class="control-group-title">Order (M)</span>
+        <div class="order-pills">
+          <button class="order-btn active" data-order="3" title="Order 3: 2-3 Tree (Max 2 keys, 3 children)">M = 3</button>
+          <button class="order-btn" data-order="4" title="Order 4: 2-3-4 Tree (Max 3 keys, 4 children)">M = 4</button>
+          <button class="order-btn" data-order="5" title="Order 5: Max 4 keys, 5 children">M = 5</button>
+          <button class="order-btn" data-order="6" title="Order 6: Max 5 keys, 6 children">M = 6</button>
+          <button class="order-btn" data-order="7" title="Order 7: Max 6 keys, 7 children">M = 7</button>
+        </div>
+      </div>
+
+      <!-- Single Key Operations (Insert, Delete, Search) -->
+      <div class="control-group">
+        <span class="control-group-title">Single Key</span>
+        <input type="number" id="single-key-input" placeholder="e.g. 25" min="-999" max="999">
+        <button class="btn btn-primary" id="btn-insert" title="Insert key into active tree">
+          <span>+</span> Insert
+        </button>
+        <button class="btn btn-danger" id="btn-delete" title="Delete key from active tree">
+          <span>−</span> Delete
+        </button>
+        <button class="btn btn-search" id="btn-search" title="Search for key in active tree">
+          <span>🔍</span> Search
+        </button>
+      </div>
+
+      <!-- Bulk Explicit Keys Input -->
+      <div class="control-group">
+        <span class="control-group-title">Explicit Keys List</span>
+        <input type="text" class="bulk-input" id="bulk-keys-input" placeholder="30, 20, 10, 40, 50, 25" value="30, 20, 10, 40, 50, 25">
+        <button class="btn btn-success" id="btn-bulk-insert" title="Insert all keys sequentially">
+          <span>📥</span> Insert All
+        </button>
+        <button class="btn btn-primary" id="btn-bulk-rebuild" title="Clear and rebuild tree with these exact keys">
+          <span>🔄</span> Rebuild Tree
+        </button>
+      </div>
+
+      <!-- Generators & Clear -->
+      <div class="control-group">
+        <button class="btn btn-ghost" id="btn-random-key" title="Generate one random key and insert">
+          + Random Key
+        </button>
+        <button class="btn btn-ghost" id="btn-random-set" title="Generate 8 random keys and rebuild">
+          🎲 8 Random Keys
+        </button>
+        <button class="btn btn-danger" id="btn-clear" title="Clear active tree">
+          🧹 Clear
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Canvas & Algorithmic Steps Layout -->
+  <div class="main-layout">
+    <!-- Interactive Tree SVG Viewport -->
+    <div class="canvas-wrapper">
+      <svg id="tree-svg">
+        <g id="viewport">
+          <g id="links-group"></g>
+          <g id="nodes-group"></g>
+        </g>
+      </svg>
+
+      <!-- Floating Canvas Toolbar -->
+      <div class="canvas-toolbar">
+        <button class="canvas-tool-btn" id="btn-zoom-in" title="Zoom In (+)">+</button>
+        <button class="canvas-tool-btn" id="btn-zoom-out" title="Zoom Out (−)">−</button>
+        <button class="canvas-tool-btn" id="btn-fit-screen" title="Fit to Screen (⛶)">⛶</button>
+        <button class="canvas-tool-btn" id="btn-center-root" title="Center Root (🎯)">🎯</button>
+      </div>
+
+      <!-- Empty State Indicator -->
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">🌳</div>
+        <div class="empty-title" id="empty-title">The Tree is currently empty</div>
+        <div class="empty-hint">Enter custom keys above or click "Rebuild Tree" to visualize the data structure.</div>
+      </div>
+    </div>
+
+    <!-- Spacious Algorithmic Steps Sidebar (Completely Visible) -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">
+          <span>⚡</span> Algorithmic Steps
+        </div>
+        <span class="sidebar-step-counter" id="sidebar-counter">0 / 0</span>
+      </div>
+
+      <!-- Current Step Highlight Card -->
+      <div class="step-callout" id="step-callout">
+        <div class="step-callout-header">
+          <span class="step-type-badge step-type-info">READY</span>
+        </div>
+        <div class="step-description">Enter custom keys to execute insertion, deletion, or search.</div>
+      </div>
+
+      <!-- Step-by-Step History Timeline List -->
+      <div class="log-list-wrapper">
+        <div class="log-list-header">Execution Timeline (Click any step to inspect)</div>
+        <div class="log-list" id="log-list"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- In-Order Traversal Preview Strip -->
+  <div class="inorder-bar">
+    <div class="inorder-label">Sorted In-Order Traversal:</div>
+    <div class="inorder-keys" id="inorder-keys">[ Empty ]</div>
+  </div>
+
+  <!-- Animation Playback Controller Bar -->
+  <div class="playback-bar">
+    <div class="playback-controls">
+      <button class="btn btn-ghost" id="btn-first-step" title="Jump to start">⏮</button>
+      <button class="btn btn-ghost" id="btn-prev-step" title="Previous step">◀</button>
+      <button class="btn btn-primary" id="btn-play-pause" title="Play or pause animation">▶️ Play</button>
+      <button class="btn btn-ghost" id="btn-next-step" title="Next step">▶</button>
+      <button class="btn btn-ghost" id="btn-last-step" title="Jump to final step">⏭</button>
+      <div class="step-indicator" id="step-indicator">Step 0 / 0</div>
+    </div>
+
+    <!-- Timeline Scrubber -->
+    <div class="playback-scrubber">
+      <input type="range" id="step-scrubber" min="0" max="0" value="0" title="Scrub through animation steps">
+    </div>
+
+    <!-- Animation Speed Slider -->
+    <div class="speed-control">
+      <span>Speed:</span>
+      <input type="range" id="speed-slider" min="1" max="4" value="2" step="1" title="Animation speed (Slow to Instant)">
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- DIRECTLY INTEGRATED THEORY & COMPLEXITY CENTER (PROMINENT)    -->
+  <!-- ============================================================ -->
+  <section class="theory-container" id="theory-section">
+    <div class="theory-header">
+      <h2 class="theory-main-title">
+        <span>📚</span> Educational Reference: Theory, Invariants & Time Complexity
+      </h2>
+      <p class="theory-main-subtitle">
+        Explore detailed mathematical invariants, rotation mechanics, multi-way properties, and rigorous time & space complexity analysis.
+      </p>
+    </div>
+
+    <!-- Theory Tabs Navigation -->
+    <nav class="theory-nav-tabs">
+      <button class="theory-tab-btn active" data-tab="avl-theory">⚖️ AVL Tree Theory</button>
+      <button class="theory-tab-btn" data-tab="avl-rotations">🔄 AVL Rotations (LL, RR, LR, RL)</button>
+      <button class="theory-tab-btn" data-tab="btree-theory">🌳 B-Tree Theory & Invariants</button>
+      <button class="theory-tab-btn" data-tab="complexity">⏱️ Time & Space Complexity</button>
+      <button class="theory-tab-btn" data-tab="comparison">📊 AVL vs B-Tree vs Red-Black</button>
+    </nav>
+
+    <!-- Panel 1: AVL Tree Theory -->
+    <div class="theory-panel active" id="tab-avl-theory">
+      <h3>⚖️ AVL Tree Fundamentals & Balance Invariants</h3>
+      <p>
+        An <strong>AVL Tree</strong> (invented in 1962 by Soviet mathematicians <strong>Georgy Adelson-Velsky</strong> and <strong>Evgenii Landis</strong>) is the first self-balancing binary search tree in computer science history. Ordinary BSTs can degrade into $O(N)$ skewed chains upon inserting sorted data; AVL trees eliminate this by strictly enforcing balance invariants on every update.
+      </p>
+
+      <h4>1. Balance Factor (BF) Definition</h4>
+      <p>
+        For every node $v$ in an AVL tree, its <strong>Balance Factor</strong> is mathematically defined as:
+      </p>
+      <div style="background-color: var(--bg-primary); padding: 12px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 14px; margin-bottom: 14px; border: 1px solid var(--border-color); color: #38bdf8;">
+        Balance Factor: BF(v) = Height(Left Subtree) − Height(Right Subtree)
+      </div>
+      <p>
+        A node is <strong>valid and balanced</strong> if and only if:
+        <br>
+        <span style="color: var(--success); font-family: var(--font-mono); font-weight: 800; font-size: 15px;">BF(v) ∈ {-1, 0, +1}</span>
+      </p>
+      <ul style="margin-left: 24px; color: var(--text-secondary); margin-bottom: 16px;">
+        <li><strong>BF = 0:</strong> Perfect balance; left and right subtrees have equal height.</li>
+        <li><strong>BF = +1:</strong> Left-heavy; left subtree is 1 level taller than right.</li>
+        <li><strong>BF = -1:</strong> Right-heavy; right subtree is 1 level taller than left.</li>
+        <li><strong>|BF| ≥ 2:</strong> <em>Violation!</em> Requires immediate constant-time $O(1)$ rotation.</li>
+      </ul>
+
+      <h4>2. Mathematical Height Bound Theorem</h4>
+      <p>
+        Let $N(h)$ be the minimum number of nodes in an AVL tree of height $h$. The recurrence is:
+      </p>
+      <div style="background-color: var(--bg-primary); padding: 10px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 13px; margin-bottom: 12px; border: 1px solid var(--border-color);">
+        N(h) = 1 + N(h - 1) + N(h - 2) &nbsp;&nbsp;(where N(0) = 0, N(1) = 1)
+      </div>
+      <p>
+        Since $N(h) = F_{h+2} - 1$ (where $F_k$ is the $k$-th Fibonacci number), solving the golden ratio $\phi = \frac{1 + \sqrt{5}}{2} \approx 1.618$ gives the upper bound on height:
+      </p>
+      <div style="background-color: var(--bg-primary); padding: 12px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 15px; margin-bottom: 14px; border: 1px solid var(--border-color); color: var(--accent-light); font-weight: 700;">
+        h &lt; 1.4404 · log₂(N + 2) − 0.328 &nbsp;⇒&nbsp; h = O(log N)
+      </div>
+      <p>
+        This guarantees that search, insertion, and deletion are always strictly $O(\log N)$.
+      </p>
+    </div>
+
+    <!-- Panel 2: AVL Rotations Guide -->
+    <div class="theory-panel" id="tab-avl-rotations">
+      <h3>🔄 The 4 Rebalancing Rotations</h3>
+      <p>
+        When an insertion or deletion pushes a node's Balance Factor to $+2$ or $-2$, the tree performs one of <strong>four canonical rotations</strong>. Rotations execute in $O(1)$ time by adjusting a few pointers without altering the in-order sorting invariant.
+      </p>
+
+      <div class="rotations-grid">
+        <!-- LL Case -->
+        <div class="rotation-card">
+          <div class="rotation-card-header">
+            <span class="rotation-card-title">1. Left-Left (LL) Case</span>
+            <span class="step-type-badge step-type-split">Single Right Rotation</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted);">
+            Triggered when node $z$ has <strong>BF = +2</strong> and left child $y$ has <strong>BF ≥ 0</strong>.
+          </p>
+          <div class="rotation-diagram">
+      [z] (+2)                 [y] (0)
+      /   \                   /   \
+    [y]   T4      ===>      [x]   [z]
+    / \                     / \   / \
+  [x] T3                   T1 T2 T3 T4
+  / \
+ T1 T2</div>
+        </div>
+
+        <!-- RR Case -->
+        <div class="rotation-card">
+          <div class="rotation-card-header">
+            <span class="rotation-card-title">2. Right-Right (RR) Case</span>
+            <span class="step-type-badge step-type-split">Single Left Rotation</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted);">
+            Triggered when node $z$ has <strong>BF = -2</strong> and right child $y$ has <strong>BF ≤ 0</strong>.
+          </p>
+          <div class="rotation-diagram">
+    [z] (-2)                   [y] (0)
+    /   \                     /   \
+   T1   [y]       ===>      [z]   [x]
+        / \                 / \   / \
+       T2 [x]              T1 T2 T3 T4
+          / \
+         T3 T4</div>
+        </div>
+
+        <!-- LR Case -->
+        <div class="rotation-card">
+          <div class="rotation-card-header">
+            <span class="rotation-card-title">3. Left-Right (LR) Case</span>
+            <span class="step-type-badge step-type-borrow">Double: Left then Right</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted);">
+            Triggered when node $z$ has <strong>BF = +2</strong> and left child $y$ has <strong>BF = -1</strong> (zigzag).
+          </p>
+          <div class="rotation-diagram">
+      [z] (+2)               [z] (+2)              [x] (0)
+      /   \                  /   \                /   \
+    [y]   T4    ==Left=>   [x]   T4    ==Right=> [y]   [z]
+    / \                    / \                   / \   / \
+   T1 [x]                [y] T3                 T1 T2 T3 T4
+      / \                / \
+     T2 T3              T1 T2</div>
+        </div>
+
+        <!-- RL Case -->
+        <div class="rotation-card">
+          <div class="rotation-card-header">
+            <span class="rotation-card-title">4. Right-Left (RL) Case</span>
+            <span class="step-type-badge step-type-borrow">Double: Right then Left</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted);">
+            Triggered when node $z$ has <strong>BF = -2</strong> and right child $y$ has <strong>BF = +1</strong> (zigzag).
+          </p>
+          <div class="rotation-diagram">
+    [z] (-2)                 [z] (-2)              [x] (0)
+    /   \                    /   \                /   \
+   T1   [y]    ==Right=>    T1   [x]    ==Left=> [z]   [y]
+        / \                      / \             / \   / \
+      [x] T4                    T2 [y]          T1 T2 T3 T4
+      / \                          / \
+     T2 T3                        T3 T4</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 3: B-Tree Theory -->
+    <div class="theory-panel" id="tab-btree-theory">
+      <h3>🌳 B-Tree Fundamentals & Invariants</h3>
+      <p>
+        A <strong>B-Tree</strong> (invented by <strong>Rudolf Bayer</strong> and <strong>Edward M. McCreight</strong> in 1972) is a self-balancing, multi-way search tree specifically designed for storage systems, databases (PostgreSQL, MySQL InnoDB), and filesystems (ext4, NTFS, Btrfs) where reading large blocks from disk or flash memory dominates performance.
+      </p>
+
+      <h4>Fundamental Invariants of Order M:</h4>
+      <ul style="margin-left: 24px; color: var(--text-secondary); margin-bottom: 16px;">
+        <li><strong>Order M:</strong> Every internal node has at most $M$ children.</li>
+        <li><strong>Non-root Branching:</strong> Every non-root node has at least $\lceil M / 2 \rceil$ children.</li>
+        <li><strong>Key Capacity:</strong> Every node contains between $\lceil M / 2 \rceil - 1$ and $M - 1$ keys. (The root may hold as few as 1 key).</li>
+        <li><strong>Strict Leaf Alignment:</strong> All leaves appear at the exact same depth ($h$).</li>
+        <li><strong>Internal Pointers:</strong> A node with $k$ keys contains exactly $k + 1$ child pointers separating key ranges.</li>
+      </ul>
+
+      <h4>Overflow & Underflow Operations:</h4>
+      <ul style="margin-left: 24px; color: var(--text-secondary); margin-bottom: 16px;">
+        <li><strong>Node Splitting:</strong> When insertion causes keys to exceed $M - 1$, the node splits at the median key. The median is promoted to the parent, creating two sibling nodes.</li>
+        <li><strong>Borrowing (Rotation):</strong> If a deletion causes a node to fall below $\lceil M / 2 \rceil - 1$ keys, it first attempts to borrow a key from its left or right sibling via parent rotation.</li>
+        <li><strong>Node Merging:</strong> If neither sibling has spare keys, the node merges with a sibling and pulls down the separating key from the parent. If the parent root is emptied, tree height decreases by 1.</li>
+      </ul>
+    </div>
+
+    <!-- Panel 4: Time & Space Complexity -->
+    <div class="theory-panel" id="tab-complexity">
+      <h3>⏱️ Comprehensive Time & Space Complexity Analysis</h3>
+      <p>
+        Comparison of theoretical performance guarantees between AVL Trees and B-Trees across all primary operations.
+      </p>
+
+      <table class="complexity-table">
+        <thead>
+          <tr>
+            <th>Operation</th>
+            <th>AVL Tree (Binary)</th>
+            <th>B-Tree of Order M</th>
+            <th>Why / Mechanism</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Search (Lookup)</strong></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(log_M N)</span></td>
+            <td>AVL does at most $1.44 \log_2 N$ pointer hops; B-Tree does $\log_{M/2} N$ node reads with binary search inside each node.</td>
+          </tr>
+          <tr>
+            <td><strong>Insertion</strong></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(M · log_M N)</span></td>
+            <td>AVL requires $O(\log N)$ traversal + at most <strong>1 single/double rotation</strong>. B-Tree splits nodes upwards if overflowing.</td>
+          </tr>
+          <tr>
+            <td><strong>Deletion</strong></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(M · log_M N)</span></td>
+            <td>AVL does $O(\log N)$ search + predecessor swap + up to $O(\log N)$ cascading rotations. B-Tree borrows or merges underflowing nodes.</td>
+          </tr>
+          <tr>
+            <td><strong>Tree Height (h)</strong></td>
+            <td><span class="complexity-badge badge-yellow">h ≤ 1.44 log₂ N</span></td>
+            <td><span class="complexity-badge badge-green">h ≤ log_{⌈M/2⌉}((N+1)/2) + 1</span></td>
+            <td>B-Trees are extremely shallow (height 3 to 4 can hold millions of keys), minimizing expensive disk I/O.</td>
+          </tr>
+          <tr>
+            <td><strong>Rebalance Cost (Insert)</strong></td>
+            <td><span class="complexity-badge badge-green">O(1)</span> (at most 2 rotations)</td>
+            <td><span class="complexity-badge badge-green">O(1)</span> amortized</td>
+            <td>A single AVL rotation restores subtree height to its pre-insert value, preventing further propagation.</td>
+          </tr>
+          <tr>
+            <td><strong>Rebalance Cost (Delete)</strong></td>
+            <td><span class="complexity-badge badge-yellow">O(log N)</span> (cascading)</td>
+            <td><span class="complexity-badge badge-yellow">O(log_M N)</span></td>
+            <td>Deletion rebalances can propagate all the way up to the root in both trees.</td>
+          </tr>
+          <tr>
+            <td><strong>Auxiliary Space</strong></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span> stack</td>
+            <td><span class="complexity-badge badge-blue">O(log_M N)</span> stack</td>
+            <td>Call stack for recursion or search traversal path.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Panel 5: Comparison Matrix -->
+    <div class="theory-panel" id="tab-comparison">
+      <h3>📊 Architectural Comparison: AVL Tree vs B-Tree vs Red-Black Tree</h3>
+      <p>
+        How to choose the optimal data structure based on hardware, workload characteristics, and access patterns:
+      </p>
+
+      <table class="complexity-table">
+        <thead>
+          <tr>
+            <th>Characteristic</th>
+            <th>AVL Tree</th>
+            <th>Red-Black Tree</th>
+            <th>B-Tree (Order M)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Branching Model</strong></td>
+            <td>Strict Binary (2 children)</td>
+            <td>Binary (2 children)</td>
+            <td>Multi-way ($\lceil M/2 \rceil$ to $M$ children)</td>
+          </tr>
+          <tr>
+            <td><strong>Balancing Strictness</strong></td>
+            <td><strong>Strictest:</strong> $|BF| \le 1$</td>
+            <td>Moderate: black-height rules</td>
+            <td>Strict: all leaves at equal depth</td>
+          </tr>
+          <tr>
+            <td><strong>Max Height</strong></td>
+            <td>$\approx 1.44 \log_2 N$ (Flattest binary tree)</td>
+            <td>$\approx 2.00 \log_2 N$</td>
+            <td>$\approx \log_{M/2} N$ (Extremely flat)</td>
+          </tr>
+          <tr>
+            <td><strong>Lookup Performance</strong></td>
+            <td><strong>Fastest binary lookups</strong> (fewer pointer hops)</td>
+            <td>Fast (slightly taller than AVL)</td>
+            <td>Fastest for block/disk memory (cache line friendly)</td>
+          </tr>
+          <tr>
+            <td><strong>Update Overhead</strong></td>
+            <td>Frequent rotations on delete</td>
+            <td>Fewer rotations (≤ 2 insert, ≤ 3 delete)</td>
+            <td>Node splits & merges (higher fanout)</td>
+          </tr>
+          <tr>
+            <td><strong>Ideal Engineering Use</strong></td>
+            <td>Read-heavy in-memory lookups, language symbol tables</td>
+            <td>Write-heavy collections (C++ <code>std::map</code>, Linux CFS)</td>
+            <td>Databases (InnoDB, PostgreSQL), Block filesystems</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Scripts: Unified Standalone Bundle (avl.js + btree.js + visualizer.js) -->
+  <script>
+/**
+ * Tree Visualizer - All-In-One Unified Bundle
+ * Merged from: avl.js, btree.js, visualizer.js
+ */
+
+// ==========================================
+// 1. AVL Tree Implementation (avl.js)
+// ==========================================
+/**
+ * AVL Tree Implementation with Step-by-Step Animation Recording
+ * Self-Balancing Binary Search Tree (Adelson-Velsky & Landis, 1962)
+ */
+
+let nextAVLNodeId = 1;
+
+class AVLNode {
+  constructor(key) {
+    this.id = nextAVLNodeId++;
+    this.key = Number(key);
+    this.height = 1;
+    this.left = null;
+    this.right = null;
+  }
+
+  get balanceFactor() {
+    const leftHeight = this.left ? this.left.height : 0;
+    const rightHeight = this.right ? this.right.height : 0;
+    return leftHeight - rightHeight;
+  }
+}
+
+class AVLTree {
+  constructor() {
+    this.root = null;
+    this.steps = [];
+  }
+
+  clear() {
+    this.root = null;
+    this.steps = [];
+  }
+
+  getHeight(node) {
+    return node ? node.height : 0;
+  }
+
+  getBalance(node) {
+    return node ? this.getHeight(node.left) - this.getHeight(node.right) : 0;
+  }
+
+  updateHeight(node) {
+    if (node) {
+      node.height = 1 + Math.max(this.getHeight(node.left), this.getHeight(node.right));
+    }
+  }
+
+  // Deep clone of AVL tree for step frames
+  cloneTree(node = this.root) {
+    if (!node) return null;
+    return {
+      id: node.id,
+      key: node.key,
+      height: node.height,
+      balanceFactor: this.getBalance(node),
+      left: this.cloneTree(node.left),
+      right: this.cloneTree(node.right)
+    };
+  }
+
+  recordStep({
+    type = 'info',
+    message = '',
+    highlightedNodes = {}, // { [nodeId]: 'active' | 'visited' | 'unbalanced' | 'rotating' | 'success' | 'error' | 'target' }
+    details = null
+  }) {
+    this.steps.push({
+      stepNumber: this.steps.length + 1,
+      type,
+      message,
+      treeSnapshot: this.cloneTree(),
+      highlightedNodes: { ...highlightedNodes },
+      details
+    });
+  }
+
+  // --- SEARCH OPERATION ---
+  search(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key)) return { found: false, steps: [] };
+
+    if (!this.root) {
+      this.recordStep({
+        type: 'error',
+        message: `AVL Tree is empty. Key ${key} not found.`,
+      });
+      return { found: false, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'search',
+      message: `Starting BST search for key ${key} at root Node #${this.root.id} (key: ${this.root.key}).`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let curr = this.root;
+    while (curr) {
+      if (key === curr.key) {
+        this.recordStep({
+          type: 'success',
+          message: `Target key ${key} found at Node #${curr.id}! (Height: ${curr.height}, BF: ${this.getBalance(curr)})`,
+          highlightedNodes: { [curr.id]: 'success' }
+        });
+        return { found: true, node: curr, steps: this.steps };
+      } else if (key < curr.key) {
+        if (!curr.left) {
+          this.recordStep({
+            type: 'error',
+            message: `${key} < ${curr.key}, but Node #${curr.id} has no left child. Key ${key} not found in tree.`,
+            highlightedNodes: { [curr.id]: 'error' }
+          });
+          return { found: false, node: null, steps: this.steps };
+        }
+        this.recordStep({
+          type: 'search',
+          message: `${key} < ${curr.key}: navigating left to Node #${curr.left.id} (key: ${curr.left.key}).`,
+          highlightedNodes: { [curr.id]: 'visited', [curr.left.id]: 'active' }
+        });
+        curr = curr.left;
+      } else {
+        if (!curr.right) {
+          this.recordStep({
+            type: 'error',
+            message: `${key} > ${curr.key}, but Node #${curr.id} has no right child. Key ${key} not found in tree.`,
+            highlightedNodes: { [curr.id]: 'error' }
+          });
+          return { found: false, node: null, steps: this.steps };
+        }
+        this.recordStep({
+          type: 'search',
+          message: `${key} > ${curr.key}: navigating right to Node #${curr.right.id} (key: ${curr.right.key}).`,
+          highlightedNodes: { [curr.id]: 'visited', [curr.right.id]: 'active' }
+        });
+        curr = curr.right;
+      }
+    }
+
+    return { found: false, node: null, steps: this.steps };
+  }
+
+  // --- ROTATION PRIMITIVES ---
+  _rightRotate(y) {
+    const x = y.left;
+    const T2 = x.right;
+
+    // Perform rotation
+    x.right = y;
+    y.left = T2;
+
+    // Update heights
+    this.updateHeight(y);
+    this.updateHeight(x);
+
+    return x;
+  }
+
+  _leftRotate(x) {
+    const y = x.right;
+    const T2 = y.left;
+
+    // Perform rotation
+    y.left = x;
+    x.right = T2;
+
+    // Update heights
+    this.updateHeight(x);
+    this.updateHeight(y);
+
+    return y;
+  }
+
+  // --- INSERT OPERATION ---
+  insert(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key)) return { success: false, steps: [] };
+
+    if (!this.root) {
+      this.root = new AVLNode(key);
+      this.recordStep({
+        type: 'insert',
+        message: `Tree was empty. Created root Node #${this.root.id} with key [${key}]. (Height: 1, BF: 0)`,
+        highlightedNodes: { [this.root.id]: 'success' }
+      });
+      return { success: true, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'insert',
+      message: `Inserting key ${key}. Traversing BST from root Node #${this.root.id} (key: ${this.root.key})...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    this.root = this._insertNode(this.root, key);
+
+    this.recordStep({
+      type: 'success',
+      message: `Key ${key} inserted and AVL height invariants restored. Tree is balanced!`,
+      highlightedNodes: { [this.root.id]: 'success' }
+    });
+
+    return { success: true, steps: this.steps };
+  }
+
+  _insertNode(node, key) {
+    if (!node) {
+      const newNode = new AVLNode(key);
+      this.recordStep({
+        type: 'insert',
+        message: `Created new leaf Node #${newNode.id} with key [${key}].`,
+        highlightedNodes: { [newNode.id]: 'success' }
+      });
+      return newNode;
+    }
+
+    if (key < node.key) {
+      this.recordStep({
+        type: 'search',
+        message: `${key} < ${node.key}: descending left from Node #${node.id}.`,
+        highlightedNodes: { [node.id]: 'visited' }
+      });
+      node.left = this._insertNode(node.left, key);
+    } else if (key > node.key) {
+      this.recordStep({
+        type: 'search',
+        message: `${key} > ${node.key}: descending right from Node #${node.id}.`,
+        highlightedNodes: { [node.id]: 'visited' }
+      });
+      node.right = this._insertNode(node.right, key);
+    } else {
+      this.recordStep({
+        type: 'error',
+        message: `Key ${key} already exists in Node #${node.id}. Duplicate keys are not inserted in AVL tree.`,
+        highlightedNodes: { [node.id]: 'error' }
+      });
+      return node;
+    }
+
+    // 2. Update height of current ancestor node
+    this.updateHeight(node);
+    const balance = this.getBalance(node);
+
+    this.recordStep({
+      type: 'info',
+      message: `Backtracking up: Node #${node.id} (${node.key}) updated: Height = ${node.height}, Balance Factor = ${balance > 0 ? '+' : ''}${balance}.`,
+      highlightedNodes: { [node.id]: 'active' }
+    });
+
+    // 3. Check for 4 Unbalance Cases
+    // Case 1: Left Left (LL)
+    if (balance > 1 && key < node.left.key) {
+      this.recordStep({
+        type: 'split',
+        message: `UNBALANCE DETECTED at Node #${node.id} (${node.key}): BF = +2 (Left-Heavy), and inserted key ${key} < ${node.left.key}. Performing Single RIGHT ROTATION (LL Case).`,
+        highlightedNodes: { [node.id]: 'unbalanced', [node.left.id]: 'rotating' }
+      });
+
+      const newSubRoot = this._rightRotate(node);
+
+      this.recordStep({
+        type: 'borrow',
+        message: `Right rotation complete. Node #${newSubRoot.id} (${newSubRoot.key}) is now the subtree root. Balance Factor restored to ${this.getBalance(newSubRoot)}.`,
+        highlightedNodes: { [newSubRoot.id]: 'success' }
+      });
+      return newSubRoot;
+    }
+
+    // Case 2: Right Right (RR)
+    if (balance < -1 && key > node.right.key) {
+      this.recordStep({
+        type: 'split',
+        message: `UNBALANCE DETECTED at Node #${node.id} (${node.key}): BF = -2 (Right-Heavy), and inserted key ${key} > ${node.right.key}. Performing Single LEFT ROTATION (RR Case).`,
+        highlightedNodes: { [node.id]: 'unbalanced', [node.right.id]: 'rotating' }
+      });
+
+      const newSubRoot = this._leftRotate(node);
+
+      this.recordStep({
+        type: 'borrow',
+        message: `Left rotation complete. Node #${newSubRoot.id} (${newSubRoot.key}) is now the subtree root. Balance Factor restored to ${this.getBalance(newSubRoot)}.`,
+        highlightedNodes: { [newSubRoot.id]: 'success' }
+      });
+      return newSubRoot;
+    }
+
+    // Case 3: Left Right (LR)
+    if (balance > 1 && key > node.left.key) {
+      this.recordStep({
+        type: 'split',
+        message: `UNBALANCE DETECTED at Node #${node.id} (${node.key}): BF = +2 (Left-Heavy), but inserted key ${key} > ${node.left.key} (Right-Heavy child). Performing DOUBLE ROTATION (LR Case): Part 1 - Left Rotate on Child Node #${node.left.id}.`,
+        highlightedNodes: { [node.id]: 'unbalanced', [node.left.id]: 'rotating' }
+      });
+
+      node.left = this._leftRotate(node.left);
+
+      this.recordStep({
+        type: 'split',
+        message: `LR Part 1 Complete. Now performing Part 2: Right Rotate on Node #${node.id} (${node.key}).`,
+        highlightedNodes: { [node.id]: 'unbalanced', [node.left.id]: 'rotating' }
+      });
+
+      const newSubRoot = this._rightRotate(node);
+
+      this.recordStep({
+        type: 'borrow',
+        message: `LR Double Rotation complete! Node #${newSubRoot.id} (${newSubRoot.key}) is now subtree root. Balance Factor restored to ${this.getBalance(newSubRoot)}.`,
+        highlightedNodes: { [newSubRoot.id]: 'success' }
+      });
+      return newSubRoot;
+    }
+
+    // Case 4: Right Left (RL)
+    if (balance < -1 && key < node.right.key) {
+      this.recordStep({
+        type: 'split',
+        message: `UNBALANCE DETECTED at Node #${node.id} (${node.key}): BF = -2 (Right-Heavy), but inserted key ${key} < ${node.right.key} (Left-Heavy child). Performing DOUBLE ROTATION (RL Case): Part 1 - Right Rotate on Child Node #${node.right.id}.`,
+        highlightedNodes: { [node.id]: 'unbalanced', [node.right.id]: 'rotating' }
+      });
+
+      node.right = this._rightRotate(node.right);
+
+      this.recordStep({
+        type: 'split',
+        message: `RL Part 1 Complete. Now performing Part 2: Left Rotate on Node #${node.id} (${node.key}).`,
+        highlightedNodes: { [node.id]: 'unbalanced', [node.right.id]: 'rotating' }
+      });
+
+      const newSubRoot = this._leftRotate(node);
+
+      this.recordStep({
+        type: 'borrow',
+        message: `RL Double Rotation complete! Node #${newSubRoot.id} (${newSubRoot.key}) is now subtree root. Balance Factor restored to ${this.getBalance(newSubRoot)}.`,
+        highlightedNodes: { [newSubRoot.id]: 'success' }
+      });
+      return newSubRoot;
+    }
+
+    return node;
+  }
+
+  // --- DELETE OPERATION ---
+  delete(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key) || !this.root) {
+      this.recordStep({
+        type: 'error',
+        message: `Tree is empty or invalid key. Cannot delete ${key}.`,
+      });
+      return { success: false, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'delete',
+      message: `Searching for key ${key} to delete from AVL tree...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    const initialCount = this.getStats().totalNodes;
+    this.root = this._deleteNode(this.root, key);
+    const finalCount = this.getStats().totalNodes;
+
+    if (initialCount === finalCount) {
+      this.recordStep({
+        type: 'error',
+        message: `Key ${key} was not found in AVL tree. Deletion aborted.`,
+      });
+      return { success: false, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'success',
+      message: `Key ${key} successfully deleted and AVL height balance maintained!`,
+      highlightedNodes: this.root ? { [this.root.id]: 'success' } : {}
+    });
+
+    return { success: true, steps: this.steps };
+  }
+
+  _deleteNode(node, key) {
+    if (!node) {
+      return null;
+    }
+
+    if (key < node.key) {
+      this.recordStep({
+        type: 'search',
+        message: `${key} < ${node.key}: descending left in search of deletion target.`,
+        highlightedNodes: { [node.id]: 'visited' }
+      });
+      node.left = this._deleteNode(node.left, key);
+    } else if (key > node.key) {
+      this.recordStep({
+        type: 'search',
+        message: `${key} > ${node.key}: descending right in search of deletion target.`,
+        highlightedNodes: { [node.id]: 'visited' }
+      });
+      node.right = this._deleteNode(node.right, key);
+    } else {
+      // Node found!
+      this.recordStep({
+        type: 'delete',
+        message: `Found target Node #${node.id} with key [${node.key}]. Proceeding with deletion...`,
+        highlightedNodes: { [node.id]: 'target' }
+      });
+
+      // Case 1 or 2: Node with 0 or 1 child
+      if (!node.left || !node.right) {
+        const temp = node.left ? node.left : node.right;
+        if (!temp) {
+          // Leaf node
+          this.recordStep({
+            type: 'delete',
+            message: `Node #${node.id} is a leaf node. Removing directly.`,
+            highlightedNodes: { [node.id]: 'target' }
+          });
+          node = null;
+        } else {
+          // One child
+          this.recordStep({
+            type: 'delete',
+            message: `Node #${node.id} has one child (Node #${temp.id}). Splicing child into parent's place.`,
+            highlightedNodes: { [node.id]: 'target', [temp.id]: 'active' }
+          });
+          node = temp;
+        }
+      } else {
+        // Case 3: Node with two children
+        this.recordStep({
+          type: 'delete',
+          message: `Node #${node.id} has two children. Finding in-order successor (minimum node in right subtree)...`,
+          highlightedNodes: { [node.id]: 'target' }
+        });
+
+        let successor = node.right;
+        while (successor.left) {
+          successor = successor.left;
+        }
+
+        this.recordStep({
+          type: 'delete',
+          message: `Found in-order successor: Node #${successor.id} with key [${successor.key}]. Copying key to Node #${node.id} and recursively deleting successor.`,
+          highlightedNodes: { [node.id]: 'target', [successor.id]: 'active' }
+        });
+
+        node.key = successor.key;
+        node.right = this._deleteNode(node.right, successor.key);
+      }
+    }
+
+    // If tree had only one node and it was removed
+    if (!node) {
+      return null;
+    }
+
+    // 2. Update height
+    this.updateHeight(node);
+    const balance = this.getBalance(node);
+
+    this.recordStep({
+      type: 'info',
+      message: `Backtracking up: Node #${node.id} (${node.key}) updated: Height = ${node.height}, Balance Factor = ${balance > 0 ? '+' : ''}${balance}.`,
+      highlightedNodes: { [node.id]: 'active' }
+    });
+
+    // 3. Rebalance if needed
+    // Left Left Case
+    if (balance > 1 && this.getBalance(node.left) >= 0) {
+      this.recordStep({
+        type: 'split',
+        message: `POST-DELETION UNBALANCE at Node #${node.id} (${node.key}): BF = +2, left child BF >= 0. Performing Single Right Rotation (LL Case).`,
+        highlightedNodes: { [node.id]: 'unbalanced', [node.left.id]: 'rotating' }
+      });
+      return this._rightRotate(node);
+    }
+
+    // Left Right Case
+    if (balance > 1 && this.getBalance(node.left) < 0) {
+      this.recordStep({
+        type: 'split',
+        message: `POST-DELETION UNBALANCE at Node #${node.id} (${node.key}): BF = +2, left child BF < 0. Performing Double Rotation (LR Case): Left Rotate child, then Right Rotate node.`,
+        highlightedNodes: { [node.id]: 'unbalanced', [node.left.id]: 'rotating' }
+      });
+      node.left = this._leftRotate(node.left);
+      return this._rightRotate(node);
+    }
+
+    // Right Right Case
+    if (balance < -1 && this.getBalance(node.right) <= 0) {
+      this.recordStep({
+        type: 'split',
+        message: `POST-DELETION UNBALANCE at Node #${node.id} (${node.key}): BF = -2, right child BF <= 0. Performing Single Left Rotation (RR Case).`,
+        highlightedNodes: { [node.id]: 'unbalanced', [node.right.id]: 'rotating' }
+      });
+      return this._leftRotate(node);
+    }
+
+    // Right Left Case
+    if (balance < -1 && this.getBalance(node.right) > 0) {
+      this.recordStep({
+        type: 'split',
+        message: `POST-DELETION UNBALANCE at Node #${node.id} (${node.key}): BF = -2, right child BF > 0. Performing Double Rotation (RL Case): Right Rotate child, then Left Rotate node.`,
+        highlightedNodes: { [node.id]: 'unbalanced', [node.right.id]: 'rotating' }
+      });
+      node.right = this._rightRotate(node.right);
+      return this._leftRotate(node);
+    }
+
+    return node;
+  }
+
+  // --- DIRECT INSERT (NO STEP RECORDING, FOR PRESETS) ---
+  insertDirect(key) {
+    key = Number(key);
+    if (isNaN(key)) return;
+    this.root = this._insertDirectNode(this.root, key);
+  }
+
+  _insertDirectNode(node, key) {
+    if (!node) return new AVLNode(key);
+    if (key < node.key) node.left = this._insertDirectNode(node.left, key);
+    else if (key > node.key) node.right = this._insertDirectNode(node.right, key);
+    else return node; // no duplicates
+
+    this.updateHeight(node);
+    const balance = this.getBalance(node);
+
+    if (balance > 1 && key < node.left.key) return this._rightRotate(node);
+    if (balance < -1 && key > node.right.key) return this._leftRotate(node);
+    if (balance > 1 && key > node.left.key) {
+      node.left = this._leftRotate(node.left);
+      return this._rightRotate(node);
+    }
+    if (balance < -1 && key < node.right.key) {
+      node.right = this._rightRotate(node.right);
+      return this._leftRotate(node);
+    }
+    return node;
+  }
+
+  // --- TRAVERSAL & STATS ---
+  getInorderKeys(node = this.root, result = []) {
+    if (!node) return result;
+    this.getInorderKeys(node.left, result);
+    result.push(node.key);
+    this.getInorderKeys(node.right, result);
+    return result;
+  }
+
+  getStats() {
+    if (!this.root) {
+      return {
+        height: 0,
+        totalNodes: 0,
+        isBalanced: true,
+        maxBF: 0,
+        minBF: 0
+      };
+    }
+
+    let count = 0;
+    let maxBF = -Infinity;
+    let minBF = Infinity;
+    let isBalanced = true;
+
+    const traverse = (n) => {
+      if (!n) return;
+      count++;
+      const bf = this.getBalance(n);
+      if (Math.abs(bf) > 1) isBalanced = false;
+      if (bf > maxBF) maxBF = bf;
+      if (bf < minBF) minBF = bf;
+      traverse(n.left);
+      traverse(n.right);
+    };
+
+    traverse(this.root);
+
+    return {
+      height: this.root.height,
+      totalNodes: count,
+      isBalanced,
+      maxBF: count > 0 ? maxBF : 0,
+      minBF: count > 0 ? minBF : 0
+    };
+  }
+}
+
+// Export for Node.js / Browser
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { AVLTree, AVLNode };
+}
+
+
+// ==========================================
+// 2. B-Tree Implementation (btree.js)
+// ==========================================
+/**
+ * B-Tree Implementation with Animation Step Recording
+ * Supports configurable Order M (M >= 3)
+ */
+
+let nextNodeId = 1;
+
+class BTreeNode {
+  constructor(isLeaf = true) {
+    this.id = nextNodeId++;
+    this.keys = [];
+    this.children = [];
+    this.isLeaf = isLeaf;
+    this.parent = null;
+  }
+}
+
+class BTree {
+  constructor(order = 3) {
+    if (order < 3) order = 3;
+    this.order = order; // Maximum number of children (M)
+    this.root = null;
+    this.steps = []; // Captured animation steps for current operation
+  }
+
+  get maxKeys() {
+    return this.order - 1;
+  }
+
+  get minKeys() {
+    // Non-root nodes must have at least ceil(M / 2) - 1 keys
+    return Math.ceil(this.order / 2) - 1;
+  }
+
+  get maxChildren() {
+    return this.order;
+  }
+
+  get minChildren() {
+    return Math.ceil(this.order / 2);
+  }
+
+  setOrder(newOrder) {
+    if (newOrder < 3) newOrder = 3;
+    const currentKeys = this.getInorderKeys();
+    this.order = newOrder;
+    this.clear();
+    // Re-insert keys with new order
+    for (const key of currentKeys) {
+      this.insertDirect(key);
+    }
+  }
+
+  clear() {
+    this.root = null;
+    this.steps = [];
+  }
+
+  // Helper to clone tree structure for snapshot
+  cloneTree(node = this.root) {
+    if (!node) return null;
+    return {
+      id: node.id,
+      keys: [...node.keys],
+      isLeaf: node.isLeaf,
+      children: node.children.map(c => this.cloneTree(c))
+    };
+  }
+
+  recordStep({
+    type = 'info',
+    message = '',
+    highlightedNodes = {}, // { [nodeId]: 'active' | 'visited' | 'split' | 'merge' | 'target' | 'success' | 'error' }
+    highlightedKeys = {},  // { [`${nodeId}_${keyIdx}`]: 'target' | 'compared' | 'promoted' | 'swapped' | 'deleted' | 'found' }
+    details = null
+  }) {
+    this.steps.push({
+      stepNumber: this.steps.length + 1,
+      type,
+      message,
+      treeSnapshot: this.cloneTree(),
+      highlightedNodes: { ...highlightedNodes },
+      highlightedKeys: { ...highlightedKeys },
+      details
+    });
+  }
+
+  // --- SEARCH OPERATION ---
+  search(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key)) return { found: false, steps: [] };
+
+    if (!this.root || this.root.keys.length === 0) {
+      this.recordStep({
+        type: 'error',
+        message: `Tree is empty. Key ${key} not found.`,
+      });
+      return { found: false, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'search',
+      message: `Starting search for key ${key} at root node.`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    const result = this._searchNode(this.root, key);
+    return { found: result.found, steps: this.steps };
+  }
+
+  _searchNode(node, key) {
+    let i = 0;
+    const nodeHighlights = { [node.id]: 'active' };
+    const keyHighlights = {};
+
+    while (i < node.keys.length && key > node.keys[i]) {
+      keyHighlights[`${node.id}_${i}`] = 'compared';
+      this.recordStep({
+        type: 'search',
+        message: `Comparing target ${key} with ${node.keys[i]}: ${key} > ${node.keys[i]}, moving to next key in node.`,
+        highlightedNodes: nodeHighlights,
+        highlightedKeys: keyHighlights
+      });
+      i++;
+    }
+
+    if (i < node.keys.length && key === node.keys[i]) {
+      keyHighlights[`${node.id}_${i}`] = 'found';
+      this.recordStep({
+        type: 'success',
+        message: `Key ${key} found in Node #${node.id} at index ${i}!`,
+        highlightedNodes: { [node.id]: 'success' },
+        highlightedKeys: keyHighlights
+      });
+      return { found: true, node, index: i };
+    }
+
+    if (node.isLeaf) {
+      this.recordStep({
+        type: 'error',
+        message: `Reached leaf Node #${node.id} without finding key ${key}. Search unsuccessful.`,
+        highlightedNodes: { [node.id]: 'error' }
+      });
+      return { found: false, node: null, index: -1 };
+    }
+
+    const nextChild = node.children[i];
+    this.recordStep({
+      type: 'search',
+      message: `${key} belongs in subtree between indices. Navigating down to Child #${i + 1} (Node #${nextChild.id}).`,
+      highlightedNodes: { [node.id]: 'visited', [nextChild.id]: 'active' }
+    });
+
+    return this._searchNode(nextChild, key);
+  }
+
+  // --- INSERT OPERATION ---
+  insert(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key)) return { success: false, steps: [] };
+
+    // Case 1: Empty tree
+    if (!this.root) {
+      this.root = new BTreeNode(true);
+      this.root.keys.push(key);
+      this.recordStep({
+        type: 'insert',
+        message: `Tree was empty. Created root Node #${this.root.id} with key [${key}].`,
+        highlightedNodes: { [this.root.id]: 'success' },
+        highlightedKeys: { [`${this.root.id}_0`]: 'inserted' }
+      });
+      return { success: true, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'insert',
+      message: `Searching for leaf insertion point for key ${key}...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    // Traverse to leaf
+    let curr = this.root;
+    while (!curr.isLeaf) {
+      let i = 0;
+      while (i < curr.keys.length && key > curr.keys[i]) {
+        i++;
+      }
+      if (i < curr.keys.length && key === curr.keys[i]) {
+        this.recordStep({
+          type: 'error',
+          message: `Key ${key} already exists in Node #${curr.id} at index ${i}. Duplicate keys are not inserted.`,
+          highlightedNodes: { [curr.id]: 'error' },
+          highlightedKeys: { [`${curr.id}_${i}`]: 'found' }
+        });
+        return { success: false, duplicate: true, steps: this.steps };
+      }
+      const child = curr.children[i];
+      this.recordStep({
+        type: 'search',
+        message: `${key} belongs in subtree #${i + 1}. Moving to Node #${child.id}.`,
+        highlightedNodes: { [curr.id]: 'visited', [child.id]: 'active' }
+      });
+      curr = child;
+    }
+
+    // Check duplicate in leaf
+    if (curr.keys.includes(key)) {
+      const idx = curr.keys.indexOf(key);
+      this.recordStep({
+        type: 'error',
+        message: `Key ${key} already exists in leaf Node #${curr.id}. Duplicate keys are not inserted.`,
+        highlightedNodes: { [curr.id]: 'error' },
+        highlightedKeys: { [`${curr.id}_${idx}`]: 'found' }
+      });
+      return { success: false, duplicate: true, steps: this.steps };
+    }
+
+    // Insert key into leaf in sorted position
+    let insertIdx = 0;
+    while (insertIdx < curr.keys.length && key > curr.keys[insertIdx]) {
+      insertIdx++;
+    }
+    curr.keys.splice(insertIdx, 0, key);
+
+    this.recordStep({
+      type: 'insert',
+      message: `Inserted key ${key} into leaf Node #${curr.id} at position ${insertIdx}. Keys: [${curr.keys.join(', ')}].`,
+      highlightedNodes: { [curr.id]: 'active' },
+      highlightedKeys: { [`${curr.id}_${insertIdx}`]: 'inserted' }
+    });
+
+    // Check overflow and split if necessary
+    if (curr.keys.length > this.maxKeys) {
+      this._handleOverflow(curr);
+    } else {
+      this.recordStep({
+        type: 'success',
+        message: `Node #${curr.id} has ${curr.keys.length} keys <= max keys (${this.maxKeys}). Insertion complete.`,
+        highlightedNodes: { [curr.id]: 'success' }
+      });
+    }
+
+    return { success: true, steps: this.steps };
+  }
+
+  _handleOverflow(node) {
+    this.recordStep({
+      type: 'split',
+      message: `Node #${node.id} has ${node.keys.length} keys, exceeding maximum allowed (${this.maxKeys}) for Order ${this.order}. Splitting node!`,
+      highlightedNodes: { [node.id]: 'split' }
+    });
+
+    const midIdx = Math.floor(node.keys.length / 2);
+    const medianKey = node.keys[midIdx];
+
+    const leftKeys = node.keys.slice(0, midIdx);
+    const rightKeys = node.keys.slice(midIdx + 1);
+
+    const rightNode = new BTreeNode(node.isLeaf);
+    rightNode.keys = rightKeys;
+    node.keys = leftKeys;
+
+    if (!node.isLeaf) {
+      const leftChildren = node.children.slice(0, midIdx + 1);
+      const rightChildren = node.children.slice(midIdx + 1);
+      node.children = leftChildren;
+      rightNode.children = rightChildren;
+      for (const child of rightNode.children) {
+        child.parent = rightNode;
+      }
+    }
+
+    if (node === this.root) {
+      const newRoot = new BTreeNode(false);
+      newRoot.keys = [medianKey];
+      newRoot.children = [node, rightNode];
+      node.parent = newRoot;
+      rightNode.parent = newRoot;
+      this.root = newRoot;
+
+      this.recordStep({
+        type: 'split',
+        message: `Root overflowed! Created new root Node #${newRoot.id} with median key [${medianKey}]. Tree height increased.`,
+        highlightedNodes: { [newRoot.id]: 'success', [node.id]: 'active', [rightNode.id]: 'active' },
+        highlightedKeys: { [`${newRoot.id}_0`]: 'promoted' }
+      });
+    } else {
+      const parent = node.parent;
+      rightNode.parent = parent;
+
+      const childIdx = parent.children.indexOf(node);
+      parent.keys.splice(childIdx, 0, medianKey);
+      parent.children.splice(childIdx + 1, 0, rightNode);
+
+      this.recordStep({
+        type: 'split',
+        message: `Median key ${medianKey} promoted to parent Node #${parent.id}. Left child: Node #${node.id} [${node.keys.join(', ')}], Right child: Node #${rightNode.id} [${rightNode.keys.join(', ')}].`,
+        highlightedNodes: { [parent.id]: 'active', [node.id]: 'active', [rightNode.id]: 'active' },
+        highlightedKeys: { [`${parent.id}_${childIdx}`]: 'promoted' }
+      });
+
+      if (parent.keys.length > this.maxKeys) {
+        this._handleOverflow(parent);
+      } else {
+        this.recordStep({
+          type: 'success',
+          message: `Parent Node #${parent.id} valid (${parent.keys.length} <= ${this.maxKeys} keys). Split complete.`,
+          highlightedNodes: { [parent.id]: 'success' }
+        });
+      }
+    }
+  }
+
+  // --- DELETE OPERATION ---
+  delete(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key) || !this.root) {
+      this.recordStep({
+        type: 'error',
+        message: `Key ${key} cannot be deleted. Tree is empty.`,
+      });
+      return { success: false, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'delete',
+      message: `Searching for key ${key} to delete...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    const target = this._findKey(this.root, key);
+    if (!target) {
+      this.recordStep({
+        type: 'error',
+        message: `Key ${key} not found in B-Tree. Deletion aborted.`,
+      });
+      return { success: false, steps: this.steps };
+    }
+
+    const { node, index } = target;
+
+    this.recordStep({
+      type: 'delete',
+      message: `Target key ${key} located in Node #${node.id} at index ${index}.`,
+      highlightedNodes: { [node.id]: 'target' },
+      highlightedKeys: { [`${node.id}_${index}`]: 'target' }
+    });
+
+    if (node.isLeaf) {
+      // Direct leaf deletion
+      node.keys.splice(index, 1);
+      this.recordStep({
+        type: 'delete',
+        message: `Removed key ${key} directly from leaf Node #${node.id}. Keys remaining: [${node.keys.join(', ')}].`,
+        highlightedNodes: { [node.id]: 'active' }
+      });
+
+      if (node === this.root) {
+        if (node.keys.length === 0) {
+          this.root = null;
+          this.recordStep({
+            type: 'delete',
+            message: `Root leaf was emptied. Tree is now completely empty.`,
+          });
+        } else {
+          this.recordStep({
+            type: 'success',
+            message: `Key ${key} deleted from root. Operation complete.`,
+            highlightedNodes: { [node.id]: 'success' }
+          });
+        }
+        return { success: true, steps: this.steps };
+      }
+
+      if (node.keys.length < this.minKeys) {
+        this._fixUnderflow(node);
+      } else {
+        this.recordStep({
+          type: 'success',
+          message: `Node #${node.id} has ${node.keys.length} keys >= min keys (${this.minKeys}). Deletion complete.`,
+          highlightedNodes: { [node.id]: 'success' }
+        });
+      }
+    } else {
+      // Internal node deletion: swap with in-order predecessor
+      this.recordStep({
+        type: 'delete',
+        message: `Node #${node.id} is an internal node. Locating in-order predecessor in left subtree...`,
+        highlightedNodes: { [node.id]: 'target' }
+      });
+
+      let predNode = node.children[index];
+      while (!predNode.isLeaf) {
+        predNode = predNode.children[predNode.children.length - 1];
+      }
+      const predKey = predNode.keys[predNode.keys.length - 1];
+
+      this.recordStep({
+        type: 'delete',
+        message: `Found in-order predecessor ${predKey} in leaf Node #${predNode.id}. Swapping with ${key}.`,
+        highlightedNodes: { [node.id]: 'target', [predNode.id]: 'active' },
+        highlightedKeys: {
+          [`${node.id}_${index}`]: 'swapped',
+          [`${predNode.id}_${predNode.keys.length - 1}`]: 'swapped'
+        }
+      });
+
+      node.keys[index] = predKey;
+      predNode.keys.pop(); // Remove predecessor from leaf
+
+      this.recordStep({
+        type: 'delete',
+        message: `Replaced ${key} with predecessor ${predKey} in Node #${node.id}, and removed ${predKey} from leaf Node #${predNode.id}.`,
+        highlightedNodes: { [node.id]: 'active', [predNode.id]: 'active' }
+      });
+
+      if (predNode.keys.length < this.minKeys) {
+        this._fixUnderflow(predNode);
+      } else {
+        this.recordStep({
+          type: 'success',
+          message: `Leaf Node #${predNode.id} has ${predNode.keys.length} keys >= min keys (${this.minKeys}). Deletion complete.`,
+          highlightedNodes: { [predNode.id]: 'success' }
+        });
+      }
+    }
+
+    return { success: true, steps: this.steps };
+  }
+
+  _findKey(node, key) {
+    if (!node) return null;
+    let i = 0;
+    while (i < node.keys.length && key > node.keys[i]) {
+      i++;
+    }
+    if (i < node.keys.length && key === node.keys[i]) {
+      return { node, index: i };
+    }
+    if (node.isLeaf) return null;
+    return this._findKey(node.children[i], key);
+  }
+
+  _fixUnderflow(node) {
+    if (node === this.root) {
+      if (node.keys.length === 0) {
+        if (node.children.length > 0) {
+          this.root = node.children[0];
+          this.root.parent = null;
+          this.recordStep({
+            type: 'merge',
+            message: `Root had 0 keys. Child Node #${this.root.id} promoted as new root. Tree height reduced.`,
+            highlightedNodes: { [this.root.id]: 'success' }
+          });
+        } else {
+          this.root = null;
+          this.recordStep({
+            type: 'delete',
+            message: `Tree is now empty.`,
+          });
+        }
+      }
+      return;
+    }
+
+    const parent = node.parent;
+    const childIdx = parent.children.indexOf(node);
+
+    this.recordStep({
+      type: 'merge',
+      message: `Underflow in Node #${node.id}: has ${node.keys.length} keys, but requires at least ${this.minKeys} for Order ${this.order}. Checking siblings to borrow...`,
+      highlightedNodes: { [node.id]: 'split', [parent.id]: 'active' }
+    });
+
+    // Option 1: Borrow from left sibling
+    if (childIdx > 0) {
+      const leftSib = parent.children[childIdx - 1];
+      if (leftSib.keys.length > this.minKeys) {
+        const parentKey = parent.keys[childIdx - 1];
+        const borrowedKey = leftSib.keys.pop();
+
+        parent.keys[childIdx - 1] = borrowedKey;
+        node.keys.unshift(parentKey);
+
+        if (!leftSib.isLeaf) {
+          const borrowedChild = leftSib.children.pop();
+          borrowedChild.parent = node;
+          node.children.unshift(borrowedChild);
+        }
+
+        this.recordStep({
+          type: 'borrow',
+          message: `Borrowed key ${borrowedKey} from left sibling Node #${leftSib.id} via parent key ${parentKey}. Underflow resolved!`,
+          highlightedNodes: { [leftSib.id]: 'active', [parent.id]: 'active', [node.id]: 'success' },
+          highlightedKeys: {
+            [`${parent.id}_${childIdx - 1}`]: 'promoted',
+            [`${node.id}_0`]: 'inserted'
+          }
+        });
+        return;
+      }
+    }
+
+    // Option 2: Borrow from right sibling
+    if (childIdx < parent.children.length - 1) {
+      const rightSib = parent.children[childIdx + 1];
+      if (rightSib.keys.length > this.minKeys) {
+        const parentKey = parent.keys[childIdx];
+        const borrowedKey = rightSib.keys.shift();
+
+        parent.keys[childIdx] = borrowedKey;
+        node.keys.push(parentKey);
+
+        if (!rightSib.isLeaf) {
+          const borrowedChild = rightSib.children.shift();
+          borrowedChild.parent = node;
+          node.children.push(borrowedChild);
+        }
+
+        this.recordStep({
+          type: 'borrow',
+          message: `Borrowed key ${borrowedKey} from right sibling Node #${rightSib.id} via parent key ${parentKey}. Underflow resolved!`,
+          highlightedNodes: { [rightSib.id]: 'active', [parent.id]: 'active', [node.id]: 'success' },
+          highlightedKeys: {
+            [`${parent.id}_${childIdx}`]: 'promoted',
+            [`${node.id}_${node.keys.length - 1}`]: 'inserted'
+          }
+        });
+        return;
+      }
+    }
+
+    // Option 3: Neither sibling has surplus keys -> Merge
+    if (childIdx > 0) {
+      // Merge with left sibling
+      const leftSib = parent.children[childIdx - 1];
+      const parentKey = parent.keys[childIdx - 1];
+
+      leftSib.keys.push(parentKey);
+      leftSib.keys.push(...node.keys);
+
+      if (!node.isLeaf) {
+        for (const child of node.children) {
+          child.parent = leftSib;
+          leftSib.children.push(child);
+        }
+      }
+
+      parent.keys.splice(childIdx - 1, 1);
+      parent.children.splice(childIdx, 1);
+
+      this.recordStep({
+        type: 'merge',
+        message: `Merged underflowing Node #${node.id} into left sibling Node #${leftSib.id} pulling down parent key [${parentKey}].`,
+        highlightedNodes: { [leftSib.id]: 'active', [parent.id]: 'active' },
+        highlightedKeys: { [`${leftSib.id}_${leftSib.keys.indexOf(parentKey)}`]: 'promoted' }
+      });
+
+      if (parent === this.root && parent.keys.length === 0) {
+        this.root = leftSib;
+        leftSib.parent = null;
+        this.recordStep({
+          type: 'merge',
+          message: `Root had no keys left. Merged node Node #${leftSib.id} becomes the new root. Tree height decreased.`,
+          highlightedNodes: { [this.root.id]: 'success' }
+        });
+      } else if (parent.keys.length < this.minKeys) {
+        this.recordStep({
+          type: 'merge',
+          message: `Parent Node #${parent.id} now has ${parent.keys.length} < min keys (${this.minKeys}). Cascading underflow fix upwards...`,
+          highlightedNodes: { [parent.id]: 'split' }
+        });
+        this._fixUnderflow(parent);
+      } else {
+        this.recordStep({
+          type: 'success',
+          message: `Parent Node #${parent.id} satisfies min keys requirement (${parent.keys.length} >= ${this.minKeys}). Deletion complete.`,
+          highlightedNodes: { [parent.id]: 'success' }
+        });
+      }
+    } else {
+      // Merge with right sibling
+      const rightSib = parent.children[childIdx + 1];
+      const parentKey = parent.keys[childIdx];
+
+      node.keys.push(parentKey);
+      node.keys.push(...rightSib.keys);
+
+      if (!rightSib.isLeaf) {
+        for (const child of rightSib.children) {
+          child.parent = node;
+          node.children.push(child);
+        }
+      }
+
+      parent.keys.splice(childIdx, 1);
+      parent.children.splice(childIdx + 1, 1);
+
+      this.recordStep({
+        type: 'merge',
+        message: `Merged right sibling Node #${rightSib.id} into Node #${node.id} pulling down parent key [${parentKey}].`,
+        highlightedNodes: { [node.id]: 'active', [parent.id]: 'active' },
+        highlightedKeys: { [`${node.id}_${node.keys.indexOf(parentKey)}`]: 'promoted' }
+      });
+
+      if (parent === this.root && parent.keys.length === 0) {
+        this.root = node;
+        node.parent = null;
+        this.recordStep({
+          type: 'merge',
+          message: `Root had no keys left. Node #${node.id} becomes the new root. Tree height decreased.`,
+          highlightedNodes: { [this.root.id]: 'success' }
+        });
+      } else if (parent.keys.length < this.minKeys) {
+        this.recordStep({
+          type: 'merge',
+          message: `Parent Node #${parent.id} now has ${parent.keys.length} < min keys (${this.minKeys}). Cascading underflow fix upwards...`,
+          highlightedNodes: { [parent.id]: 'split' }
+        });
+        this._fixUnderflow(parent);
+      } else {
+        this.recordStep({
+          type: 'success',
+          message: `Parent Node #${parent.id} satisfies min keys requirement (${parent.keys.length} >= ${this.minKeys}). Deletion complete.`,
+          highlightedNodes: { [parent.id]: 'success' }
+        });
+      }
+    }
+  }
+
+  // --- DIRECT INSERTION (NO STEP LOGGING, FOR INITIALIZATION) ---
+  insertDirect(key) {
+    key = Number(key);
+    if (isNaN(key)) return;
+
+    if (!this.root) {
+      this.root = new BTreeNode(true);
+      this.root.keys.push(key);
+      return;
+    }
+
+    let curr = this.root;
+    while (!curr.isLeaf) {
+      let i = 0;
+      while (i < curr.keys.length && key > curr.keys[i]) i++;
+      if (i < curr.keys.length && key === curr.keys[i]) return; // ignore duplicate
+      curr = curr.children[i];
+    }
+
+    if (curr.keys.includes(key)) return;
+
+    let insertIdx = 0;
+    while (insertIdx < curr.keys.length && key > curr.keys[insertIdx]) insertIdx++;
+    curr.keys.splice(insertIdx, 0, key);
+
+    if (curr.keys.length > this.maxKeys) {
+      this._handleOverflowDirect(curr);
+    }
+  }
+
+  _handleOverflowDirect(node) {
+    const midIdx = Math.floor(node.keys.length / 2);
+    const medianKey = node.keys[midIdx];
+    const rightKeys = node.keys.slice(midIdx + 1);
+    node.keys = node.keys.slice(0, midIdx);
+
+    const rightNode = new BTreeNode(node.isLeaf);
+    rightNode.keys = rightKeys;
+
+    if (!node.isLeaf) {
+      rightNode.children = node.children.slice(midIdx + 1);
+      node.children = node.children.slice(0, midIdx + 1);
+      for (const c of rightNode.children) c.parent = rightNode;
+    }
+
+    if (node === this.root) {
+      const newRoot = new BTreeNode(false);
+      newRoot.keys = [medianKey];
+      newRoot.children = [node, rightNode];
+      node.parent = newRoot;
+      rightNode.parent = newRoot;
+      this.root = newRoot;
+    } else {
+      const parent = node.parent;
+      rightNode.parent = parent;
+      const idx = parent.children.indexOf(node);
+      parent.keys.splice(idx, 0, medianKey);
+      parent.children.splice(idx + 1, 0, rightNode);
+      if (parent.keys.length > this.maxKeys) {
+        this._handleOverflowDirect(parent);
+      }
+    }
+  }
+
+  // --- TRAVERSALS & STATS ---
+  getInorderKeys(node = this.root, result = []) {
+    if (!node) return result;
+    for (let i = 0; i < node.keys.length; i++) {
+      if (!node.isLeaf && node.children[i]) {
+        this.getInorderKeys(node.children[i], result);
+      }
+      result.push(node.keys[i]);
+    }
+    if (!node.isLeaf && node.children[node.keys.length]) {
+      this.getInorderKeys(node.children[node.keys.length], result);
+    }
+    return result;
+  }
+
+  getStats() {
+    if (!this.root) {
+      return {
+        height: 0,
+        totalKeys: 0,
+        totalNodes: 0,
+        order: this.order,
+        minKeys: this.minKeys,
+        maxKeys: this.maxKeys
+      };
+    }
+
+    let height = 0;
+    let curr = this.root;
+    while (curr) {
+      height++;
+      curr = curr.children && curr.children.length > 0 ? curr.children[0] : null;
+    }
+
+    let totalKeys = 0;
+    let totalNodes = 0;
+
+    const countNodes = (n) => {
+      if (!n) return;
+      totalNodes++;
+      totalKeys += n.keys.length;
+      if (!n.isLeaf) {
+        for (const child of n.children) {
+          countNodes(child);
+        }
+      }
+    };
+
+    countNodes(this.root);
+
+    return {
+      height,
+      totalKeys,
+      totalNodes,
+      order: this.order,
+      minKeys: this.minKeys,
+      maxKeys: this.maxKeys
+    };
+  }
+}
+
+// Export for browser window or Node.js test environment
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { BTree, BTreeNode };
+}
+
+
+// ==========================================
+// 3. Visualizer Controller & UI (visualizer.js)
+// ==========================================
+/**
+ * Unified Tree Visualizer - Supports both AVL Tree and B-Tree
+ * Explicit User Input Only (No Presets)
+ * Full Visibility for Steps and Direct Theory & Complexity Center
+ */
+
+// Active Tree Mode: 'avl' or 'btree'
+let currentTreeMode = 'avl';
+
+// Tree Instances
+let avlTree = new AVLTree();
+let btree = new BTree(3);
+
+// Animation / Step player state
+let animationSteps = [];
+let currentStepIdx = 0;
+let isPlaying = false;
+let playTimer = null;
+let animationSpeed = 600; // ms
+
+// Pan & Zoom state
+let panX = 0;
+let panY = 0;
+let scale = 1;
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+
+// DOM references
+let svg, viewport, linksGroup, nodesGroup;
+let singleKeyInput, bulkKeysInput, stepIndicator, stepScrubber, speedSlider;
+let stepCallout, logList, inorderKeysElem, emptyState;
+let activePopover = null;
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  initDOM();
+  initEvents();
+  initSVGPanZoom();
+  initTheoryTabs();
+
+  // Initialize with AVL mode and default explicit keys
+  switchTreeMode('avl');
+  setupInitialTree('avl');
+});
+
+function initDOM() {
+  svg = document.getElementById('tree-svg');
+  viewport = document.getElementById('viewport');
+  linksGroup = document.getElementById('links-group');
+  nodesGroup = document.getElementById('nodes-group');
+
+  singleKeyInput = document.getElementById('single-key-input');
+  bulkKeysInput = document.getElementById('bulk-keys-input');
+  stepIndicator = document.getElementById('step-indicator');
+  stepScrubber = document.getElementById('step-scrubber');
+  speedSlider = document.getElementById('speed-slider');
+
+  stepCallout = document.getElementById('step-callout');
+  logList = document.getElementById('log-list');
+  inorderKeysElem = document.getElementById('inorder-keys');
+  emptyState = document.getElementById('empty-state');
+}
+
+function initEvents() {
+  // TWO PROMINENT OPTIONS IN MIDDLE OF THE PAGE
+  document.querySelectorAll('.tree-card-option').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const mode = e.currentTarget.dataset.mode;
+      if (mode === currentTreeMode) return;
+      switchTreeMode(mode);
+    });
+  });
+
+  // B-Tree Order Buttons
+  document.querySelectorAll('.order-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const newOrder = parseInt(e.target.dataset.order);
+      if (newOrder === btree.order) return;
+
+      document.querySelectorAll('.order-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+
+      btree.setOrder(newOrder);
+      updateStats();
+      addLogEntry(`Changed B-Tree order to M = ${newOrder}`, 'info');
+
+      animationSteps = [{
+        stepNumber: 1,
+        type: 'info',
+        message: `B-Tree order changed to M = ${newOrder}. Max keys = ${btree.maxKeys}, Min keys = ${btree.minKeys}.`,
+        treeSnapshot: btree.cloneTree(),
+        highlightedNodes: {},
+        highlightedKeys: {}
+      }];
+      currentStepIdx = 0;
+      renderStep(0);
+      fitToScreen();
+    });
+  });
+
+  // Single Key Operations
+  document.getElementById('btn-insert').addEventListener('click', handleInsert);
+  document.getElementById('btn-delete').addEventListener('click', handleDelete);
+  document.getElementById('btn-search').addEventListener('click', handleSearch);
+
+  singleKeyInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleInsert();
+  });
+
+  // Bulk Operations
+  document.getElementById('btn-bulk-insert').addEventListener('click', handleBulkInsert);
+  document.getElementById('btn-bulk-rebuild').addEventListener('click', handleBulkRebuild);
+
+  // Generators & Clear
+  document.getElementById('btn-random-key').addEventListener('click', handleRandomKey);
+  document.getElementById('btn-random-set').addEventListener('click', handleRandomSet);
+  document.getElementById('btn-clear').addEventListener('click', handleClear);
+
+  // Playback controls
+  document.getElementById('btn-first-step').addEventListener('click', () => goToStep(0));
+  document.getElementById('btn-prev-step').addEventListener('click', () => goToStep(currentStepIdx - 1));
+  document.getElementById('btn-play-pause').addEventListener('click', togglePlay);
+  document.getElementById('btn-next-step').addEventListener('click', () => goToStep(currentStepIdx + 1));
+  document.getElementById('btn-last-step').addEventListener('click', () => goToStep(animationSteps.length - 1));
+
+  stepScrubber.addEventListener('input', (e) => {
+    pause();
+    goToStep(parseInt(e.target.value));
+  });
+
+  speedSlider.addEventListener('input', (e) => {
+    const val = parseInt(e.target.value);
+    const speeds = { 1: 1200, 2: 600, 3: 250, 4: 50 };
+    animationSpeed = speeds[val] || 600;
+  });
+
+  // Canvas zoom/pan controls
+  document.getElementById('btn-zoom-in').addEventListener('click', () => zoomBy(1.2));
+  document.getElementById('btn-zoom-out').addEventListener('click', () => zoomBy(0.8));
+  document.getElementById('btn-fit-screen').addEventListener('click', fitToScreen);
+  document.getElementById('btn-center-root').addEventListener('click', centerRoot);
+
+  // Close popover on document click
+  document.addEventListener('click', (e) => {
+    if (activePopover && !activePopover.contains(e.target) && !e.target.closest('.key-cell') && !e.target.closest('.avl-node-group')) {
+      closePopover();
+    }
+  });
+}
+
+// --- SWITCH TREE MODE (AVL vs B-TREE) ---
+function switchTreeMode(mode) {
+  currentTreeMode = mode;
+  pause();
+  closePopover();
+
+  // Update prominent middle card active states
+  document.querySelectorAll('.tree-card-option').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+
+  const btreeControls = document.getElementById('btree-order-group');
+  const btreeStats = document.getElementById('btree-stats');
+  const avlStats = document.getElementById('avl-stats');
+  const emptyTitle = document.getElementById('empty-title');
+
+  if (mode === 'avl') {
+    btreeControls.style.display = 'none';
+    btreeStats.style.display = 'none';
+    avlStats.style.display = 'flex';
+    emptyTitle.textContent = 'The AVL Tree is currently empty';
+
+    // Synchronize theory tab to AVL
+    activateTheoryTab('avl-theory');
+
+    // Populate default explicit keys if input is empty
+    if (!bulkKeysInput.value.trim() || bulkKeysInput.value.includes('17')) {
+      bulkKeysInput.value = '30, 20, 10, 40, 50, 25';
+    }
+
+    if (!avlTree.root) {
+      setupInitialTree('avl');
+    } else {
+      animationSteps = [{
+        stepNumber: 1,
+        type: 'info',
+        message: `Switched to AVL Tree. Active keys: [${avlTree.getInorderKeys().join(', ')}]. Height: ${avlTree.root.height}.`,
+        treeSnapshot: avlTree.cloneTree(),
+        highlightedNodes: {}
+      }];
+      currentStepIdx = 0;
+      renderStep(0);
+      fitToScreen();
+    }
+
+  } else {
+    btreeControls.style.display = 'flex';
+    btreeStats.style.display = 'flex';
+    avlStats.style.display = 'none';
+    emptyTitle.textContent = 'The B-Tree is currently empty';
+
+    // Synchronize theory tab to B-Tree
+    activateTheoryTab('btree-theory');
+
+    // Populate default explicit keys if input is empty
+    if (!bulkKeysInput.value.trim() || bulkKeysInput.value.includes('40, 50')) {
+      bulkKeysInput.value = '10, 20, 5, 6, 12, 30, 7, 17';
+    }
+
+    if (!btree.root) {
+      setupInitialTree('btree');
+    } else {
+      animationSteps = [{
+        stepNumber: 1,
+        type: 'info',
+        message: `Switched to B-Tree (Order M = ${btree.order}). Active keys: [${btree.getInorderKeys().join(', ')}].`,
+        treeSnapshot: btree.cloneTree(),
+        highlightedNodes: {},
+        highlightedKeys: {}
+      }];
+      currentStepIdx = 0;
+      renderStep(0);
+      fitToScreen();
+    }
+  }
+}
+
+function setupInitialTree(mode) {
+  if (mode === 'avl') {
+    avlTree.clear();
+    const keys = [30, 20, 10, 40, 50, 25];
+    keys.forEach(k => avlTree.insertDirect(k));
+    animationSteps = [{
+      stepNumber: 1,
+      type: 'success',
+      message: `Initialized AVL Tree with user keys: [${keys.join(', ')}]. Tree is fully balanced.`,
+      treeSnapshot: avlTree.cloneTree(),
+      highlightedNodes: {}
+    }];
+  } else {
+    btree.clear();
+    const keys = [10, 20, 5, 6, 12, 30, 7, 17];
+    keys.forEach(k => btree.insertDirect(k));
+    animationSteps = [{
+      stepNumber: 1,
+      type: 'success',
+      message: `Initialized B-Tree (Order M = ${btree.order}) with user keys: [${keys.join(', ')}].`,
+      treeSnapshot: btree.cloneTree(),
+      highlightedNodes: {},
+      highlightedKeys: {}
+    }];
+  }
+  currentStepIdx = 0;
+  renderStep(0);
+  setTimeout(fitToScreen, 60);
+}
+
+// --- DIRECT THEORY TABS INITIALIZATION ---
+function initTheoryTabs() {
+  document.querySelectorAll('.theory-tab-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      activateTheoryTab(e.target.dataset.tab);
+    });
+  });
+}
+
+function activateTheoryTab(tabId) {
+  document.querySelectorAll('.theory-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tabId);
+  });
+  document.querySelectorAll('.theory-panel').forEach(panel => {
+    panel.classList.toggle('active', panel.id === `tab-${tabId}`);
+  });
+}
+
+// --- ZOOM & PAN ENGINE ---
+function initSVGPanZoom() {
+  svg.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.key-cell') || e.target.closest('.avl-node-group')) return;
+    isDragging = true;
+    startX = e.clientX - panX;
+    startY = e.clientY - panY;
+    svg.style.cursor = 'grabbing';
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    panX = e.clientX - startX;
+    panY = e.clientY - startY;
+    updateTransform();
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+    svg.style.cursor = 'grab';
+  });
+
+  svg.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const rect = svg.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const zoomFactor = e.deltaY < 0 ? 1.15 : 0.85;
+    const newScale = Math.min(Math.max(0.12, scale * zoomFactor), 3.5);
+
+    panX = mouseX - (mouseX - panX) * (newScale / scale);
+    panY = mouseY - (mouseY - panY) * (newScale / scale);
+    scale = newScale;
+
+    updateTransform();
+  }, { passive: false });
+}
+
+function updateTransform() {
+  viewport.setAttribute('transform', `matrix(${scale}, 0, 0, ${scale}, ${panX}, ${panY})`);
+}
+
+function zoomBy(factor) {
+  const rect = svg.getBoundingClientRect();
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+
+  const newScale = Math.min(Math.max(0.12, scale * factor), 3.5);
+  panX = centerX - (centerX - panX) * (newScale / scale);
+  panY = centerY - (centerY - panY) * (newScale / scale);
+  scale = newScale;
+  updateTransform();
+}
+
+function fitToScreen() {
+  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
+  if (!currentTree.root) {
+    panX = svg.clientWidth / 2;
+    panY = 100;
+    scale = 1;
+    updateTransform();
+    return;
+  }
+
+  const snapshot = animationSteps[currentStepIdx] ? animationSteps[currentStepIdx].treeSnapshot : currentTree.cloneTree();
+  if (!snapshot) return;
+
+  if (currentTreeMode === 'avl') computeAVLLayout(snapshot);
+  else computeBTreeLayout(snapshot);
+
+  const bounds = getTreeBounds(snapshot);
+  const padding = 60;
+  const availWidth = svg.clientWidth - padding * 2;
+  const availHeight = svg.clientHeight - padding * 2;
+
+  const treeWidth = bounds.maxX - bounds.minX;
+  const treeHeight = bounds.maxY - bounds.minY;
+
+  const scaleX = availWidth / Math.max(1, treeWidth);
+  const scaleY = availHeight / Math.max(1, treeHeight);
+  scale = Math.min(Math.min(scaleX, scaleY), 1.2);
+
+  const treeCenterX = (bounds.minX + bounds.maxX) / 2;
+  panX = svg.clientWidth / 2 - treeCenterX * scale;
+  panY = 80 - bounds.minY * scale;
+
+  updateTransform();
+}
+
+function centerRoot() {
+  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
+  const snapshot = animationSteps[currentStepIdx] ? animationSteps[currentStepIdx].treeSnapshot : currentTree.cloneTree();
+  if (!snapshot) return;
+
+  if (currentTreeMode === 'avl') computeAVLLayout(snapshot);
+  else computeBTreeLayout(snapshot);
+
+  scale = 1;
+  panX = svg.clientWidth / 2 - snapshot.x;
+  panY = 80;
+  updateTransform();
+}
+
+function getTreeBounds(node, bounds = { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity }) {
+  if (!node) return bounds;
+
+  const width = node.renderWidth || 56;
+  const height = node.renderHeight || 56;
+  const left = node.x - width / 2;
+  const right = node.x + width / 2;
+  const top = node.y;
+  const bottom = node.y + height;
+
+  bounds.minX = Math.min(bounds.minX, left);
+  bounds.maxX = Math.max(bounds.maxX, right);
+  bounds.minY = Math.min(bounds.minY, top);
+  bounds.maxY = Math.max(bounds.maxY, bottom);
+
+  if (node.children) {
+    for (const child of node.children) getTreeBounds(child, bounds);
+  }
+  if (node.left) getTreeBounds(node.left, bounds);
+  if (node.right) getTreeBounds(node.right, bounds);
+
+  return bounds;
+}
+
+// ============================================================
+// B-TREE LAYOUT COMPUTATION
+// ============================================================
+const B_KEY_WIDTH = 48;
+const B_KEY_HEIGHT = 38;
+const B_NODE_PADDING_X = 14;
+const B_NODE_HEIGHT = 46;
+const B_LEVEL_GAP = 100;
+const B_SIBLING_GAP = 32;
+
+function computeBTreeLayout(node) {
+  if (!node) return;
+  computeBTreeSubtreeWidths(node);
+  assignBTreeNodePositions(node, 0, 0);
+}
+
+function computeBTreeSubtreeWidths(node) {
+  node.renderWidth = Math.max(54, node.keys.length * B_KEY_WIDTH + B_NODE_PADDING_X * 2);
+  node.renderHeight = B_NODE_HEIGHT;
+
+  if (!node.children || node.children.length === 0) {
+    node.subtreeWidth = node.renderWidth + B_SIBLING_GAP;
+    return;
+  }
+
+  let childrenSpan = 0;
+  for (const child of node.children) {
+    computeBTreeSubtreeWidths(child);
+    childrenSpan += child.subtreeWidth;
+  }
+
+  if (node.renderWidth + B_SIBLING_GAP > childrenSpan) {
+    const extra = (node.renderWidth + B_SIBLING_GAP - childrenSpan) / node.children.length;
+    for (const child of node.children) {
+      child.subtreeWidth += extra;
+    }
+    childrenSpan = node.renderWidth + B_SIBLING_GAP;
+  }
+
+  node.subtreeWidth = childrenSpan;
+}
+
+function assignBTreeNodePositions(node, xStart, y) {
+  node.y = y;
+
+  if (!node.children || node.children.length === 0) {
+    node.x = xStart + node.subtreeWidth / 2;
+    return;
+  }
+
+  let currX = xStart;
+  const childMidpoints = [];
+
+  for (const child of node.children) {
+    assignBTreeNodePositions(child, currX, y + B_LEVEL_GAP);
+    childMidpoints.push(child.x);
+    currX += child.subtreeWidth;
+  }
+
+  node.x = (childMidpoints[0] + childMidpoints[childMidpoints.length - 1]) / 2;
+}
+
+// ============================================================
+// AVL TREE LAYOUT COMPUTATION (In-Order with Post-Order Centering)
+// ============================================================
+const AVL_NODE_RADIUS = 26;
+const AVL_LEVEL_GAP = 90;
+const AVL_HORIZ_SPACING = 68;
+
+function computeAVLLayout(root) {
+  if (!root) return;
+
+  let inOrderIndex = 0;
+  function assignInorder(node, depth) {
+    if (!node) return;
+    assignInorder(node.left, depth + 1);
+    node.x = inOrderIndex++ * AVL_HORIZ_SPACING;
+    node.y = depth * AVL_LEVEL_GAP;
+    node.renderWidth = AVL_NODE_RADIUS * 2;
+    node.renderHeight = AVL_NODE_RADIUS * 2;
+    assignInorder(node.right, depth + 1);
+  }
+  assignInorder(root, 0);
+
+  function centerParents(node) {
+    if (!node) return;
+    centerParents(node.left);
+    centerParents(node.right);
+    if (node.left && node.right) {
+      node.x = (node.left.x + node.right.x) / 2;
+    }
+  }
+  centerParents(root);
+}
+
+// ============================================================
+// STEP RENDERING (DISPATCHER)
+// ============================================================
+function renderStep(stepIndex) {
+  closePopover();
+  currentStepIdx = stepIndex;
+
+  const totalSteps = animationSteps.length;
+  const currentStepNum = totalSteps === 0 ? 0 : currentStepIdx + 1;
+
+  stepIndicator.textContent = `Step ${currentStepNum} / ${totalSteps}`;
+  document.getElementById('sidebar-counter').textContent = `${currentStepNum} / ${totalSteps}`;
+
+  stepScrubber.max = Math.max(0, totalSteps - 1);
+  stepScrubber.value = currentStepIdx;
+
+  document.getElementById('btn-first-step').disabled = currentStepIdx <= 0;
+  document.getElementById('btn-prev-step').disabled = currentStepIdx <= 0;
+  document.getElementById('btn-next-step').disabled = currentStepIdx >= totalSteps - 1;
+  document.getElementById('btn-last-step').disabled = currentStepIdx >= totalSteps - 1;
+
+  if (totalSteps === 0) {
+    linksGroup.innerHTML = '';
+    nodesGroup.innerHTML = '';
+    emptyState.style.display = 'flex';
+    updateStepCallout(null);
+    updateStats();
+    return;
+  }
+
+  emptyState.style.display = 'none';
+  const step = animationSteps[stepIndex];
+  updateStepCallout(step, currentStepNum, totalSteps);
+
+  // Auto-scroll active item in log list into view
+  document.querySelectorAll('.log-item').forEach((item, idx) => {
+    const isActive = idx === stepIndex;
+    item.classList.toggle('active-step', isActive);
+    if (isActive) {
+      item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  });
+
+  const snapshot = step.treeSnapshot;
+  if (!snapshot) {
+    linksGroup.innerHTML = '';
+    nodesGroup.innerHTML = '';
+    emptyState.style.display = 'flex';
+    updateStats();
+    return;
+  }
+
+  linksGroup.innerHTML = '';
+  nodesGroup.innerHTML = '';
+
+  if (currentTreeMode === 'avl') {
+    computeAVLLayout(snapshot);
+    renderAVLTreeSVG(snapshot, step.highlightedNodes || {});
+  } else {
+    computeBTreeLayout(snapshot);
+    renderBTreeSVG(snapshot, step.highlightedNodes || {}, step.highlightedKeys || {});
+  }
+
+  updateStats();
+}
+
+function updateStepCallout(step, currentNum = 0, total = 0) {
+  if (!step) {
+    stepCallout.innerHTML = `
+      <div class="step-callout-header">
+        <span class="step-type-badge step-type-info">READY</span>
+      </div>
+      <div class="step-description">Enter custom keys above to execute insertion, deletion, or search.</div>
+    `;
+    return;
+  }
+
+  stepCallout.innerHTML = `
+    <div class="step-callout-header">
+      <span class="step-type-badge step-type-${step.type}">${step.type}</span>
+      <span style="font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--text-muted);">STEP ${currentNum} OF ${total}</span>
+    </div>
+    <div class="step-description">${step.message}</div>
+  `;
+}
+
+// ============================================================
+// AVL TREE SVG RENDERER
+// ============================================================
+function renderAVLTreeSVG(node, highlightedNodes) {
+  if (!node) return;
+
+  if (node.left) {
+    renderAVLLink(node, node.left, 'L', highlightedNodes);
+    renderAVLTreeSVG(node.left, highlightedNodes);
+  }
+
+  if (node.right) {
+    renderAVLLink(node, node.right, 'R', highlightedNodes);
+    renderAVLTreeSVG(node.right, highlightedNodes);
+  }
+
+  const nodeG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  nodeG.setAttribute('class', 'avl-node-group');
+  nodeG.dataset.nodeId = node.id;
+  nodeG.dataset.key = node.key;
+
+  if (highlightedNodes[node.id]) {
+    nodeG.classList.add(`node-${highlightedNodes[node.id]}`);
+  }
+
+  const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  circle.setAttribute('cx', node.x);
+  circle.setAttribute('cy', node.y + AVL_NODE_RADIUS);
+  circle.setAttribute('r', AVL_NODE_RADIUS);
+  circle.setAttribute('class', 'avl-node-circle');
+  nodeG.appendChild(circle);
+
+  const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  text.setAttribute('x', node.x);
+  text.setAttribute('y', node.y + AVL_NODE_RADIUS);
+  text.setAttribute('class', 'avl-node-key');
+  text.textContent = node.key;
+  nodeG.appendChild(text);
+
+  // Height Badge
+  const hBadgeG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  hBadgeG.setAttribute('class', 'avl-badge-height');
+  const hRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  hRect.setAttribute('x', node.x - AVL_NODE_RADIUS - 16);
+  hRect.setAttribute('y', node.y);
+  hRect.setAttribute('width', 22);
+  hRect.setAttribute('height', 14);
+  hRect.setAttribute('class', 'avl-badge-bg');
+  hBadgeG.appendChild(hRect);
+
+  const hText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  hText.setAttribute('x', node.x - AVL_NODE_RADIUS - 5);
+  hText.setAttribute('y', node.y + 7);
+  hText.setAttribute('class', 'avl-badge-text');
+  hText.textContent = `h:${node.height}`;
+  hBadgeG.appendChild(hText);
+  nodeG.appendChild(hBadgeG);
+
+  // Balance Factor Badge
+  const bf = node.balanceFactor !== undefined ? node.balanceFactor : 0;
+  const bfBadgeG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  let bfClass = 'bf-zero';
+  if (Math.abs(bf) > 1) bfClass = 'bf-unbalanced';
+  else if (bf !== 0) bfClass = 'bf-balanced';
+
+  bfBadgeG.setAttribute('class', `avl-badge-bf ${bfClass}`);
+  const bfRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  bfRect.setAttribute('x', node.x + AVL_NODE_RADIUS - 6);
+  bfRect.setAttribute('y', node.y);
+  bfRect.setAttribute('width', 28);
+  bfRect.setAttribute('height', 14);
+  bfRect.setAttribute('class', 'avl-badge-bg');
+  bfBadgeG.appendChild(bfRect);
+
+  const bfText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  bfText.setAttribute('x', node.x + AVL_NODE_RADIUS + 8);
+  bfText.setAttribute('y', node.y + 7);
+  bfText.setAttribute('class', 'avl-badge-text');
+  bfText.textContent = `BF:${bf > 0 ? '+' : ''}${bf}`;
+  bfBadgeG.appendChild(bfText);
+  nodeG.appendChild(bfBadgeG);
+
+  nodeG.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openKeyPopover(node.key, e.clientX, e.clientY);
+  });
+
+  nodesGroup.appendChild(nodeG);
+}
+
+function renderAVLLink(parent, child, side, highlightedNodes) {
+  const pX = parent.x;
+  const pY = parent.y + AVL_NODE_RADIUS * 2;
+  const cX = child.x;
+  const cY = child.y;
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const midY = (pY + cY) / 2;
+  path.setAttribute('d', `M ${pX} ${pY} C ${pX} ${midY}, ${cX} ${midY}, ${cX} ${cY}`);
+  path.setAttribute('class', 'tree-link');
+
+  if (highlightedNodes[parent.id] && highlightedNodes[child.id]) {
+    path.classList.add('active');
+  }
+  linksGroup.appendChild(path);
+
+  const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  label.setAttribute('x', (pX + cX) / 2 + (side === 'L' ? -8 : 8));
+  label.setAttribute('y', midY);
+  label.setAttribute('class', 'avl-branch-label');
+  label.textContent = side;
+  linksGroup.appendChild(label);
+}
+
+// ============================================================
+// B-TREE SVG RENDERER
+// ============================================================
+function renderBTreeSVG(node, highlightedNodes, highlightedKeys) {
+  if (!node) return;
+
+  if (node.children && node.children.length > 0) {
+    const parentLeft = node.x - node.renderWidth / 2;
+    const numPointers = node.children.length;
+    const pointerSpan = node.renderWidth / numPointers;
+
+    node.children.forEach((child, idx) => {
+      const pX = parentLeft + (idx + 0.5) * pointerSpan;
+      const pY = node.y + node.renderHeight;
+      const cX = child.x;
+      const cY = child.y;
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const midY = (pY + cY) / 2;
+      path.setAttribute('d', `M ${pX} ${pY} C ${pX} ${midY}, ${cX} ${midY}, ${cX} ${cY}`);
+      path.setAttribute('class', 'tree-link');
+
+      if (highlightedNodes[node.id] && highlightedNodes[child.id]) {
+        path.classList.add('active');
+      }
+
+      linksGroup.appendChild(path);
+      renderBTreeSVG(child, highlightedNodes, highlightedKeys);
+    });
+  }
+
+  const nodeG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  nodeG.setAttribute('class', 'node-group');
+  nodeG.dataset.nodeId = node.id;
+
+  if (highlightedNodes[node.id]) {
+    nodeG.classList.add(`node-${highlightedNodes[node.id]}`);
+  }
+
+  const left = node.x - node.renderWidth / 2;
+  const top = node.y;
+
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect.setAttribute('x', left);
+  rect.setAttribute('y', top);
+  rect.setAttribute('width', node.renderWidth);
+  rect.setAttribute('height', node.renderHeight);
+  rect.setAttribute('class', 'node-box');
+  nodeG.appendChild(rect);
+
+  const startKeyX = left + B_NODE_PADDING_X;
+  const keyY = top + (B_NODE_HEIGHT - B_KEY_HEIGHT) / 2;
+
+  node.keys.forEach((key, keyIdx) => {
+    const keyX = startKeyX + keyIdx * B_KEY_WIDTH;
+
+    const keyG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    keyG.setAttribute('class', 'key-cell');
+    keyG.dataset.key = key;
+
+    const keyHighlightKey = `${node.id}_${keyIdx}`;
+    if (highlightedKeys && highlightedKeys[keyHighlightKey]) {
+      keyG.classList.add(`key-${highlightedKeys[keyHighlightKey]}`);
+    }
+
+    const keyRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    keyRect.setAttribute('x', keyX + 2);
+    keyRect.setAttribute('y', keyY);
+    keyRect.setAttribute('width', B_KEY_WIDTH - 4);
+    keyRect.setAttribute('height', B_KEY_HEIGHT);
+    keyRect.setAttribute('class', 'key-box');
+    keyG.appendChild(keyRect);
+
+    const keyText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    keyText.setAttribute('x', keyX + B_KEY_WIDTH / 2);
+    keyText.setAttribute('y', keyY + B_KEY_HEIGHT / 2);
+    keyText.setAttribute('class', 'key-text');
+    keyText.textContent = key;
+    keyG.appendChild(keyText);
+
+    keyG.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openKeyPopover(key, e.clientX, e.clientY);
+    });
+
+    nodeG.appendChild(keyG);
+  });
+
+  const idText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  idText.setAttribute('x', node.x);
+  idText.setAttribute('y', top - 6);
+  idText.setAttribute('class', 'node-id-label');
+  idText.textContent = `Node #${node.id}${node.isLeaf ? ' (Leaf)' : ''}`;
+  nodeG.appendChild(idText);
+
+  nodesGroup.appendChild(nodeG);
+}
+
+// --- INTERACTIVE KEY POPOVER ---
+function openKeyPopover(key, clientX, clientY) {
+  closePopover();
+
+  const popover = document.createElement('div');
+  popover.className = 'key-action-popover';
+  popover.style.left = `${clientX}px`;
+  popover.style.top = `${clientY}px`;
+
+  popover.innerHTML = `
+    <div class="popover-header">Key: ${key}</div>
+    <button class="popover-btn" id="pop-search">🔍 Search ${key}</button>
+    <button class="popover-btn delete-btn" id="pop-delete">🗑️ Delete ${key}</button>
+  `;
+
+  document.body.appendChild(popover);
+  activePopover = popover;
+
+  popover.querySelector('#pop-search').addEventListener('click', () => {
+    closePopover();
+    singleKeyInput.value = key;
+    handleSearch();
+  });
+
+  popover.querySelector('#pop-delete').addEventListener('click', () => {
+    closePopover();
+    singleKeyInput.value = key;
+    handleDelete();
+  });
+}
+
+function closePopover() {
+  if (activePopover) {
+    activePopover.remove();
+    activePopover = null;
+  }
+}
+
+// --- ANIMATION PLAYER CONTROLS ---
+function startAnimation(steps) {
+  pause();
+  animationSteps = steps;
+  currentStepIdx = 0;
+
+  logList.innerHTML = '';
+  steps.forEach((step, idx) => {
+    const item = document.createElement('div');
+    item.className = 'log-item';
+    item.dataset.step = idx;
+    item.innerHTML = `
+      <div class="log-item-header">
+        <span class="log-step-num">Step #${idx + 1}</span>
+        <span class="step-type-badge step-type-${step.type}">${step.type}</span>
+      </div>
+      <div class="log-text">${step.message}</div>
+    `;
+    item.addEventListener('click', () => {
+      pause();
+      goToStep(idx);
+    });
+    logList.appendChild(item);
+  });
+
+  renderStep(0);
+
+  if (animationSpeed > 50 && steps.length > 1) {
+    play();
+  } else {
+    goToStep(steps.length - 1);
+  }
+}
+
+function goToStep(index) {
+  if (index < 0 || index >= animationSteps.length) return;
+  renderStep(index);
+}
+
+function play() {
+  if (isPlaying) return;
+  if (currentStepIdx >= animationSteps.length - 1) {
+    currentStepIdx = 0;
+  }
+  isPlaying = true;
+  document.getElementById('btn-play-pause').innerHTML = '⏸️ Pause';
+  scheduleNextFrame();
+}
+
+function pause() {
+  isPlaying = false;
+  if (playTimer) {
+    clearTimeout(playTimer);
+    playTimer = null;
+  }
+  document.getElementById('btn-play-pause').innerHTML = '▶️ Play';
+}
+
+function togglePlay() {
+  if (isPlaying) pause();
+  else play();
+}
+
+function scheduleNextFrame() {
+  if (!isPlaying) return;
+  playTimer = setTimeout(() => {
+    if (currentStepIdx < animationSteps.length - 1) {
+      goToStep(currentStepIdx + 1);
+      scheduleNextFrame();
+    } else {
+      pause();
+    }
+  }, animationSpeed);
+}
+
+function updateStats() {
+  if (currentTreeMode === 'avl') {
+    const stats = avlTree.getStats();
+    document.getElementById('avl-stat-height').textContent = stats.height;
+    document.getElementById('avl-stat-nodes').textContent = stats.totalNodes;
+
+    const balanceElem = document.getElementById('avl-stat-balance');
+    balanceElem.textContent = stats.isBalanced ? 'Balanced' : 'Unbalanced';
+    balanceElem.className = `stat-value ${stats.isBalanced ? 'balanced' : 'unbalanced'}`;
+
+    const inorder = avlTree.getInorderKeys();
+    inorderKeysElem.textContent = inorder.length === 0 ? '[ Empty ]' : `[ ${inorder.join(', ')} ]`;
+  } else {
+    const stats = btree.getStats();
+    document.getElementById('stat-order').textContent = stats.order;
+    document.getElementById('stat-height').textContent = stats.height;
+    document.getElementById('stat-keys').textContent = stats.totalKeys;
+    document.getElementById('stat-nodes').textContent = stats.totalNodes;
+    document.getElementById('stat-min-keys').textContent = stats.minKeys;
+    document.getElementById('stat-max-keys').textContent = stats.maxKeys;
+
+    const inorder = btree.getInorderKeys();
+    inorderKeysElem.textContent = inorder.length === 0 ? '[ Empty ]' : `[ ${inorder.join(', ')} ]`;
+  }
+}
+
+function addLogEntry(text, type = 'info') {
+  const item = document.createElement('div');
+  item.className = 'log-item';
+  item.innerHTML = `
+    <div class="log-item-header">
+      <span class="step-type-badge step-type-${type}">${type}</span>
+    </div>
+    <div class="log-text">${text}</div>
+  `;
+  logList.prepend(item);
+}
+
+// --- USER EXPLICIT OPERATIONS ---
+function handleInsert() {
+  const raw = singleKeyInput.value.trim();
+  if (!raw) return;
+  const key = parseInt(raw, 10);
+  if (isNaN(key)) return;
+
+  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
+  const result = currentTree.insert(key);
+  singleKeyInput.value = '';
+  startAnimation(result.steps);
+}
+
+function handleDelete() {
+  const raw = singleKeyInput.value.trim();
+  if (!raw) return;
+  const key = parseInt(raw, 10);
+  if (isNaN(key)) return;
+
+  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
+  const result = currentTree.delete(key);
+  singleKeyInput.value = '';
+  startAnimation(result.steps);
+}
+
+function handleSearch() {
+  const raw = singleKeyInput.value.trim();
+  if (!raw) return;
+  const key = parseInt(raw, 10);
+  if (isNaN(key)) return;
+
+  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
+  const result = currentTree.search(key);
+  startAnimation(result.steps);
+}
+
+function handleBulkInsert() {
+  const raw = bulkKeysInput.value.trim();
+  if (!raw) return;
+
+  const keys = raw.split(/[\s,]+/).map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
+  if (keys.length === 0) return;
+
+  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
+  let allSteps = [];
+  keys.forEach(k => {
+    const res = currentTree.insert(k);
+    allSteps = allSteps.concat(res.steps);
+  });
+
+  startAnimation(allSteps);
+}
+
+function handleBulkRebuild() {
+  const raw = bulkKeysInput.value.trim();
+  if (!raw) return;
+
+  const keys = raw.split(/[\s,]+/).map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
+  if (keys.length === 0) return;
+
+  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
+  currentTree.clear();
+
+  let allSteps = [];
+  keys.forEach(k => {
+    const res = currentTree.insert(k);
+    allSteps = allSteps.concat(res.steps);
+  });
+
+  startAnimation(allSteps);
+  fitToScreen();
+}
+
+function handleRandomKey() {
+  const rand = Math.floor(Math.random() * 99) + 1;
+  singleKeyInput.value = rand;
+  handleInsert();
+}
+
+function handleRandomSet() {
+  const count = 8;
+  const set = new Set();
+  while (set.size < count) {
+    set.add(Math.floor(Math.random() * 95) + 5);
+  }
+  const keys = Array.from(set);
+  bulkKeysInput.value = keys.join(', ');
+  handleBulkRebuild();
+}
+
+function handleClear() {
+  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
+  currentTree.clear();
+  animationSteps = [];
+  currentStepIdx = 0;
+  pause();
+  renderStep(0);
+  addLogEntry(`Cleared ${currentTreeMode.toUpperCase()} tree.`, 'info');
+}
+
+
+  </script>
+</body>
+</html>
