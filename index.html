@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tree Visualizer | AVL Tree & B-Tree Interactive Explorer</title>
+  <title>Ultimate Tree Visualizer | 9 Interactive Data Structures & Complexity</title>
   <style>
-/* Modern Dark Theme - Interactive Multi-Tree Visualizer (AVL Tree & B-Tree) */
+/* Modern Dark Theme - Ultimate Multi-Tree Visualizer (9 Data Structures) */
 :root {
-  --bg-primary: #070d19;
-  --bg-secondary: #0f172a;
-  --bg-tertiary: #1e293b;
-  --bg-card: #131d31;
-  --border-color: #27354f;
+  --bg-primary: #060b16;
+  --bg-secondary: #0d1527;
+  --bg-tertiary: #19253e;
+  --bg-card: #121c32;
+  --border-color: #243553;
   --border-focus: #6366f1;
   --text-primary: #f8fafc;
   --text-secondary: #cbd5e1;
@@ -20,18 +20,18 @@
   --accent-hover: #4f46e5;
   --accent-light: #818cf8;
   --success: #10b981;
-  --success-bg: rgba(16, 185, 129, 0.18);
+  --success-bg: rgba(16, 185, 129, 0.2);
   --warning: #f59e0b;
-  --warning-bg: rgba(245, 158, 11, 0.18);
+  --warning-bg: rgba(245, 158, 11, 0.2);
   --danger: #ef4444;
-  --danger-bg: rgba(239, 68, 68, 0.18);
+  --danger-bg: rgba(239, 68, 68, 0.2);
   --purple: #a855f7;
-  --purple-bg: rgba(168, 85, 247, 0.18);
+  --purple-bg: rgba(168, 85, 247, 0.2);
   --cyan: #06b6d4;
-  --cyan-bg: rgba(6, 182, 212, 0.18);
-  --node-bg: #1e293b;
+  --cyan-bg: rgba(6, 182, 212, 0.2);
+  --node-bg: #152238;
   --node-border: #475569;
-  --key-bg: #0f172a;
+  --key-bg: #0b1220;
   --key-border: #334155;
   --key-text: #f1f5f9;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -63,11 +63,17 @@ header {
   border-bottom: 1px solid var(--border-color);
   padding: 14px 28px;
   display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 10;
+}
+
+.header-top {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 16px;
   flex-wrap: wrap;
-  z-index: 10;
 }
 
 .logo-group {
@@ -81,10 +87,10 @@ header {
   color: white;
   font-weight: 800;
   font-size: 14px;
-  padding: 8px 12px;
+  padding: 6px 12px;
   border-radius: 8px;
   letter-spacing: 0.5px;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
 }
 
 .app-title {
@@ -100,107 +106,60 @@ header {
   font-weight: 500;
 }
 
-/* TWO PROMINENT OPTIONS IN MIDDLE OF THE PAGE */
-.tree-hero-selector {
+/* PROMINENT TREE SELECTOR IN MIDDLE OF PAGE */
+.tree-selector-grid {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin: 0 auto;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 4px 0;
 }
 
-.tree-card-option {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: var(--bg-tertiary);
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  padding: 8px 18px;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  text-align: left;
-}
-
-.tree-card-option:hover {
-  border-color: var(--accent-light);
-  background-color: #26354f;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-}
-
-.tree-card-option.active {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25));
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.45);
-}
-
-.tree-card-icon {
-  font-size: 26px;
-  line-height: 1;
-}
-
-.tree-card-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.tree-card-title {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: 0.3px;
-}
-
-.tree-card-option.active .tree-card-title {
-  color: #a5b4fc;
-}
-
-.tree-card-desc {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-/* Header Stats Chips */
-.stats-container {
+.tree-selector-card {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
 }
 
-.stat-chip {
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 5px 12px;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.tree-selector-card:hover {
+  border-color: var(--accent-light);
+  background-color: var(--bg-tertiary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
-.stat-label {
-  color: var(--text-muted);
-  font-weight: 600;
+.tree-selector-card.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25));
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.45);
 }
 
-.stat-value {
-  color: var(--accent-light);
-  font-family: var(--font-mono);
-  font-weight: 800;
+.card-icon {
+  font-size: 20px;
+  line-height: 1;
 }
 
-.stat-value.balanced {
-  color: var(--success);
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
 }
 
-.stat-value.unbalanced {
-  color: var(--danger);
+.tree-selector-card.active .card-title {
+  color: #a5b4fc;
 }
 
 /* ============================================================ */
-/* CONTROL PANEL (DIRECT EXPLICIT INPUTS ONLY)                  */
+/* CONTROL PANEL (DIRECT EXPLICIT INPUTS ONLY - NO PRESETS)     */
 /* ============================================================ */
 .control-panel {
   background-color: var(--bg-secondary);
@@ -215,7 +174,7 @@ header {
 .control-row {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   flex-wrap: wrap;
 }
 
@@ -235,7 +194,7 @@ header {
   text-transform: uppercase;
   color: var(--text-muted);
   letter-spacing: 0.5px;
-  margin-right: 4px;
+  margin-right: 2px;
 }
 
 /* Order Selector */
@@ -315,7 +274,7 @@ input[type="number"] {
 }
 
 .btn:hover {
-  background-color: #475569;
+  background-color: #2b3d63;
   border-color: #64748b;
   transform: translateY(-1px);
 }
@@ -324,21 +283,22 @@ input[type="number"] {
   transform: translateY(1px);
 }
 
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  transform: none;
-}
-
 .btn-primary {
   background-color: var(--accent-primary);
   border-color: var(--accent-primary);
   color: white;
 }
-
 .btn-primary:hover {
   background-color: var(--accent-hover);
-  border-color: var(--accent-hover);
+}
+
+.btn-secondary {
+  background-color: #0891b2;
+  border-color: #0891b2;
+  color: white;
+}
+.btn-secondary:hover {
+  background-color: #06b6d4;
 }
 
 .btn-success {
@@ -346,7 +306,6 @@ input[type="number"] {
   border-color: #059669;
   color: white;
 }
-
 .btn-success:hover {
   background-color: #10b981;
 }
@@ -356,7 +315,6 @@ input[type="number"] {
   border-color: #dc2626;
   color: white;
 }
-
 .btn-danger:hover {
   background-color: #ef4444;
 }
@@ -366,7 +324,6 @@ input[type="number"] {
   border-color: #0284c7;
   color: white;
 }
-
 .btn-search:hover {
   background-color: #0ea5e9;
 }
@@ -376,30 +333,28 @@ input[type="number"] {
   border-color: transparent;
   color: var(--text-secondary);
 }
-
 .btn-ghost:hover {
   background-color: var(--bg-card);
   color: var(--text-primary);
 }
 
 /* ============================================================ */
-/* MAIN WORKSPACE LAYOUT (CANVAS + EXPANSIVE STEPS SIDEBAR)     */
+/* MAIN WORKSPACE (CANVAS + SPACIOUS STEPS SIDEBAR)             */
 /* ============================================================ */
 .main-layout {
-  height: 600px;
+  height: 580px;
   display: flex;
   overflow: hidden;
   position: relative;
   border-bottom: 1px solid var(--border-color);
 }
 
-/* Tree Canvas Area */
 .canvas-wrapper {
   flex: 1;
   position: relative;
-  background-color: #060b16;
+  background-color: var(--bg-primary);
   background-image: 
-    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.06) 1px, transparent 0);
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
   background-size: 24px 24px;
   overflow: hidden;
 }
@@ -409,12 +364,10 @@ input[type="number"] {
   height: 100%;
   cursor: grab;
 }
-
 #tree-svg:active {
   cursor: grabbing;
 }
 
-/* Canvas Floating Toolbar */
 .canvas-toolbar {
   position: absolute;
   top: 16px;
@@ -422,7 +375,7 @@ input[type="number"] {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background-color: rgba(19, 29, 49, 0.95);
+  background-color: rgba(18, 28, 50, 0.95);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
   padding: 6px;
@@ -445,13 +398,11 @@ input[type="number"] {
   font-size: 16px;
   transition: all 0.15s;
 }
-
 .canvas-tool-btn:hover {
   background-color: var(--bg-tertiary);
   color: var(--text-primary);
 }
 
-/* Empty State */
 .empty-state {
   position: absolute;
   top: 50%;
@@ -465,30 +416,15 @@ input[type="number"] {
   align-items: center;
   gap: 12px;
 }
-
-.empty-icon {
-  font-size: 48px;
-  opacity: 0.6;
-}
-
-.empty-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.empty-hint {
-  font-size: 13px;
-  max-width: 360px;
-  line-height: 1.5;
-  color: var(--text-muted);
-}
+.empty-icon { font-size: 48px; opacity: 0.6; }
+.empty-title { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+.empty-hint { font-size: 13px; max-width: 360px; line-height: 1.5; color: var(--text-muted); }
 
 /* ============================================================ */
-/* ALGORITHMIC STEPS SIDEBAR (EXPANDED & BEAUTIFULLY STYLED)   */
+/* SPACIOUS ALGORITHMIC STEPS SIDEBAR (COMPLETELY VISIBLE)      */
 /* ============================================================ */
 .sidebar {
-  width: 440px; /* Spacious width to ensure complete visibility */
+  width: 440px;
   min-width: 380px;
   background-color: var(--bg-secondary);
   border-left: 1px solid var(--border-color);
@@ -530,11 +466,10 @@ input[type="number"] {
   color: var(--accent-light);
 }
 
-/* Current Step Callout Card (Highlighted & High Visibility) */
 .step-callout {
   padding: 18px 20px;
   border-bottom: 1px solid var(--border-color);
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+  background: linear-gradient(180deg, rgba(25, 37, 62, 0.9), rgba(13, 21, 39, 0.95));
 }
 
 .step-callout-header {
@@ -574,7 +509,6 @@ input[type="number"] {
   overflow-wrap: anywhere;
 }
 
-/* History / Log List */
 .log-list-wrapper {
   flex: 1;
   display: flex;
@@ -619,14 +553,14 @@ input[type="number"] {
 }
 
 .log-item:hover {
-  background-color: #1a2842;
+  background-color: #1a2a48;
   border-color: #3b82f6;
   transform: translateX(2px);
 }
 
 .log-item.active-step {
   border-color: var(--accent-light);
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.15));
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.2));
   box-shadow: 0 0 14px rgba(99, 102, 241, 0.35);
 }
 
@@ -647,12 +581,11 @@ input[type="number"] {
   color: var(--text-secondary);
   font-weight: 500;
 }
-
 .log-item.active-step .log-text {
   color: #ffffff;
 }
 
-/* In-Order Traversal Bar */
+/* In-Order Traversal Preview */
 .inorder-bar {
   background-color: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
@@ -680,7 +613,7 @@ input[type="number"] {
   padding: 3px 0;
 }
 
-/* Bottom Animation Playback Bar */
+/* Playback Bar */
 .playback-bar {
   background-color: var(--bg-card);
   border-top: 1px solid var(--border-color);
@@ -737,10 +670,6 @@ input[type="range"]::-webkit-slider-thumb {
   transition: transform 0.1s;
 }
 
-input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-}
-
 .speed-control {
   display: flex;
   align-items: center;
@@ -750,7 +679,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* ============================================================ */
-/* DIRECTLY INTEGRATED THEORY & COMPLEXITY SECTION (PROMINENT)  */
+/* DIRECTLY INTEGRATED THEORY & COMPLEXITY SECTION (9 TREES)    */
 /* ============================================================ */
 .theory-container {
   background-color: var(--bg-secondary);
@@ -777,7 +706,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
   color: var(--text-muted);
 }
 
-/* Theory Tabs */
 .theory-nav-tabs {
   display: flex;
   gap: 8px;
@@ -796,7 +724,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -813,7 +741,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
   box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
 }
 
-/* Tab Panels */
 .theory-panel {
   display: none;
   background-color: var(--bg-card);
@@ -849,7 +776,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-size: 14px;
 }
 
-/* Complexity Table */
 .complexity-table {
   width: 100%;
   border-collapse: collapse;
@@ -871,7 +797,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .complexity-table tr:nth-child(even) {
-  background-color: rgba(7, 13, 25, 0.4);
+  background-color: rgba(6, 11, 22, 0.4);
 }
 
 .complexity-badge {
@@ -886,6 +812,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .badge-green { background: var(--success-bg); color: var(--success); }
 .badge-blue { background: rgba(99, 102, 241, 0.25); color: #a5b4fc; }
 .badge-yellow { background: var(--warning-bg); color: var(--warning); }
+.badge-red { background: var(--danger-bg); color: #f87171; }
+.badge-black { background: #000000; color: #cbd5e1; border: 1px solid #475569; }
+.badge-purple { background: var(--purple-bg); color: #d8b4fe; }
 
 /* Rotations Grid */
 .rotations-grid {
@@ -942,133 +871,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .tree-link.active {
   stroke: var(--accent-light);
-  stroke-width: 3px;
+  stroke-width: 3.5px;
 }
 
-/* B-Tree Nodes */
-.node-group {
-  cursor: pointer;
-}
-
-.node-box {
-  fill: var(--node-bg);
-  stroke: var(--node-border);
-  stroke-width: 1.5px;
-  rx: 8px;
-  ry: 8px;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
-  transition: all 0.3s ease;
-}
-
-.node-group.node-active .node-box {
-  stroke: var(--warning);
-  stroke-width: 2.5px;
-  filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.6));
-}
-
-.node-group.node-visited .node-box {
-  stroke: var(--accent-light);
-  stroke-width: 2px;
-}
-
-.node-group.node-split .node-box {
-  stroke: var(--purple);
-  stroke-width: 2.5px;
-  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.6));
-}
-
-.node-group.node-merge .node-box {
-  stroke: var(--cyan);
-  stroke-width: 2.5px;
-  filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.6));
-}
-
-.node-group.node-success .node-box {
-  stroke: var(--success);
-  stroke-width: 2.5px;
-  filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.6));
-}
-
-.node-group.node-error .node-box {
-  stroke: var(--danger);
-  stroke-width: 2.5px;
-  filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.6));
-}
-
-.node-group.node-target .node-box {
-  stroke: var(--danger);
-  stroke-width: 2.5px;
-  stroke-dasharray: 4 2;
-  filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.5));
-}
-
-.key-box {
-  fill: var(--key-bg);
-  stroke: var(--key-border);
-  stroke-width: 1px;
-  rx: 6px;
-  ry: 6px;
-  transition: all 0.25s ease;
-}
-
-.key-text {
-  fill: var(--key-text);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 700;
-  text-anchor: middle;
-  dominant-baseline: central;
-  pointer-events: none;
-}
-
-.key-cell:hover .key-box {
-  stroke: var(--accent-light);
-  fill: rgba(99, 102, 241, 0.2);
-}
-
-.key-cell.key-compared .key-box {
-  stroke: var(--warning);
-  fill: rgba(245, 158, 11, 0.3);
-}
-
-.key-cell.key-inserted .key-box {
-  stroke: var(--success);
-  fill: rgba(16, 185, 129, 0.4);
-}
-
-.key-cell.key-promoted .key-box {
-  stroke: var(--purple);
-  fill: rgba(168, 85, 247, 0.4);
-}
-
-.key-cell.key-swapped .key-box {
-  stroke: var(--cyan);
-  fill: rgba(6, 182, 212, 0.4);
-}
-
-.key-cell.key-found .key-box {
-  stroke: var(--success);
-  fill: rgba(16, 185, 129, 0.5);
-  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.8));
-}
-
-.key-cell.key-target .key-box {
-  stroke: var(--danger);
-  fill: rgba(239, 68, 68, 0.35);
-}
-
-.node-id-label {
+.tree-link-label {
   fill: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 9px;
-  text-anchor: middle;
+  font-size: 11px;
+  font-weight: 700;
 }
 
-/* AVL Tree Nodes */
-.avl-node-group {
-  cursor: pointer;
-}
-
+/* AVL & General Circular Nodes */
 .avl-node-circle {
   fill: var(--node-bg);
   stroke: var(--node-border);
@@ -1087,13 +900,120 @@ input[type="range"]::-webkit-slider-thumb:hover {
   pointer-events: none;
 }
 
-.avl-badge-bg {
+/* Red-Black Nodes */
+.rb-node-circle-red {
+  fill: #dc2626;
+  stroke: #f87171;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.6));
+}
+
+.rb-node-circle-black {
+  fill: #090e17;
+  stroke: #94a3b8;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.8));
+}
+
+.rb-node-key {
+  fill: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 800;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+/* B-Tree & B+ Tree Rectangles */
+.node-box {
+  fill: var(--node-bg);
+  stroke: var(--node-border);
+  stroke-width: 1.5px;
+  rx: 8px;
+  ry: 8px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.bplus-leaf-box {
+  fill: #0a1f18;
+  stroke: #10b981;
+  stroke-width: 2px;
+  rx: 8px;
+  ry: 8px;
+  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.4));
+}
+
+.key-box {
+  fill: var(--key-bg);
+  stroke: var(--key-border);
+  stroke-width: 1px;
+  rx: 6px;
+  ry: 6px;
+}
+
+.key-text {
+  fill: var(--key-text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+/* Trie Nodes */
+.trie-node-terminal {
+  fill: #0d281e;
+  stroke: #10b981;
+  stroke-width: 3.5px;
+  stroke-dasharray: 4 2;
+  filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.7));
+}
+
+/* Segment Tree Nodes */
+.seg-leaf-box {
+  fill: #0d2238;
+  stroke: #0284c7;
+  stroke-width: 2px;
+  rx: 6px;
+  ry: 6px;
+}
+
+.seg-range-text {
+  fill: #7dd3fc;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  text-anchor: middle;
+}
+
+.seg-sum-text {
+  fill: #f8fafc;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+/* K-D Tree Points */
+.kd-point-text {
+  fill: #f8fafc;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+/* Badges */
+.badge-group {
+  pointer-events: none;
+}
+.badge-bg {
   stroke-width: 1px;
   rx: 4px;
   ry: 4px;
 }
-
-.avl-badge-text {
+.badge-text {
   font-family: var(--font-mono);
   font-size: 9px;
   font-weight: 700;
@@ -1101,97 +1021,62 @@ input[type="range"]::-webkit-slider-thumb:hover {
   dominant-baseline: central;
 }
 
-.avl-badge-height .avl-badge-bg {
-  fill: rgba(99, 102, 241, 0.3);
-  stroke: rgba(99, 102, 241, 0.6);
+.avl-badge-height .badge-bg { fill: rgba(99, 102, 241, 0.3); stroke: rgba(99, 102, 241, 0.6); }
+.avl-badge-height .badge-text { fill: #c7d2fe; }
+
+.avl-badge-bf.bf-zero .badge-bg { fill: rgba(148, 163, 184, 0.2); stroke: rgba(148, 163, 184, 0.5); }
+.avl-badge-bf.bf-zero .badge-text { fill: #cbd5e1; }
+
+.avl-badge-bf.bf-balanced .badge-bg { fill: rgba(16, 185, 129, 0.3); stroke: rgba(16, 185, 129, 0.6); }
+.avl-badge-bf.bf-balanced .badge-text { fill: #a7f3d0; }
+
+.avl-badge-bf.bf-unbalanced .badge-bg { fill: rgba(239, 68, 68, 0.5); stroke: var(--danger); }
+.avl-badge-bf.bf-unbalanced .badge-text { fill: #ffffff; }
+
+/* Interactive Hover States */
+.tree-node-interactive {
+  cursor: pointer;
 }
-.avl-badge-height .avl-badge-text {
-  fill: #c7d2fe;
+.tree-node-interactive:hover circle,
+.tree-node-interactive:hover rect {
+  stroke: var(--accent-light);
+  transform: scale(1.04);
 }
 
-.avl-badge-bf.bf-zero .avl-badge-bg {
-  fill: rgba(148, 163, 184, 0.2);
-  stroke: rgba(148, 163, 184, 0.5);
-}
-.avl-badge-bf.bf-zero .avl-badge-text {
-  fill: #cbd5e1;
-}
-
-.avl-badge-bf.bf-balanced .avl-badge-bg {
-  fill: rgba(16, 185, 129, 0.3);
-  stroke: rgba(16, 185, 129, 0.6);
-}
-.avl-badge-bf.bf-balanced .avl-badge-text {
-  fill: #a7f3d0;
-}
-
-.avl-badge-bf.bf-unbalanced .avl-badge-bg {
-  fill: rgba(239, 68, 68, 0.5);
-  stroke: var(--danger);
-  animation: pulseBadge 1s infinite alternate;
-}
-.avl-badge-bf.bf-unbalanced .avl-badge-text {
-  fill: #ffffff;
-}
-
-@keyframes pulseBadge {
-  0% { filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.5)); }
-  100% { filter: drop-shadow(0 0 8px rgba(239, 68, 68, 1)); }
-}
-
-.avl-node-group.node-active .avl-node-circle {
-  stroke: var(--warning);
-  stroke-width: 3.5px;
+/* Highlight states */
+.node-active circle, .node-active rect {
+  stroke: var(--warning) !important;
+  stroke-width: 3.5px !important;
   filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.7));
 }
 
-.avl-node-group.node-visited .avl-node-circle {
-  stroke: var(--accent-light);
-  stroke-width: 2.5px;
+.node-visited circle, .node-visited rect {
+  stroke: var(--accent-light) !important;
+  stroke-width: 2.5px !important;
 }
 
-.avl-node-group.node-unbalanced .avl-node-circle {
-  stroke: var(--danger);
-  stroke-width: 4px;
+.node-unbalanced circle, .node-unbalanced rect {
+  stroke: var(--danger) !important;
+  stroke-width: 4px !important;
   filter: drop-shadow(0 0 18px rgba(239, 68, 68, 0.85));
 }
 
-.avl-node-group.node-rotating .avl-node-circle {
-  stroke: var(--purple);
-  stroke-width: 4px;
+.node-rotating circle, .node-rotating rect {
+  stroke: var(--purple) !important;
+  stroke-width: 4px !important;
   filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.85));
 }
 
-.avl-node-group.node-success .avl-node-circle {
-  stroke: var(--success);
-  stroke-width: 3.5px;
+.node-success circle, .node-success rect {
+  stroke: var(--success) !important;
+  stroke-width: 3.5px !important;
   filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.85));
 }
 
-.avl-node-group.node-error .avl-node-circle {
-  stroke: var(--danger);
-  stroke-width: 3.5px;
+.node-error circle, .node-error rect {
+  stroke: var(--danger) !important;
+  stroke-width: 3.5px !important;
   filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.75));
-}
-
-.avl-node-group.node-target .avl-node-circle {
-  stroke: var(--danger);
-  stroke-width: 3.5px;
-  stroke-dasharray: 4 2;
-  filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.75));
-}
-
-.avl-node-group:hover .avl-node-circle {
-  stroke: var(--accent-light);
-  fill: #1e293b;
-}
-
-.avl-branch-label {
-  fill: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 800;
-  text-anchor: middle;
 }
 
 /* Key Popover */
@@ -1244,13 +1129,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-weight: 600;
 }
 
-.popover-btn:hover {
-  background: var(--accent-primary);
-}
-
-.popover-btn.delete-btn:hover {
-  background: var(--danger);
-}
+.popover-btn:hover { background: var(--accent-primary); }
+.popover-btn.delete-btn:hover { background: var(--danger); }
 
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1261,129 +1141,117 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
   <!-- Top App Header -->
   <header>
-    <div class="logo-group">
-      <div class="logo-badge">TREES</div>
-      <div>
-        <h1 class="app-title">Tree Visualizer</h1>
-        <div class="app-subtitle">Interactive Educational Data Structures</div>
+    <div class="header-top">
+      <div class="logo-group">
+        <div class="logo-badge">TREES</div>
+        <div>
+          <h1 class="app-title">Tree Data Structure Visualizer</h1>
+          <div class="app-subtitle">Interactive Step-by-Step Algorithms & Complexity Suite</div>
+        </div>
+      </div>
+      <div style="font-size: 12px; color: var(--text-muted); font-family: var(--font-mono);">
+        Select any data structure below to explore
       </div>
     </div>
 
-    <!-- TWO PROMINENT OPTIONS IN MIDDLE OF THE PAGE -->
-    <div class="tree-hero-selector">
-      <button class="tree-card-option active" data-mode="avl" id="opt-avl" title="Switch to Self-Balancing AVL Binary Search Tree">
-        <span class="tree-card-icon">⚖️</span>
-        <div class="tree-card-text">
-          <span class="tree-card-title">AVL Tree</span>
-          <span class="tree-card-desc">Height-Balanced BST (|BF| ≤ 1)</span>
-        </div>
+    <!-- PROMINENT TREE SELECTOR IN MIDDLE OF THE PAGE (9 TREE STRUCTURES) -->
+    <div class="tree-selector-grid">
+      <button class="tree-selector-card active" data-mode="avl" title="AVL Tree: Height-balanced BST with BF ∈ {-1, 0, 1}">
+        <span class="card-icon">⚖️</span>
+        <span class="card-title">AVL Tree</span>
       </button>
 
-      <button class="tree-card-option" data-mode="btree" id="opt-btree" title="Switch to Multi-Way B-Tree">
-        <span class="tree-card-icon">🌳</span>
-        <div class="tree-card-text">
-          <span class="tree-card-title">B-Tree</span>
-          <span class="tree-card-desc">Multi-Way Balanced Tree (Order M)</span>
-        </div>
+      <button class="tree-selector-card" data-mode="rbtree" title="Red-Black Tree: Self-balancing BST with Red/Black color properties">
+        <span class="card-icon">🔴</span>
+        <span class="card-title">Red-Black Tree</span>
       </button>
-    </div>
 
-    <!-- Dynamic Stats Displays -->
-    <!-- AVL Tree Stats (Active by default) -->
-    <div class="stats-container" id="avl-stats">
-      <div class="stat-chip">
-        <span class="stat-label">Height:</span>
-        <span class="stat-value" id="avl-stat-height">0</span>
-      </div>
-      <div class="stat-chip">
-        <span class="stat-label">Total Nodes:</span>
-        <span class="stat-value" id="avl-stat-nodes">0</span>
-      </div>
-      <div class="stat-chip">
-        <span class="stat-label">Status:</span>
-        <span class="stat-value balanced" id="avl-stat-balance">Balanced</span>
-      </div>
-    </div>
+      <button class="tree-selector-card" data-mode="btree" title="B-Tree: Multi-way search tree with Order M">
+        <span class="card-icon">🌳</span>
+        <span class="card-title">B-Tree</span>
+      </button>
 
-    <!-- B-Tree Stats (Shown when B-Tree mode is active) -->
-    <div class="stats-container" id="btree-stats" style="display: none;">
-      <div class="stat-chip">
-        <span class="stat-label">Order (M):</span>
-        <span class="stat-value" id="stat-order">3</span>
-      </div>
-      <div class="stat-chip">
-        <span class="stat-label">Height:</span>
-        <span class="stat-value" id="stat-height">0</span>
-      </div>
-      <div class="stat-chip">
-        <span class="stat-label">Total Keys:</span>
-        <span class="stat-value" id="stat-keys">0</span>
-      </div>
-      <div class="stat-chip">
-        <span class="stat-label">Total Nodes:</span>
-        <span class="stat-value" id="stat-nodes">0</span>
-      </div>
-      <div class="stat-chip">
-        <span class="stat-label">Min Keys:</span>
-        <span class="stat-value" id="stat-min-keys">1</span>
-      </div>
-      <div class="stat-chip">
-        <span class="stat-label">Max Keys:</span>
-        <span class="stat-value" id="stat-max-keys">2</span>
-      </div>
+      <button class="tree-selector-card" data-mode="bplustree" title="B+ Tree: All keys in leaves, linked leaf chain for fast range queries">
+        <span class="card-icon">📑</span>
+        <span class="card-title">B+ Tree</span>
+      </button>
+
+      <button class="tree-selector-card" data-mode="trie" title="Trie: Prefix tree for efficient word and dictionary retrieval">
+        <span class="card-icon">🔤</span>
+        <span class="card-title">Trie</span>
+      </button>
+
+      <button class="tree-selector-card" data-mode="segmenttree" title="Segment Tree: Binary tree over array for logarithmic range sum queries">
+        <span class="card-icon">📏</span>
+        <span class="card-title">Segment Tree</span>
+      </button>
+
+      <button class="tree-selector-card" data-mode="suffixtree" title="Suffix Tree: Compressed trie of all suffixes for substring pattern matching">
+        <span class="card-icon">📜</span>
+        <span class="card-title">Suffix Tree</span>
+      </button>
+
+      <button class="tree-selector-card" data-mode="kdtree" title="2D K-D Tree: Alternating axis spatial partitioning for 2D points">
+        <span class="card-icon">🎯</span>
+        <span class="card-title">K-D Tree</span>
+      </button>
+
+      <button class="tree-selector-card" data-mode="threadedtree" title="Threaded Binary Tree: Uses null pointers as threads for O(1) space traversal">
+        <span class="card-icon">🧵</span>
+        <span class="card-title">Threaded BST</span>
+      </button>
     </div>
   </header>
 
-  <!-- Control Panel (Explicit User Inputs Only) -->
+  <!-- Control Panel (Direct Explicit User Inputs Only - No Presets) -->
   <div class="control-panel">
-    <!-- Row 1: Key Operations & Configuration -->
     <div class="control-row">
-      <!-- B-Tree Order Selector (Hidden in AVL mode) -->
-      <div class="control-group" id="btree-order-group" style="display: none;">
+      <!-- Order Selector (B-Tree & B+ Tree) -->
+      <div class="control-group" id="order-control-group" style="display: none;">
         <span class="control-group-title">Order (M)</span>
         <div class="order-pills">
-          <button class="order-btn active" data-order="3" title="Order 3: 2-3 Tree (Max 2 keys, 3 children)">M = 3</button>
-          <button class="order-btn" data-order="4" title="Order 4: 2-3-4 Tree (Max 3 keys, 4 children)">M = 4</button>
-          <button class="order-btn" data-order="5" title="Order 5: Max 4 keys, 5 children">M = 5</button>
-          <button class="order-btn" data-order="6" title="Order 6: Max 5 keys, 6 children">M = 6</button>
-          <button class="order-btn" data-order="7" title="Order 7: Max 6 keys, 7 children">M = 7</button>
+          <button class="order-btn active" data-order="3">M = 3</button>
+          <button class="order-btn" data-order="4">M = 4</button>
+          <button class="order-btn" data-order="5">M = 5</button>
+          <button class="order-btn" data-order="6">M = 6</button>
+          <button class="order-btn" data-order="7">M = 7</button>
         </div>
       </div>
 
-      <!-- Single Key Operations (Insert, Delete, Search) -->
+      <!-- Single Key / Item Operations -->
       <div class="control-group">
-        <span class="control-group-title">Single Key</span>
-        <input type="number" id="single-key-input" placeholder="e.g. 25" min="-999" max="999">
-        <button class="btn btn-primary" id="btn-insert" title="Insert key into active tree">
+        <span class="control-group-title" id="input-label">Key</span>
+        <input type="number" id="single-key-input" placeholder="e.g. 25">
+        <button class="btn btn-primary" id="btn-insert">
           <span>+</span> Insert
         </button>
-        <button class="btn btn-danger" id="btn-delete" title="Delete key from active tree">
+        <button class="btn btn-danger" id="btn-delete">
           <span>−</span> Delete
         </button>
-        <button class="btn btn-search" id="btn-search" title="Search for key in active tree">
+        <button class="btn btn-search" id="btn-search">
           <span>🔍</span> Search
+        </button>
+        <button class="btn btn-secondary" id="btn-secondary-action" style="display: none;">
+          Action
         </button>
       </div>
 
-      <!-- Bulk Explicit Keys Input -->
+      <!-- Explicit Bulk Input List -->
       <div class="control-group">
-        <span class="control-group-title">Explicit Keys List</span>
+        <span class="control-group-title" id="bulk-label">Numbers List</span>
         <input type="text" class="bulk-input" id="bulk-keys-input" placeholder="30, 20, 10, 40, 50, 25" value="30, 20, 10, 40, 50, 25">
-        <button class="btn btn-success" id="btn-bulk-insert" title="Insert all keys sequentially">
+        <button class="btn btn-success" id="btn-bulk-insert" title="Insert elements sequentially">
           <span>📥</span> Insert All
         </button>
-        <button class="btn btn-primary" id="btn-bulk-rebuild" title="Clear and rebuild tree with these exact keys">
+        <button class="btn btn-primary" id="btn-bulk-rebuild" title="Clear and rebuild tree with this exact input">
           <span>🔄</span> Rebuild Tree
         </button>
       </div>
 
       <!-- Generators & Clear -->
       <div class="control-group">
-        <button class="btn btn-ghost" id="btn-random-key" title="Generate one random key and insert">
-          + Random Key
-        </button>
-        <button class="btn btn-ghost" id="btn-random-set" title="Generate 8 random keys and rebuild">
-          🎲 8 Random Keys
+        <button class="btn btn-ghost" id="btn-random-set" title="Generate random sample data">
+          🎲 Random Set
         </button>
         <button class="btn btn-danger" id="btn-clear" title="Clear active tree">
           🧹 Clear
@@ -1433,7 +1301,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
         <div class="step-callout-header">
           <span class="step-type-badge step-type-info">READY</span>
         </div>
-        <div class="step-description">Enter custom keys to execute insertion, deletion, or search.</div>
+        <div class="step-description">Enter custom keys to execute operations.</div>
       </div>
 
       <!-- Step-by-Step History Timeline List -->
@@ -1444,9 +1312,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
     </aside>
   </div>
 
-  <!-- In-Order Traversal Preview Strip -->
-  <div class="inorder-bar">
-    <div class="inorder-label">Sorted In-Order Traversal:</div>
+  <!-- In-Order / Sequence Preview Strip -->
+  <div class="inorder-bar" id="inorder-bar">
+    <div class="inorder-label" id="inorder-label">Sequence / In-Order Traversal:</div>
     <div class="inorder-keys" id="inorder-keys">[ Empty ]</div>
   </div>
 
@@ -1474,7 +1342,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   </div>
 
   <!-- ============================================================ -->
-  <!-- DIRECTLY INTEGRATED THEORY & COMPLEXITY CENTER (PROMINENT)    -->
+  <!-- DIRECTLY INTEGRATED THEORY & COMPLEXITY CENTER (9 TREES)     -->
   <!-- ============================================================ -->
   <section class="theory-container" id="theory-section">
     <div class="theory-header">
@@ -1482,303 +1350,278 @@ input[type="range"]::-webkit-slider-thumb:hover {
         <span>📚</span> Educational Reference: Theory, Invariants & Time Complexity
       </h2>
       <p class="theory-main-subtitle">
-        Explore detailed mathematical invariants, rotation mechanics, multi-way properties, and rigorous time & space complexity analysis.
+        Comprehensive theoretical foundations, rotation rules, geometric partitioning, and asymptotic complexity analysis for all 9 data structures.
       </p>
     </div>
 
     <!-- Theory Tabs Navigation -->
     <nav class="theory-nav-tabs">
-      <button class="theory-tab-btn active" data-tab="avl-theory">⚖️ AVL Tree Theory</button>
-      <button class="theory-tab-btn" data-tab="avl-rotations">🔄 AVL Rotations (LL, RR, LR, RL)</button>
-      <button class="theory-tab-btn" data-tab="btree-theory">🌳 B-Tree Theory & Invariants</button>
-      <button class="theory-tab-btn" data-tab="complexity">⏱️ Time & Space Complexity</button>
-      <button class="theory-tab-btn" data-tab="comparison">📊 AVL vs B-Tree vs Red-Black</button>
+      <button class="theory-tab-btn active" data-tab="avl-theory">⚖️ AVL Tree</button>
+      <button class="theory-tab-btn" data-tab="rbtree-theory">🔴 Red-Black Tree</button>
+      <button class="theory-tab-btn" data-tab="btree-theory">🌳 B-Tree</button>
+      <button class="theory-tab-btn" data-tab="bplustree-theory">📑 B+ Tree</button>
+      <button class="theory-tab-btn" data-tab="trie-theory">🔤 Trie</button>
+      <button class="theory-tab-btn" data-tab="segmenttree-theory">📏 Segment Tree</button>
+      <button class="theory-tab-btn" data-tab="suffixtree-theory">📜 Suffix Tree</button>
+      <button class="theory-tab-btn" data-tab="kdtree-theory">🎯 K-D Tree</button>
+      <button class="theory-tab-btn" data-tab="threadedtree-theory">🧵 Threaded BST</button>
+      <button class="theory-tab-btn" data-tab="master-complexity">⏱️ Master Complexity Matrix</button>
     </nav>
 
-    <!-- Panel 1: AVL Tree Theory -->
+    <!-- 1. AVL Tree Theory -->
     <div class="theory-panel active" id="tab-avl-theory">
-      <h3>⚖️ AVL Tree Fundamentals & Balance Invariants</h3>
+      <h3>⚖️ AVL Tree Fundamentals & Rotations</h3>
       <p>
-        An <strong>AVL Tree</strong> (invented in 1962 by Soviet mathematicians <strong>Georgy Adelson-Velsky</strong> and <strong>Evgenii Landis</strong>) is the first self-balancing binary search tree in computer science history. Ordinary BSTs can degrade into $O(N)$ skewed chains upon inserting sorted data; AVL trees eliminate this by strictly enforcing balance invariants on every update.
+        Invented in 1962 by <strong>Adelson-Velsky and Landis</strong>, the AVL tree strictly bounds height by guaranteeing that for every node $v$:
       </p>
-
-      <h4>1. Balance Factor (BF) Definition</h4>
-      <p>
-        For every node $v$ in an AVL tree, its <strong>Balance Factor</strong> is mathematically defined as:
-      </p>
-      <div style="background-color: var(--bg-primary); padding: 12px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 14px; margin-bottom: 14px; border: 1px solid var(--border-color); color: #38bdf8;">
-        Balance Factor: BF(v) = Height(Left Subtree) − Height(Right Subtree)
+      <div style="background-color: var(--bg-primary); padding: 12px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 14px; margin-bottom: 12px; border: 1px solid var(--border-color); color: #38bdf8;">
+        Balance Factor: BF(v) = Height(Left Subtree) − Height(Right Subtree) ∈ {-1, 0, +1}
       </div>
       <p>
-        A node is <strong>valid and balanced</strong> if and only if:
-        <br>
-        <span style="color: var(--success); font-family: var(--font-mono); font-weight: 800; font-size: 15px;">BF(v) ∈ {-1, 0, +1}</span>
+        Strict Height Upper Bound Theorem: $h &lt; 1.4404 \log_2(N + 2) - 0.328 \approx O(\log N)$.
       </p>
-      <ul style="margin-left: 24px; color: var(--text-secondary); margin-bottom: 16px;">
-        <li><strong>BF = 0:</strong> Perfect balance; left and right subtrees have equal height.</li>
-        <li><strong>BF = +1:</strong> Left-heavy; left subtree is 1 level taller than right.</li>
-        <li><strong>BF = -1:</strong> Right-heavy; right subtree is 1 level taller than left.</li>
-        <li><strong>|BF| ≥ 2:</strong> <em>Violation!</em> Requires immediate constant-time $O(1)$ rotation.</li>
-      </ul>
-
-      <h4>2. Mathematical Height Bound Theorem</h4>
-      <p>
-        Let $N(h)$ be the minimum number of nodes in an AVL tree of height $h$. The recurrence is:
-      </p>
-      <div style="background-color: var(--bg-primary); padding: 10px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 13px; margin-bottom: 12px; border: 1px solid var(--border-color);">
-        N(h) = 1 + N(h - 1) + N(h - 2) &nbsp;&nbsp;(where N(0) = 0, N(1) = 1)
-      </div>
-      <p>
-        Since $N(h) = F_{h+2} - 1$ (where $F_k$ is the $k$-th Fibonacci number), solving the golden ratio $\phi = \frac{1 + \sqrt{5}}{2} \approx 1.618$ gives the upper bound on height:
-      </p>
-      <div style="background-color: var(--bg-primary); padding: 12px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 15px; margin-bottom: 14px; border: 1px solid var(--border-color); color: var(--accent-light); font-weight: 700;">
-        h &lt; 1.4404 · log₂(N + 2) − 0.328 &nbsp;⇒&nbsp; h = O(log N)
-      </div>
-      <p>
-        This guarantees that search, insertion, and deletion are always strictly $O(\log N)$.
-      </p>
-    </div>
-
-    <!-- Panel 2: AVL Rotations Guide -->
-    <div class="theory-panel" id="tab-avl-rotations">
-      <h3>🔄 The 4 Rebalancing Rotations</h3>
-      <p>
-        When an insertion or deletion pushes a node's Balance Factor to $+2$ or $-2$, the tree performs one of <strong>four canonical rotations</strong>. Rotations execute in $O(1)$ time by adjusting a few pointers without altering the in-order sorting invariant.
-      </p>
-
+      <h4>4 Rebalancing Rotations:</h4>
       <div class="rotations-grid">
-        <!-- LL Case -->
         <div class="rotation-card">
           <div class="rotation-card-header">
-            <span class="rotation-card-title">1. Left-Left (LL) Case</span>
-            <span class="step-type-badge step-type-split">Single Right Rotation</span>
+            <span class="rotation-card-title">LL: Single Right Rotation</span>
+            <span class="complexity-badge badge-blue">BF = +2, Child ≥ 0</span>
           </div>
-          <p style="font-size: 13px; color: var(--text-muted);">
-            Triggered when node $z$ has <strong>BF = +2</strong> and left child $y$ has <strong>BF ≥ 0</strong>.
-          </p>
-          <div class="rotation-diagram">
-      [z] (+2)                 [y] (0)
-      /   \                   /   \
-    [y]   T4      ===>      [x]   [z]
-    / \                     / \   / \
-  [x] T3                   T1 T2 T3 T4
-  / \
- T1 T2</div>
+          <p style="font-size: 12px; color: var(--text-muted);">Left-heavy node with left-heavy child. Rotates right around unbalanced node.</p>
         </div>
-
-        <!-- RR Case -->
         <div class="rotation-card">
           <div class="rotation-card-header">
-            <span class="rotation-card-title">2. Right-Right (RR) Case</span>
-            <span class="step-type-badge step-type-split">Single Left Rotation</span>
+            <span class="rotation-card-title">RR: Single Left Rotation</span>
+            <span class="complexity-badge badge-blue">BF = -2, Child ≤ 0</span>
           </div>
-          <p style="font-size: 13px; color: var(--text-muted);">
-            Triggered when node $z$ has <strong>BF = -2</strong> and right child $y$ has <strong>BF ≤ 0</strong>.
-          </p>
-          <div class="rotation-diagram">
-    [z] (-2)                   [y] (0)
-    /   \                     /   \
-   T1   [y]       ===>      [z]   [x]
-        / \                 / \   / \
-       T2 [x]              T1 T2 T3 T4
-          / \
-         T3 T4</div>
+          <p style="font-size: 12px; color: var(--text-muted);">Right-heavy node with right-heavy child. Rotates left around unbalanced node.</p>
         </div>
-
-        <!-- LR Case -->
         <div class="rotation-card">
           <div class="rotation-card-header">
-            <span class="rotation-card-title">3. Left-Right (LR) Case</span>
-            <span class="step-type-badge step-type-borrow">Double: Left then Right</span>
+            <span class="rotation-card-title">LR: Double Rotation</span>
+            <span class="complexity-badge badge-purple">Left then Right</span>
           </div>
-          <p style="font-size: 13px; color: var(--text-muted);">
-            Triggered when node $z$ has <strong>BF = +2</strong> and left child $y$ has <strong>BF = -1</strong> (zigzag).
-          </p>
-          <div class="rotation-diagram">
-      [z] (+2)               [z] (+2)              [x] (0)
-      /   \                  /   \                /   \
-    [y]   T4    ==Left=>   [x]   T4    ==Right=> [y]   [z]
-    / \                    / \                   / \   / \
-   T1 [x]                [y] T3                 T1 T2 T3 T4
-      / \                / \
-     T2 T3              T1 T2</div>
+          <p style="font-size: 12px; color: var(--text-muted);">Zigzag left-right: Left rotate child first, then Right rotate parent.</p>
         </div>
-
-        <!-- RL Case -->
         <div class="rotation-card">
           <div class="rotation-card-header">
-            <span class="rotation-card-title">4. Right-Left (RL) Case</span>
-            <span class="step-type-badge step-type-borrow">Double: Right then Left</span>
+            <span class="rotation-card-title">RL: Double Rotation</span>
+            <span class="complexity-badge badge-purple">Right then Left</span>
           </div>
-          <p style="font-size: 13px; color: var(--text-muted);">
-            Triggered when node $z$ has <strong>BF = -2</strong> and right child $y$ has <strong>BF = +1</strong> (zigzag).
-          </p>
-          <div class="rotation-diagram">
-    [z] (-2)                 [z] (-2)              [x] (0)
-    /   \                    /   \                /   \
-   T1   [y]    ==Right=>    T1   [x]    ==Left=> [z]   [y]
-        / \                      / \             / \   / \
-      [x] T4                    T2 [y]          T1 T2 T3 T4
-      / \                          / \
-     T2 T3                        T3 T4</div>
+          <p style="font-size: 12px; color: var(--text-muted);">Zigzag right-left: Right rotate child first, then Left rotate parent.</p>
         </div>
       </div>
     </div>
 
-    <!-- Panel 3: B-Tree Theory -->
+    <!-- 2. Red-Black Tree Theory -->
+    <div class="theory-panel" id="tab-rbtree-theory">
+      <h3>🔴 Red-Black Tree Properties & Invariants</h3>
+      <p>
+        Introduced by Rudolf Bayer (1972) and refined by Guibas & Sedgewick (1978), Red-Black trees are self-balancing BSTs widely used in production runtimes (C++ <code>std::map</code>, Java <code>TreeMap</code>, Linux Completely Fair Scheduler).
+      </p>
+      <h4>The 5 Fundamental Properties:</h4>
+      <ul style="margin-left: 24px; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>Property 1:</strong> Every node is colored either <span style="color: #ef4444; font-weight: 700;">RED</span> or <span style="color: #94a3b8; font-weight: 700;">BLACK</span>.</li>
+        <li><strong>Property 2:</strong> The root is always <strong>BLACK</strong>.</li>
+        <li><strong>Property 3:</strong> All NIL leaf nodes are <strong>BLACK</strong>.</li>
+        <li><strong>Property 4:</strong> If a node is <strong>RED</strong>, both of its children must be <strong>BLACK</strong> (no two consecutive reds).</li>
+        <li><strong>Property 5 (Black-Height):</strong> Every path from a given node to any of its descendant NIL leaves contains the exact same number of BLACK nodes.</li>
+      </ul>
+      <p>
+        <strong>Height Guarantee:</strong> Height $h \le 2 \log_2(N + 1) = O(\log N)$. Insertion requires at most <strong>2 rotations</strong>; deletion requires at most <strong>3 rotations</strong>!
+      </p>
+    </div>
+
+    <!-- 3. B-Tree Theory -->
     <div class="theory-panel" id="tab-btree-theory">
-      <h3>🌳 B-Tree Fundamentals & Invariants</h3>
+      <h3>🌳 B-Tree Fundamentals & Invariants (Order M)</h3>
       <p>
-        A <strong>B-Tree</strong> (invented by <strong>Rudolf Bayer</strong> and <strong>Edward M. McCreight</strong> in 1972) is a self-balancing, multi-way search tree specifically designed for storage systems, databases (PostgreSQL, MySQL InnoDB), and filesystems (ext4, NTFS, Btrfs) where reading large blocks from disk or flash memory dominates performance.
+        Designed for block storage, filesystems, and databases where disk I/O dominates latency.
       </p>
-
-      <h4>Fundamental Invariants of Order M:</h4>
-      <ul style="margin-left: 24px; color: var(--text-secondary); margin-bottom: 16px;">
-        <li><strong>Order M:</strong> Every internal node has at most $M$ children.</li>
-        <li><strong>Non-root Branching:</strong> Every non-root node has at least $\lceil M / 2 \rceil$ children.</li>
-        <li><strong>Key Capacity:</strong> Every node contains between $\lceil M / 2 \rceil - 1$ and $M - 1$ keys. (The root may hold as few as 1 key).</li>
-        <li><strong>Strict Leaf Alignment:</strong> All leaves appear at the exact same depth ($h$).</li>
-        <li><strong>Internal Pointers:</strong> A node with $k$ keys contains exactly $k + 1$ child pointers separating key ranges.</li>
-      </ul>
-
-      <h4>Overflow & Underflow Operations:</h4>
-      <ul style="margin-left: 24px; color: var(--text-secondary); margin-bottom: 16px;">
-        <li><strong>Node Splitting:</strong> When insertion causes keys to exceed $M - 1$, the node splits at the median key. The median is promoted to the parent, creating two sibling nodes.</li>
-        <li><strong>Borrowing (Rotation):</strong> If a deletion causes a node to fall below $\lceil M / 2 \rceil - 1$ keys, it first attempts to borrow a key from its left or right sibling via parent rotation.</li>
-        <li><strong>Node Merging:</strong> If neither sibling has spare keys, the node merges with a sibling and pulls down the separating key from the parent. If the parent root is emptied, tree height decreases by 1.</li>
+      <ul style="margin-left: 24px; color: var(--text-secondary); line-height: 1.8;">
+        <li>Every internal node contains at most $M$ children and at most $M - 1$ keys.</li>
+        <li>Every internal node (except root) contains at least $\lceil M / 2 \rceil$ children and $\lceil M / 2 \rceil - 1$ keys.</li>
+        <li>All leaf nodes are strictly placed at the exact same depth.</li>
+        <li><strong>Node Split:</strong> Overfilled node splits at median; median is pushed up to parent.</li>
+        <li><strong>Borrow & Merge:</strong> Underfilled nodes borrow from siblings or merge with parent key pull-down.</li>
       </ul>
     </div>
 
-    <!-- Panel 4: Time & Space Complexity -->
-    <div class="theory-panel" id="tab-complexity">
-      <h3>⏱️ Comprehensive Time & Space Complexity Analysis</h3>
+    <!-- 4. B+ Tree Theory -->
+    <div class="theory-panel" id="tab-bplustree-theory">
+      <h3>📑 B+ Tree Architecture & Sequential Leaf Chaining</h3>
       <p>
-        Comparison of theoretical performance guarantees between AVL Trees and B-Trees across all primary operations.
+        The gold standard index structure for relational database engines (PostgreSQL, MySQL InnoDB, SQLite).
       </p>
+      <h4>Key Differences from B-Tree:</h4>
+      <ul style="margin-left: 24px; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>Data Resides Exclusively in Leaves:</strong> Internal nodes hold only <em>routing keys</em> and pointers, maximizing fanout and cache line efficiency.</li>
+        <li><strong>Singly/Doubly Linked Leaves:</strong> All leaf nodes are linked horizontally. Once the lower bound is located in $O(\log_M N)$ time, range scans execute sequentially in linear $O(K)$ time along the linked chain without traversing back up!</li>
+        <li><strong>Copy-Up Splits:</strong> When a leaf splits, its median key is copied up to the parent while remaining inside the right leaf.</li>
+      </ul>
+    </div>
 
+    <!-- 5. Trie Theory -->
+    <div class="theory-panel" id="tab-trie-theory">
+      <h3>🔤 Trie (Prefix Tree) Data Structure</h3>
+      <p>
+        An ordered tree data structure used to store dynamic sets of strings where keys are usually strings.
+      </p>
+      <ul style="margin-left: 24px; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>Prefix Sharing:</strong> All descendants of a node share a common string prefix.</li>
+        <li><strong>Time Complexity:</strong> Lookup, insertion, and deletion depend strictly on <strong>string length $L$</strong>: $O(L)$, completely independent of the number of words $N$ stored!</li>
+        <li><strong>Ideal Applications:</strong> Autocomplete search suggestions, spell checkers, IP routing longest-prefix match.</li>
+      </ul>
+    </div>
+
+    <!-- 6. Segment Tree Theory -->
+    <div class="theory-panel" id="tab-segmenttree-theory">
+      <h3>📏 Segment Tree for Range Queries</h3>
+      <p>
+        A binary tree used for storing intervals or segments, allowing fast querying of which stored segments contain a given point, or range queries over arrays.
+      </p>
+      <ul style="margin-left: 24px; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>Structure:</strong> Leaf nodes represent array indices $[i..i]$; internal nodes represent range $[L..R]$ with aggregate sum, minimum, or maximum.</li>
+        <li><strong>Range Sum Query (RSQ):</strong> Solved in $O(\log N)$ time by decomposing any arbitrary query interval $[qL..qR]$ into at most $O(\log N)$ canonical segments.</li>
+        <li><strong>Point Update:</strong> Single element update takes $O(\log N)$ by updating leaf and backtracking to recalculate ancestor segment sums.</li>
+      </ul>
+    </div>
+
+    <!-- 7. Suffix Tree Theory -->
+    <div class="theory-panel" id="tab-suffixtree-theory">
+      <h3>📜 Suffix Tree for String Analysis</h3>
+      <p>
+        A compressed trie containing all suffixes of a given text string $S\$$.
+      </p>
+      <ul style="margin-left: 24px; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>Edge Compression:</strong> Non-branching paths are compressed into substring edges, ensuring at most $2N$ nodes and $O(N)$ linear space.</li>
+        <li><strong>Pattern Search:</strong> Determines if a pattern $P$ of length $M$ occurs in text $T$ of length $N$ in <strong>$O(M)$ time</strong>, completely independent of text length $N$!</li>
+        <li><strong>Genomics & Bioinformatics:</strong> DNA motif matching, longest common substring, and genome assembly.</li>
+      </ul>
+    </div>
+
+    <!-- 8. K-D Tree Theory -->
+    <div class="theory-panel" id="tab-kdtree-theory">
+      <h3>🎯 2D K-D Tree (Spatial Partitioning)</h3>
+      <p>
+        A space-partitioning binary tree for organizing points in a $k$-dimensional space (here $k = 2$).
+      </p>
+      <ul style="margin-left: 24px; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>Alternating Cutting Planes:</strong> Level 0 splits on $X$-axis; Level 1 splits on $Y$-axis; Level 2 splits on $X$-axis, etc.</li>
+        <li><strong>Nearest Neighbor (NN) Search:</strong> Traverses down to find the closest leaf, then backtracks with <em>geometric pruning</em>: if the distance to the splitting plane is greater than the current best distance, the entire opposite branch is pruned!</li>
+        <li><strong>Complexity:</strong> Average search is $O(\log N)$; worst case 2D range search is $O(\sqrt{N})$.</li>
+      </ul>
+    </div>
+
+    <!-- 9. Threaded Binary Tree Theory -->
+    <div class="theory-panel" id="tab-threadedtree-theory">
+      <h3>🧵 Threaded Binary Tree (O(1) Auxiliary Space Traversal)</h3>
+      <p>
+        In an ordinary binary tree of $N$ nodes, $N + 1$ pointers are NULL. A Threaded Binary Tree puts these wasted null pointers to work!
+      </p>
+      <ul style="margin-left: 24px; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>Threads:</strong> A null left pointer points to the <em>in-order predecessor</em>; a null right pointer points to the <em>in-order successor</em>.</li>
+        <li><strong>Stackless Traversal:</strong> Traverses the entire tree in sorted order in $O(N)$ time and <strong>$O(1)$ auxiliary space</strong> without any recursion or stack overhead!</li>
+        <li><strong>Embedded Hardware:</strong> Vital for microcontrollers, embedded systems, and real-time devices with strict call stack limits.</li>
+      </ul>
+    </div>
+
+    <!-- 10. Master Complexity Table -->
+    <div class="theory-panel" id="tab-master-complexity">
+      <h3>⏱️ Master Time & Space Complexity Matrix</h3>
       <table class="complexity-table">
         <thead>
           <tr>
-            <th>Operation</th>
-            <th>AVL Tree (Binary)</th>
-            <th>B-Tree of Order M</th>
-            <th>Why / Mechanism</th>
+            <th>Data Structure</th>
+            <th>Search (Average)</th>
+            <th>Search (Worst)</th>
+            <th>Insert</th>
+            <th>Delete</th>
+            <th>Auxiliary Space</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>Search (Lookup)</strong></td>
+            <td><strong>AVL Tree</strong></td>
             <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-green">O(log N)</span> stack</td>
+          </tr>
+          <tr>
+            <td><strong>Red-Black Tree</strong></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-green">O(log N)</span> stack</td>
+          </tr>
+          <tr>
+            <td><strong>B-Tree (Order M)</strong></td>
             <td><span class="complexity-badge badge-blue">O(log_M N)</span></td>
-            <td>AVL does at most $1.44 \log_2 N$ pointer hops; B-Tree does $\log_{M/2} N$ node reads with binary search inside each node.</td>
+            <td><span class="complexity-badge badge-blue">O(log_M N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(M log_M N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(M log_M N)</span></td>
+            <td><span class="complexity-badge badge-green">O(log_M N)</span></td>
           </tr>
           <tr>
-            <td><strong>Insertion</strong></td>
+            <td><strong>B+ Tree (Order M)</strong></td>
+            <td><span class="complexity-badge badge-blue">O(log_M N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(log_M N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(M log_M N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(M log_M N)</span></td>
+            <td><span class="complexity-badge badge-green">O(1)</span> range scan</td>
+          </tr>
+          <tr>
+            <td><strong>Trie</strong></td>
+            <td><span class="complexity-badge badge-green">O(L)</span> (Word len)</td>
+            <td><span class="complexity-badge badge-green">O(L)</span></td>
+            <td><span class="complexity-badge badge-green">O(L)</span></td>
+            <td><span class="complexity-badge badge-green">O(L)</span></td>
+            <td><span class="complexity-badge badge-yellow">O(Σ · L · N)</span></td>
+          </tr>
+          <tr>
+            <td><strong>Segment Tree</strong></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span> (Range)</td>
             <td><span class="complexity-badge badge-blue">O(log N)</span></td>
-            <td><span class="complexity-badge badge-blue">O(M · log_M N)</span></td>
-            <td>AVL requires $O(\log N)$ traversal + at most <strong>1 single/double rotation</strong>. B-Tree splits nodes upwards if overflowing.</td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span> (Point)</td>
+            <td>—</td>
+            <td><span class="complexity-badge badge-yellow">O(4N)</span></td>
           </tr>
           <tr>
-            <td><strong>Deletion</strong></td>
+            <td><strong>Suffix Tree</strong></td>
+            <td><span class="complexity-badge badge-green">O(M)</span> (Pattern len)</td>
+            <td><span class="complexity-badge badge-green">O(M)</span></td>
+            <td><span class="complexity-badge badge-blue">O(N)</span> Ukkonen</td>
+            <td>—</td>
+            <td><span class="complexity-badge badge-yellow">O(N)</span></td>
+          </tr>
+          <tr>
+            <td><strong>2D K-D Tree</strong></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span> (Avg NN)</td>
+            <td><span class="complexity-badge badge-yellow">O(√N)</span> (Worst)</td>
             <td><span class="complexity-badge badge-blue">O(log N)</span></td>
-            <td><span class="complexity-badge badge-blue">O(M · log_M N)</span></td>
-            <td>AVL does $O(\log N)$ search + predecessor swap + up to $O(\log N)$ cascading rotations. B-Tree borrows or merges underflowing nodes.</td>
+            <td><span class="complexity-badge badge-yellow">O(√N)</span></td>
+            <td><span class="complexity-badge badge-green">O(log N)</span></td>
           </tr>
           <tr>
-            <td><strong>Tree Height (h)</strong></td>
-            <td><span class="complexity-badge badge-yellow">h ≤ 1.44 log₂ N</span></td>
-            <td><span class="complexity-badge badge-green">h ≤ log_{⌈M/2⌉}((N+1)/2) + 1</span></td>
-            <td>B-Trees are extremely shallow (height 3 to 4 can hold millions of keys), minimizing expensive disk I/O.</td>
-          </tr>
-          <tr>
-            <td><strong>Rebalance Cost (Insert)</strong></td>
-            <td><span class="complexity-badge badge-green">O(1)</span> (at most 2 rotations)</td>
-            <td><span class="complexity-badge badge-green">O(1)</span> amortized</td>
-            <td>A single AVL rotation restores subtree height to its pre-insert value, preventing further propagation.</td>
-          </tr>
-          <tr>
-            <td><strong>Rebalance Cost (Delete)</strong></td>
-            <td><span class="complexity-badge badge-yellow">O(log N)</span> (cascading)</td>
-            <td><span class="complexity-badge badge-yellow">O(log_M N)</span></td>
-            <td>Deletion rebalances can propagate all the way up to the root in both trees.</td>
-          </tr>
-          <tr>
-            <td><strong>Auxiliary Space</strong></td>
-            <td><span class="complexity-badge badge-blue">O(log N)</span> stack</td>
-            <td><span class="complexity-badge badge-blue">O(log_M N)</span> stack</td>
-            <td>Call stack for recursion or search traversal path.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Panel 5: Comparison Matrix -->
-    <div class="theory-panel" id="tab-comparison">
-      <h3>📊 Architectural Comparison: AVL Tree vs B-Tree vs Red-Black Tree</h3>
-      <p>
-        How to choose the optimal data structure based on hardware, workload characteristics, and access patterns:
-      </p>
-
-      <table class="complexity-table">
-        <thead>
-          <tr>
-            <th>Characteristic</th>
-            <th>AVL Tree</th>
-            <th>Red-Black Tree</th>
-            <th>B-Tree (Order M)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Branching Model</strong></td>
-            <td>Strict Binary (2 children)</td>
-            <td>Binary (2 children)</td>
-            <td>Multi-way ($\lceil M/2 \rceil$ to $M$ children)</td>
-          </tr>
-          <tr>
-            <td><strong>Balancing Strictness</strong></td>
-            <td><strong>Strictest:</strong> $|BF| \le 1$</td>
-            <td>Moderate: black-height rules</td>
-            <td>Strict: all leaves at equal depth</td>
-          </tr>
-          <tr>
-            <td><strong>Max Height</strong></td>
-            <td>$\approx 1.44 \log_2 N$ (Flattest binary tree)</td>
-            <td>$\approx 2.00 \log_2 N$</td>
-            <td>$\approx \log_{M/2} N$ (Extremely flat)</td>
-          </tr>
-          <tr>
-            <td><strong>Lookup Performance</strong></td>
-            <td><strong>Fastest binary lookups</strong> (fewer pointer hops)</td>
-            <td>Fast (slightly taller than AVL)</td>
-            <td>Fastest for block/disk memory (cache line friendly)</td>
-          </tr>
-          <tr>
-            <td><strong>Update Overhead</strong></td>
-            <td>Frequent rotations on delete</td>
-            <td>Fewer rotations (≤ 2 insert, ≤ 3 delete)</td>
-            <td>Node splits & merges (higher fanout)</td>
-          </tr>
-          <tr>
-            <td><strong>Ideal Engineering Use</strong></td>
-            <td>Read-heavy in-memory lookups, language symbol tables</td>
-            <td>Write-heavy collections (C++ <code>std::map</code>, Linux CFS)</td>
-            <td>Databases (InnoDB, PostgreSQL), Block filesystems</td>
+            <td><strong>Threaded BST</strong></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-yellow">O(N)</span></td>
+            <td><span class="complexity-badge badge-blue">O(log N)</span></td>
+            <td><span class="complexity-badge badge-yellow">O(N)</span></td>
+            <td><span class="complexity-badge badge-green">O(1)</span> (Zero stack!)</td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- Scripts: Unified Standalone Bundle (avl.js + btree.js + visualizer.js) -->
+  <!-- All-In-One Unified JavaScript (All 9 Trees + Visualizer) -->
   <script>
-/**
- * Tree Visualizer - All-In-One Unified Bundle
- * Merged from: avl.js, btree.js, visualizer.js
- */
-
 // ==========================================
-// 1. AVL Tree Implementation (avl.js)
+// avl.js
 // ==========================================
 /**
  * AVL Tree Implementation with Step-by-Step Animation Recording
@@ -2377,7 +2220,528 @@ if (typeof module !== 'undefined' && module.exports) {
 
 
 // ==========================================
-// 2. B-Tree Implementation (btree.js)
+// rbtree.js
+// ==========================================
+/**
+ * Red-Black Tree Implementation with Step-by-Step Animation Recording
+ * Properties:
+ * 1. Each node is either RED or BLACK.
+ * 2. Root is always BLACK.
+ * 3. All NIL leaf nodes are BLACK.
+ * 4. If a node is RED, both its children are BLACK (no consecutive red nodes).
+ * 5. Every path from a node to descendant leaves contains the same number of BLACK nodes.
+ */
+
+let nextRBNodeId = 1;
+
+class RBNode {
+  constructor(key, color = 'RED') {
+    this.id = nextRBNodeId++;
+    this.key = Number(key);
+    this.color = color; // 'RED' or 'BLACK'
+    this.left = null;
+    this.right = null;
+    this.parent = null;
+  }
+}
+
+class RedBlackTree {
+  constructor() {
+    this.root = null;
+    this.steps = [];
+  }
+
+  clear() {
+    this.root = null;
+    this.steps = [];
+  }
+
+  cloneTree(node = this.root) {
+    if (!node) return null;
+    return {
+      id: node.id,
+      key: node.key,
+      color: node.color,
+      left: this.cloneTree(node.left),
+      right: this.cloneTree(node.right)
+    };
+  }
+
+  recordStep({
+    type = 'info',
+    message = '',
+    highlightedNodes = {} // { [nodeId]: 'active' | 'visited' | 'unbalanced' | 'rotating' | 'success' | 'error' | 'target' }
+  }) {
+    this.steps.push({
+      stepNumber: this.steps.length + 1,
+      type,
+      message,
+      treeSnapshot: this.cloneTree(),
+      highlightedNodes: { ...highlightedNodes }
+    });
+  }
+
+  // --- ROTATIONS ---
+  _leftRotate(x) {
+    const y = x.right;
+    x.right = y.left;
+    if (y.left) y.left.parent = x;
+    y.parent = x.parent;
+
+    if (!x.parent) {
+      this.root = y;
+    } else if (x === x.parent.left) {
+      x.parent.left = y;
+    } else {
+      x.parent.right = y;
+    }
+
+    y.left = x;
+    x.parent = y;
+  }
+
+  _rightRotate(y) {
+    const x = y.left;
+    y.left = x.right;
+    if (x.right) x.right.parent = y;
+    x.parent = y.parent;
+
+    if (!y.parent) {
+      this.root = x;
+    } else if (y === y.parent.left) {
+      y.parent.left = x;
+    } else {
+      y.parent.right = x;
+    }
+
+    x.right = y;
+    y.parent = x;
+  }
+
+  // --- SEARCH ---
+  search(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key) || !this.root) {
+      this.recordStep({
+        type: 'error',
+        message: `Tree is empty. Key ${key} not found.`
+      });
+      return { found: false, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'search',
+      message: `Searching for key ${key} starting at root Node #${this.root.id} (${this.root.key}, ${this.root.color}).`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let curr = this.root;
+    while (curr) {
+      if (key === curr.key) {
+        this.recordStep({
+          type: 'success',
+          message: `Key ${key} located in Node #${curr.id} (Color: ${curr.color})!`,
+          highlightedNodes: { [curr.id]: 'success' }
+        });
+        return { found: true, steps: this.steps };
+      } else if (key < curr.key) {
+        if (!curr.left) {
+          this.recordStep({
+            type: 'error',
+            message: `${key} < ${curr.key}, but left child is null. Key ${key} not found.`,
+            highlightedNodes: { [curr.id]: 'error' }
+          });
+          return { found: false, steps: this.steps };
+        }
+        this.recordStep({
+          type: 'search',
+          message: `${key} < ${curr.key}: traversing left to Node #${curr.left.id}.`,
+          highlightedNodes: { [curr.id]: 'visited', [curr.left.id]: 'active' }
+        });
+        curr = curr.left;
+      } else {
+        if (!curr.right) {
+          this.recordStep({
+            type: 'error',
+            message: `${key} > ${curr.key}, but right child is null. Key ${key} not found.`,
+            highlightedNodes: { [curr.id]: 'error' }
+          });
+          return { found: false, steps: this.steps };
+        }
+        this.recordStep({
+          type: 'search',
+          message: `${key} > ${curr.key}: traversing right to Node #${curr.right.id}.`,
+          highlightedNodes: { [curr.id]: 'visited', [curr.right.id]: 'active' }
+        });
+        curr = curr.right;
+      }
+    }
+    return { found: false, steps: this.steps };
+  }
+
+  // --- INSERTION ---
+  insert(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key)) return { success: false, steps: [] };
+
+    const newNode = new RBNode(key, 'RED');
+
+    if (!this.root) {
+      newNode.color = 'BLACK';
+      this.root = newNode;
+      this.recordStep({
+        type: 'insert',
+        message: `Tree was empty. Inserted key ${key} as root Node #${newNode.id} and colored it BLACK (Property 2).`,
+        highlightedNodes: { [newNode.id]: 'success' }
+      });
+      return { success: true, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'insert',
+      message: `Inserting key ${key} as RED node according to BST insertion rules.`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let parent = null;
+    let curr = this.root;
+    while (curr) {
+      parent = curr;
+      if (key === curr.key) {
+        this.recordStep({
+          type: 'error',
+          message: `Key ${key} already exists in Node #${curr.id}. Duplicate keys not inserted.`,
+          highlightedNodes: { [curr.id]: 'error' }
+        });
+        return { success: false, duplicate: true, steps: this.steps };
+      } else if (key < curr.key) {
+        curr = curr.left;
+      } else {
+        curr = curr.right;
+      }
+    }
+
+    newNode.parent = parent;
+    if (key < parent.key) parent.left = newNode;
+    else parent.right = newNode;
+
+    this.recordStep({
+      type: 'insert',
+      message: `Attached key ${key} (RED) as child of Node #${parent.id} (${parent.key}, ${parent.color}). Checking Red-Black invariants...`,
+      highlightedNodes: { [newNode.id]: 'active', [parent.id]: 'visited' }
+    });
+
+    this._fixInsertViolation(newNode);
+
+    this.recordStep({
+      type: 'success',
+      message: `Red-Black Tree invariants fully restored! (Root: #${this.root.id} BLACK, no double-red violations, uniform black-height).`,
+      highlightedNodes: { [this.root.id]: 'success' }
+    });
+
+    return { success: true, steps: this.steps };
+  }
+
+  _fixInsertViolation(node) {
+    while (node !== this.root && node.parent.color === 'RED') {
+      const parent = node.parent;
+      const grandparent = parent.parent;
+
+      if (parent === grandparent.left) {
+        const uncle = grandparent.right;
+
+        // Case 1: Uncle is RED -> Recolor parent, uncle, and grandparent
+        if (uncle && uncle.color === 'RED') {
+          this.recordStep({
+            type: 'split',
+            message: `Double-Red violation at Node #${node.id} & #${parent.id}. Uncle Node #${uncle.id} is RED (Case 1). Recoloring parent & uncle to BLACK, grandparent #${grandparent.id} to RED.`,
+            highlightedNodes: { [node.id]: 'unbalanced', [parent.id]: 'unbalanced', [uncle.id]: 'active', [grandparent.id]: 'active' }
+          });
+
+          parent.color = 'BLACK';
+          uncle.color = 'BLACK';
+          grandparent.color = 'RED';
+          node = grandparent;
+        } else {
+          // Case 2: Uncle is BLACK & node is inner child (triangle) -> Left Rotate parent
+          if (node === parent.right) {
+            this.recordStep({
+              type: 'borrow',
+              message: `Double-Red violation with BLACK uncle (Case 2: Triangle). Performing Left Rotation on parent Node #${parent.id} to form line.`,
+              highlightedNodes: { [node.id]: 'rotating', [parent.id]: 'rotating' }
+            });
+            node = parent;
+            this._leftRotate(node);
+          }
+
+          // Case 3: Uncle is BLACK & node is outer child (line) -> Recolor & Right Rotate grandparent
+          this.recordStep({
+            type: 'split',
+            message: `Double-Red violation (Case 3: Line). Recoloring parent Node #${node.parent.id} to BLACK, grandparent Node #${grandparent.id} to RED, and Right Rotating grandparent.`,
+            highlightedNodes: { [node.parent.id]: 'active', [grandparent.id]: 'unbalanced' }
+          });
+
+          node.parent.color = 'BLACK';
+          grandparent.color = 'RED';
+          this._rightRotate(grandparent);
+        }
+      } else {
+        // Symmetric case: parent is right child of grandparent
+        const uncle = grandparent.left;
+
+        if (uncle && uncle.color === 'RED') {
+          this.recordStep({
+            type: 'split',
+            message: `Double-Red violation at Node #${node.id} & #${parent.id}. Uncle Node #${uncle.id} is RED (Case 1). Recoloring parent & uncle to BLACK, grandparent #${grandparent.id} to RED.`,
+            highlightedNodes: { [node.id]: 'unbalanced', [parent.id]: 'unbalanced', [uncle.id]: 'active', [grandparent.id]: 'active' }
+          });
+
+          parent.color = 'BLACK';
+          uncle.color = 'BLACK';
+          grandparent.color = 'RED';
+          node = grandparent;
+        } else {
+          if (node === parent.left) {
+            this.recordStep({
+              type: 'borrow',
+              message: `Double-Red violation with BLACK uncle (Case 2: Triangle). Performing Right Rotation on parent Node #${parent.id}.`,
+              highlightedNodes: { [node.id]: 'rotating', [parent.id]: 'rotating' }
+            });
+            node = parent;
+            this._rightRotate(node);
+          }
+
+          this.recordStep({
+            type: 'split',
+            message: `Double-Red violation (Case 3: Line). Recoloring parent Node #${node.parent.id} to BLACK, grandparent Node #${grandparent.id} to RED, and Left Rotating grandparent.`,
+            highlightedNodes: { [node.parent.id]: 'active', [grandparent.id]: 'unbalanced' }
+          });
+
+          node.parent.color = 'BLACK';
+          grandparent.color = 'RED';
+          this._leftRotate(grandparent);
+        }
+      }
+    }
+
+    if (this.root.color !== 'BLACK') {
+      this.root.color = 'BLACK';
+      this.recordStep({
+        type: 'info',
+        message: `Root Node #${this.root.id} ensured to be BLACK (Property 2).`,
+        highlightedNodes: { [this.root.id]: 'success' }
+      });
+    }
+  }
+
+  // --- DELETION ---
+  delete(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key) || !this.root) {
+      this.recordStep({
+        type: 'error',
+        message: `Tree is empty. Cannot delete ${key}.`
+      });
+      return { success: false, steps: this.steps };
+    }
+
+    let z = this._findNode(this.root, key);
+    if (!z) {
+      this.recordStep({
+        type: 'error',
+        message: `Key ${key} not found in Red-Black Tree. Deletion cancelled.`
+      });
+      return { success: false, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'delete',
+      message: `Located Node #${z.id} (${z.key}, ${z.color}) for deletion.`,
+      highlightedNodes: { [z.id]: 'target' }
+    });
+
+    let y = z;
+    let yOriginalColor = y.color;
+    let x = null;
+
+    if (!z.left) {
+      x = z.right;
+      this._transplant(z, z.right);
+    } else if (!z.right) {
+      x = z.left;
+      this._transplant(z, z.left);
+    } else {
+      y = this._minimum(z.right);
+      yOriginalColor = y.color;
+      x = y.right;
+
+      this.recordStep({
+        type: 'delete',
+        message: `Node #${z.id} has two children. In-order successor is Node #${y.id} (${y.key}).`,
+        highlightedNodes: { [z.id]: 'target', [y.id]: 'active' }
+      });
+
+      if (y.parent === z) {
+        if (x) x.parent = y;
+      } else {
+        this._transplant(y, y.right);
+        y.right = z.right;
+        y.right.parent = y;
+      }
+
+      this._transplant(z, y);
+      y.left = z.left;
+      y.left.parent = y;
+      y.color = z.color;
+    }
+
+    if (yOriginalColor === 'BLACK') {
+      this.recordStep({
+        type: 'delete',
+        message: `Removed BLACK node. Black-height imbalance may exist. Restoring Red-Black properties...`,
+        highlightedNodes: {}
+      });
+      if (x) this._fixDeleteViolation(x);
+    } else {
+      this.recordStep({
+        type: 'success',
+        message: `Deleted RED node. Black-height invariant is preserved!`,
+        highlightedNodes: this.root ? { [this.root.id]: 'success' } : {}
+      });
+    }
+
+    return { success: true, steps: this.steps };
+  }
+
+  _transplant(u, v) {
+    if (!u.parent) this.root = v;
+    else if (u === u.parent.left) u.parent.left = v;
+    else u.parent.right = v;
+    if (v) v.parent = u.parent;
+  }
+
+  _minimum(node) {
+    while (node.left) node = node.left;
+    return node;
+  }
+
+  _findNode(node, key) {
+    while (node) {
+      if (key === node.key) return node;
+      node = key < node.key ? node.left : node.right;
+    }
+    return null;
+  }
+
+  _fixDeleteViolation(x) {
+    while (x !== this.root && (!x || x.color === 'BLACK')) {
+      if (x === x.parent.left) {
+        let w = x.parent.right;
+        if (w && w.color === 'RED') {
+          w.color = 'BLACK';
+          x.parent.color = 'RED';
+          this._leftRotate(x.parent);
+          w = x.parent.right;
+        }
+        if ((!w.left || w.left.color === 'BLACK') && (!w.right || w.right.color === 'BLACK')) {
+          if (w) w.color = 'RED';
+          x = x.parent;
+        } else {
+          if (!w.right || w.right.color === 'BLACK') {
+            if (w.left) w.left.color = 'BLACK';
+            w.color = 'RED';
+            this._rightRotate(w);
+            w = x.parent.right;
+          }
+          w.color = x.parent.color;
+          x.parent.color = 'BLACK';
+          if (w.right) w.right.color = 'BLACK';
+          this._leftRotate(x.parent);
+          x = this.root;
+        }
+      } else {
+        let w = x.parent.left;
+        if (w && w.color === 'RED') {
+          w.color = 'BLACK';
+          x.parent.color = 'RED';
+          this._rightRotate(x.parent);
+          w = x.parent.left;
+        }
+        if ((!w.right || w.right.color === 'BLACK') && (!w.left || w.left.color === 'BLACK')) {
+          if (w) w.color = 'RED';
+          x = x.parent;
+        } else {
+          if (!w.left || w.left.color === 'BLACK') {
+            if (w.right) w.right.color = 'BLACK';
+            w.color = 'RED';
+            this._leftRotate(w);
+            w = x.parent.left;
+          }
+          w.color = x.parent.color;
+          x.parent.color = 'BLACK';
+          if (w.left) w.left.color = 'BLACK';
+          this._rightRotate(x.parent);
+          x = this.root;
+        }
+      }
+    }
+    if (x) x.color = 'BLACK';
+  }
+
+  insertDirect(key) {
+    key = Number(key);
+    if (isNaN(key)) return;
+    this.insert(key);
+    this.steps = [];
+  }
+
+  getInorderKeys(node = this.root, result = []) {
+    if (!node) return result;
+    this.getInorderKeys(node.left, result);
+    result.push(node.key);
+    this.getInorderKeys(node.right, result);
+    return result;
+  }
+
+  getStats() {
+    if (!this.root) return { height: 0, totalNodes: 0, blackHeight: 0 };
+    let count = 0;
+    const countNodes = (n) => {
+      if (!n) return;
+      count++;
+      countNodes(n.left);
+      countNodes(n.right);
+    };
+    countNodes(this.root);
+
+    let bh = 0;
+    let curr = this.root;
+    while (curr) {
+      if (curr.color === 'BLACK') bh++;
+      curr = curr.left;
+    }
+
+    let h = 0;
+    const calcHeight = (n) => {
+      if (!n) return 0;
+      return 1 + Math.max(calcHeight(n.left), calcHeight(n.right));
+    };
+    h = calcHeight(this.root);
+
+    return { height: h, totalNodes: count, blackHeight: bh };
+  }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { RedBlackTree, RBNode };
+}
+
+
+// ==========================================
+// btree.js
 // ==========================================
 /**
  * B-Tree Implementation with Animation Step Recording
@@ -3144,20 +3508,1928 @@ if (typeof module !== 'undefined' && module.exports) {
 
 
 // ==========================================
-// 3. Visualizer Controller & UI (visualizer.js)
+// bplustree.js
 // ==========================================
 /**
- * Unified Tree Visualizer - Supports both AVL Tree and B-Tree
- * Explicit User Input Only (No Presets)
- * Full Visibility for Steps and Direct Theory & Complexity Center
+ * B+ Tree Implementation with Animation Step Recording
+ * Properties:
+ * 1. All actual data/keys reside in LEAF nodes.
+ * 2. Internal nodes store only routing guide keys and child pointers.
+ * 3. All leaf nodes are linked in a singly linked list for blazingly fast range queries.
+ * 4. Leaves all reside at the exact same depth.
  */
 
-// Active Tree Mode: 'avl' or 'btree'
+let nextBPlusNodeId = 1;
+
+class BPlusNode {
+  constructor(isLeaf = true) {
+    this.id = nextBPlusNodeId++;
+    this.isLeaf = isLeaf;
+    this.keys = [];
+    this.children = []; // For internal nodes: BPlusNode[]; For leaves: empty
+    this.parent = null;
+    this.next = null; // Pointer to next leaf node
+  }
+}
+
+class BPlusTree {
+  constructor(order = 3) {
+    if (order < 3) order = 3;
+    this.order = order; // Maximum children per internal node
+    this.root = null;
+    this.steps = [];
+  }
+
+  get maxKeys() {
+    return this.order - 1;
+  }
+
+  get minKeys() {
+    return Math.ceil(this.order / 2) - 1;
+  }
+
+  clear() {
+    this.root = null;
+    this.steps = [];
+  }
+
+  cloneTree(node = this.root) {
+    if (!node) return null;
+    return {
+      id: node.id,
+      isLeaf: node.isLeaf,
+      keys: [...node.keys],
+      nextId: node.next ? node.next.id : null,
+      children: node.children ? node.children.map(c => this.cloneTree(c)) : []
+    };
+  }
+
+  recordStep({
+    type = 'info',
+    message = '',
+    highlightedNodes = {},
+    highlightedKeys = {}
+  }) {
+    this.steps.push({
+      stepNumber: this.steps.length + 1,
+      type,
+      message,
+      treeSnapshot: this.cloneTree(),
+      highlightedNodes: { ...highlightedNodes },
+      highlightedKeys: { ...highlightedKeys }
+    });
+  }
+
+  // --- SEARCH ---
+  search(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key) || !this.root) {
+      this.recordStep({
+        type: 'error',
+        message: `B+ Tree is empty. Key ${key} not found.`
+      });
+      return { found: false, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'search',
+      message: `Searching for key ${key} starting at root Node #${this.root.id}.`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let curr = this.root;
+    while (!curr.isLeaf) {
+      let i = 0;
+      while (i < curr.keys.length && key >= curr.keys[i]) i++;
+
+      const nextChild = curr.children[i];
+      this.recordStep({
+        type: 'search',
+        message: `Routing at internal Node #${curr.id} [${curr.keys.join(', ')}]: navigating down to Child #${i + 1} (Node #${nextChild.id}).`,
+        highlightedNodes: { [curr.id]: 'visited', [nextChild.id]: 'active' }
+      });
+      curr = nextChild;
+    }
+
+    // Reached leaf
+    const foundIdx = curr.keys.indexOf(key);
+    if (foundIdx !== -1) {
+      this.recordStep({
+        type: 'success',
+        message: `Key ${key} found in leaf Node #${curr.id} at index ${foundIdx}! (All records exist in leaves in B+ Tree).`,
+        highlightedNodes: { [curr.id]: 'success' }
+      });
+      return { found: true, steps: this.steps };
+    } else {
+      this.recordStep({
+        type: 'error',
+        message: `Reached leaf Node #${curr.id} [${curr.keys.join(', ')}]. Key ${key} not present in B+ Tree.`,
+        highlightedNodes: { [curr.id]: 'error' }
+      });
+      return { found: false, steps: this.steps };
+    }
+  }
+
+  // --- RANGE QUERY ---
+  rangeQuery(low, high) {
+    this.steps = [];
+    low = Number(low);
+    high = Number(high);
+    if (isNaN(low) || isNaN(high) || !this.root) {
+      this.recordStep({
+        type: 'error',
+        message: `Invalid range [${low}, ${high}] or empty tree.`
+      });
+      return { results: [], steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'search',
+      message: `Executing Range Query [${low} .. ${high}]. First locating leaf containing lower bound ${low}...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    // 1. Locate start leaf
+    let curr = this.root;
+    while (!curr.isLeaf) {
+      let i = 0;
+      while (i < curr.keys.length && low >= curr.keys[i]) i++;
+      curr = curr.children[i];
+    }
+
+    this.recordStep({
+      type: 'search',
+      message: `Found start leaf Node #${curr.id}. Scanning sequentially along linked leaf chain (O(K) range scan)...`,
+      highlightedNodes: { [curr.id]: 'active' }
+    });
+
+    const results = [];
+    let leaf = curr;
+
+    while (leaf) {
+      let done = false;
+      const matchingKeys = [];
+
+      for (const k of leaf.keys) {
+        if (k >= low && k <= high) {
+          matchingKeys.push(k);
+          results.push(k);
+        } else if (k > high) {
+          done = true;
+          break;
+        }
+      }
+
+      this.recordStep({
+        type: 'borrow',
+        message: `Scanned leaf Node #${leaf.id}: collected [${matchingKeys.join(', ')}]. ${done ? 'Range exceeded, query complete.' : (leaf.next ? 'Following next leaf pointer ➔' : 'Reached last leaf.')}`,
+        highlightedNodes: { [leaf.id]: 'success' }
+      });
+
+      if (done || !leaf.next) break;
+      leaf = leaf.next;
+    }
+
+    this.recordStep({
+      type: 'success',
+      message: `Range query [${low} .. ${high}] complete! Collected ${results.length} keys: [${results.join(', ')}].`,
+      highlightedNodes: {}
+    });
+
+    return { results, steps: this.steps };
+  }
+
+  // --- INSERTION ---
+  insert(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key)) return { success: false, steps: [] };
+
+    if (!this.root) {
+      this.root = new BPlusNode(true);
+      this.root.keys.push(key);
+      this.recordStep({
+        type: 'insert',
+        message: `Tree was empty. Created root leaf Node #${this.root.id} with key [${key}].`,
+        highlightedNodes: { [this.root.id]: 'success' }
+      });
+      return { success: true, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'insert',
+      message: `Navigating to appropriate leaf node to insert key ${key}...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    // 1. Traverse to leaf
+    let curr = this.root;
+    while (!curr.isLeaf) {
+      let i = 0;
+      while (i < curr.keys.length && key >= curr.keys[i]) i++;
+      curr = curr.children[i];
+    }
+
+    if (curr.keys.includes(key)) {
+      this.recordStep({
+        type: 'error',
+        message: `Key ${key} already exists in leaf Node #${curr.id}. Duplicate keys not inserted.`,
+        highlightedNodes: { [curr.id]: 'error' }
+      });
+      return { success: false, duplicate: true, steps: this.steps };
+    }
+
+    // 2. Insert into leaf in sorted position
+    let idx = 0;
+    while (idx < curr.keys.length && key > curr.keys[idx]) idx++;
+    curr.keys.splice(idx, 0, key);
+
+    this.recordStep({
+      type: 'insert',
+      message: `Inserted key ${key} into leaf Node #${curr.id} at position ${idx}. Leaf keys: [${curr.keys.join(', ')}].`,
+      highlightedNodes: { [curr.id]: 'active' }
+    });
+
+    // 3. Handle leaf overflow
+    if (curr.keys.length > this.maxKeys) {
+      this._splitLeaf(curr);
+    } else {
+      this.recordStep({
+        type: 'success',
+        message: `Leaf Node #${curr.id} satisfies capacity (${curr.keys.length} <= ${this.maxKeys}). Insertion complete.`,
+        highlightedNodes: { [curr.id]: 'success' }
+      });
+    }
+
+    return { success: true, steps: this.steps };
+  }
+
+  _splitLeaf(leaf) {
+    this.recordStep({
+      type: 'split',
+      message: `Leaf Node #${leaf.id} has ${leaf.keys.length} keys > max keys (${this.maxKeys}). Splitting leaf! (In B+, promoted key is COPIED to parent while staying in right leaf).`,
+      highlightedNodes: { [leaf.id]: 'split' }
+    });
+
+    const mid = Math.ceil(leaf.keys.length / 2);
+    const rightLeaf = new BPlusNode(true);
+    rightLeaf.keys = leaf.keys.slice(mid);
+    leaf.keys = leaf.keys.slice(0, mid);
+
+    // Update leaf linked list chain
+    rightLeaf.next = leaf.next;
+    leaf.next = rightLeaf;
+
+    // In B+ trees: the smallest key in right leaf is COPIED up to parent as a routing guide
+    const promotedKey = rightLeaf.keys[0];
+
+    if (leaf === this.root) {
+      const newRoot = new BPlusNode(false);
+      newRoot.keys = [promotedKey];
+      newRoot.children = [leaf, rightLeaf];
+      leaf.parent = newRoot;
+      rightLeaf.parent = newRoot;
+      this.root = newRoot;
+
+      this.recordStep({
+        type: 'split',
+        message: `Root was leaf! Created new internal root Node #${newRoot.id} with routing key [${promotedKey}]. Linked leaves #${leaf.id} ➔ #${rightLeaf.id}.`,
+        highlightedNodes: { [newRoot.id]: 'success', [leaf.id]: 'active', [rightLeaf.id]: 'active' }
+      });
+    } else {
+      const parent = leaf.parent;
+      rightLeaf.parent = parent;
+
+      const childIdx = parent.children.indexOf(leaf);
+      parent.keys.splice(childIdx, 0, promotedKey);
+      parent.children.splice(childIdx + 1, 0, rightLeaf);
+
+      this.recordStep({
+        type: 'split',
+        message: `Routing key ${promotedKey} copied to parent Node #${parent.id}. Left leaf: #${leaf.id} [${leaf.keys.join(', ')}], Right leaf: #${rightLeaf.id} [${rightLeaf.keys.join(', ')}].`,
+        highlightedNodes: { [parent.id]: 'active', [leaf.id]: 'active', [rightLeaf.id]: 'active' }
+      });
+
+      if (parent.keys.length > this.maxKeys) {
+        this._splitInternal(parent);
+      }
+    }
+  }
+
+  _splitInternal(node) {
+    this.recordStep({
+      type: 'split',
+      message: `Internal Node #${node.id} overflowed (${node.keys.length} > ${this.maxKeys}). Splitting internal node (median pushed up, not copied).`,
+      highlightedNodes: { [node.id]: 'split' }
+    });
+
+    const mid = Math.floor(node.keys.length / 2);
+    const promotedKey = node.keys[mid];
+
+    const rightNode = new BPlusNode(false);
+    rightNode.keys = node.keys.slice(mid + 1);
+    node.keys = node.keys.slice(0, mid);
+
+    const rightChildren = node.children.slice(mid + 1);
+    node.children = node.children.slice(0, mid + 1);
+    rightNode.children = rightChildren;
+
+    for (const child of rightChildren) child.parent = rightNode;
+
+    if (node === this.root) {
+      const newRoot = new BPlusNode(false);
+      newRoot.keys = [promotedKey];
+      newRoot.children = [node, rightNode];
+      node.parent = newRoot;
+      rightNode.parent = newRoot;
+      this.root = newRoot;
+
+      this.recordStep({
+        type: 'split',
+        message: `Root internal split! New root Node #${newRoot.id} created with [${promotedKey}]. Tree height increased.`,
+        highlightedNodes: { [newRoot.id]: 'success' }
+      });
+    } else {
+      const parent = node.parent;
+      rightNode.parent = parent;
+
+      const idx = parent.children.indexOf(node);
+      parent.keys.splice(idx, 0, promotedKey);
+      parent.children.splice(idx + 1, 0, rightNode);
+
+      if (parent.keys.length > this.maxKeys) {
+        this._splitInternal(parent);
+      }
+    }
+  }
+
+  // --- DELETION ---
+  delete(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key) || !this.root) return { success: false, steps: [] };
+
+    let curr = this.root;
+    while (!curr.isLeaf) {
+      let i = 0;
+      while (i < curr.keys.length && key >= curr.keys[i]) i++;
+      curr = curr.children[i];
+    }
+
+    const idx = curr.keys.indexOf(key);
+    if (idx === -1) {
+      this.recordStep({
+        type: 'error',
+        message: `Key ${key} not found in B+ Tree. Cannot delete.`
+      });
+      return { success: false, steps: this.steps };
+    }
+
+    curr.keys.splice(idx, 1);
+    this.recordStep({
+      type: 'delete',
+      message: `Deleted key ${key} from leaf Node #${curr.id}. Remaining leaf keys: [${curr.keys.join(', ')}].`,
+      highlightedNodes: { [curr.id]: 'active' }
+    });
+
+    if (curr === this.root && curr.keys.length === 0) {
+      this.root = null;
+      this.recordStep({
+        type: 'delete',
+        message: `Tree is now empty.`
+      });
+    }
+
+    return { success: true, steps: this.steps };
+  }
+
+  insertDirect(key) {
+    key = Number(key);
+    if (isNaN(key)) return;
+    this.insert(key);
+    this.steps = [];
+  }
+
+  getInorderKeys() {
+    if (!this.root) return [];
+    let curr = this.root;
+    while (!curr.isLeaf) curr = curr.children[0];
+
+    const result = [];
+    while (curr) {
+      result.push(...curr.keys);
+      curr = curr.next;
+    }
+    return result;
+  }
+
+  getStats() {
+    if (!this.root) return { height: 0, totalKeys: 0, totalNodes: 0, leafCount: 0 };
+    let height = 0;
+    let curr = this.root;
+    while (curr) {
+      height++;
+      curr = curr.isLeaf ? null : curr.children[0];
+    }
+
+    let leafCount = 0;
+    let totalKeys = 0;
+    let totalNodes = 0;
+
+    const traverse = (n) => {
+      if (!n) return;
+      totalNodes++;
+      if (n.isLeaf) {
+        leafCount++;
+        totalKeys += n.keys.length;
+      }
+      if (n.children) {
+        for (const c of n.children) traverse(c);
+      }
+    };
+    traverse(this.root);
+
+    return { height, totalKeys, totalNodes, leafCount };
+  }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { BPlusTree, BPlusNode };
+}
+
+
+// ==========================================
+// trie.js
+// ==========================================
+/**
+ * Trie (Prefix Tree) Implementation with Step-by-Step Animation Recording
+ * Properties:
+ * 1. Root represents empty string.
+ * 2. Each edge or node represents a character.
+ * 3. All descendants of a node share a common string prefix.
+ * 4. Words end at terminal nodes with `isEndOfWord = true`.
+ */
+
+let nextTrieNodeId = 1;
+
+class TrieNode {
+  constructor(char = '') {
+    this.id = nextTrieNodeId++;
+    this.char = char; // '' for root
+    this.children = {}; // { 'a': TrieNode, 'b': TrieNode, ... }
+    this.isEndOfWord = false;
+  }
+}
+
+class Trie {
+  constructor() {
+    this.root = new TrieNode('');
+    this.steps = [];
+  }
+
+  clear() {
+    this.root = new TrieNode('');
+    this.steps = [];
+  }
+
+  cloneTree(node = this.root) {
+    if (!node) return null;
+    const clonedChildren = {};
+    for (const [char, child] of Object.entries(node.children)) {
+      clonedChildren[char] = this.cloneTree(child);
+    }
+    return {
+      id: node.id,
+      char: node.char,
+      isEndOfWord: node.isEndOfWord,
+      children: clonedChildren
+    };
+  }
+
+  recordStep({
+    type = 'info',
+    message = '',
+    highlightedNodes = {}
+  }) {
+    this.steps.push({
+      stepNumber: this.steps.length + 1,
+      type,
+      message,
+      treeSnapshot: this.cloneTree(),
+      highlightedNodes: { ...highlightedNodes }
+    });
+  }
+
+  // --- INSERT WORD ---
+  insert(word) {
+    this.steps = [];
+    if (!word || typeof word !== 'string') return { success: false, steps: [] };
+    word = word.trim().toLowerCase();
+    if (word.length === 0) return { success: false, steps: [] };
+
+    this.recordStep({
+      type: 'insert',
+      message: `Starting insertion of word "${word}" at Trie root.`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let curr = this.root;
+    for (let i = 0; i < word.length; i++) {
+      const ch = word[i];
+      if (!curr.children[ch]) {
+        const newNode = new TrieNode(ch);
+        curr.children[ch] = newNode;
+        this.recordStep({
+          type: 'insert',
+          message: `Character '${ch}' not present under Node #${curr.id}. Created child Node #${newNode.id} for '${ch}'.`,
+          highlightedNodes: { [curr.id]: 'visited', [newNode.id]: 'active' }
+        });
+        curr = newNode;
+      } else {
+        const existingNode = curr.children[ch];
+        this.recordStep({
+          type: 'search',
+          message: `Character '${ch}' already exists at Node #${existingNode.id}. Traversing forward.`,
+          highlightedNodes: { [curr.id]: 'visited', [existingNode.id]: 'active' }
+        });
+        curr = existingNode;
+      }
+    }
+
+    curr.isEndOfWord = true;
+    this.recordStep({
+      type: 'success',
+      message: `Marked Node #${curr.id} ('${curr.char}') as terminal [END OF WORD] for "${word}". Insertion complete!`,
+      highlightedNodes: { [curr.id]: 'success' }
+    });
+
+    return { success: true, steps: this.steps };
+  }
+
+  // --- SEARCH FULL WORD ---
+  search(word) {
+    this.steps = [];
+    if (!word) return { found: false, steps: [] };
+    word = word.trim().toLowerCase();
+
+    this.recordStep({
+      type: 'search',
+      message: `Searching for exact word "${word}" starting at root.`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let curr = this.root;
+    for (let i = 0; i < word.length; i++) {
+      const ch = word[i];
+      if (!curr.children[ch]) {
+        this.recordStep({
+          type: 'error',
+          message: `Character '${ch}' (position ${i + 1} of "${word}") not found under Node #${curr.id}. Word does not exist in Trie.`,
+          highlightedNodes: { [curr.id]: 'error' }
+        });
+        return { found: false, steps: this.steps };
+      }
+      curr = curr.children[ch];
+      this.recordStep({
+        type: 'search',
+        message: `Matched character '${ch}' at Node #${curr.id}.`,
+        highlightedNodes: { [curr.id]: 'active' }
+      });
+    }
+
+    if (curr.isEndOfWord) {
+      this.recordStep({
+        type: 'success',
+        message: `Full word "${word}" found! Node #${curr.id} is marked as terminal word boundary.`,
+        highlightedNodes: { [curr.id]: 'success' }
+      });
+      return { found: true, steps: this.steps };
+    } else {
+      this.recordStep({
+        type: 'error',
+        message: `Prefix "${word}" exists, but Node #${curr.id} is NOT marked as end of word. Exact word not found.`,
+        highlightedNodes: { [curr.id]: 'error' }
+      });
+      return { found: false, steps: this.steps };
+    }
+  }
+
+  // --- PREFIX SEARCH ---
+  startsWith(prefix) {
+    this.steps = [];
+    if (!prefix) return { found: false, steps: [] };
+    prefix = prefix.trim().toLowerCase();
+
+    this.recordStep({
+      type: 'search',
+      message: `Searching for prefix "${prefix}"...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let curr = this.root;
+    for (let i = 0; i < prefix.length; i++) {
+      const ch = prefix[i];
+      if (!curr.children[ch]) {
+        this.recordStep({
+          type: 'error',
+          message: `Prefix branch broken at character '${ch}'. No words with prefix "${prefix}" exist.`,
+          highlightedNodes: { [curr.id]: 'error' }
+        });
+        return { found: false, steps: this.steps };
+      }
+      curr = curr.children[ch];
+    }
+
+    this.recordStep({
+      type: 'success',
+      message: `Prefix "${prefix}" is present in Trie! Subtree under Node #${curr.id} contains matching words.`,
+      highlightedNodes: { [curr.id]: 'success' }
+    });
+    return { found: true, steps: this.steps };
+  }
+
+  // --- DELETE WORD ---
+  delete(word) {
+    this.steps = [];
+    if (!word) return { success: false, steps: [] };
+    word = word.trim().toLowerCase();
+
+    this.recordStep({
+      type: 'delete',
+      message: `Searching for word "${word}" to delete from Trie...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    const stack = [];
+    let curr = this.root;
+
+    for (let i = 0; i < word.length; i++) {
+      const ch = word[i];
+      if (!curr.children[ch]) {
+        this.recordStep({
+          type: 'error',
+          message: `Cannot delete: Word "${word}" does not exist in Trie.`
+        });
+        return { success: false, steps: this.steps };
+      }
+      stack.push({ node: curr, char: ch });
+      curr = curr.children[ch];
+    }
+
+    if (!curr.isEndOfWord) {
+      this.recordStep({
+        type: 'error',
+        message: `"${word}" is only a prefix, not a registered word. Deletion aborted.`
+      });
+      return { success: false, steps: this.steps };
+    }
+
+    curr.isEndOfWord = false;
+    this.recordStep({
+      type: 'delete',
+      message: `Unmarked terminal flag at Node #${curr.id}. Pruning unneeded prefix branch nodes...`,
+      highlightedNodes: { [curr.id]: 'target' }
+    });
+
+    // Prune backwards if node has no children
+    while (stack.length > 0) {
+      const { node: parent, char } = stack.pop();
+      const child = parent.children[char];
+
+      if (Object.keys(child.children).length === 0 && !child.isEndOfWord) {
+        delete parent.children[char];
+        this.recordStep({
+          type: 'delete',
+          message: `Pruned unused leaf Node #${child.id} ('${char}').`,
+          highlightedNodes: { [parent.id]: 'active' }
+        });
+      } else {
+        break; // Node is shared by other words
+      }
+    }
+
+    this.recordStep({
+      type: 'success',
+      message: `Word "${word}" successfully deleted from Trie.`,
+      highlightedNodes: { [this.root.id]: 'success' }
+    });
+
+    return { success: true, steps: this.steps };
+  }
+
+  insertDirect(word) {
+    if (!word) return;
+    this.insert(word);
+    this.steps = [];
+  }
+
+  getAllWords(node = this.root, prefix = '', words = []) {
+    if (!node) return words;
+    if (node.isEndOfWord && prefix) words.push(prefix);
+
+    for (const [ch, child] of Object.entries(node.children)) {
+      this.getAllWords(child, prefix + ch, words);
+    }
+    return words;
+  }
+
+  getStats() {
+    let wordCount = 0;
+    let nodeCount = 0;
+    let maxDepth = 0;
+
+    const traverse = (n, depth) => {
+      if (!n) return;
+      nodeCount++;
+      if (depth > maxDepth) maxDepth = depth;
+      if (n.isEndOfWord) wordCount++;
+      for (const child of Object.values(n.children)) {
+        traverse(child, depth + 1);
+      }
+    };
+    traverse(this.root, 0);
+
+    return { wordCount, nodeCount, maxDepth };
+  }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { Trie, TrieNode };
+}
+
+
+// ==========================================
+// segmenttree.js
+// ==========================================
+/**
+ * Segment Tree Implementation with Step-by-Step Animation Recording
+ * Properties:
+ * 1. Leaf nodes represent single array indices [i, i].
+ * 2. Internal nodes represent range intervals [L, R] with aggregated sum/min/max.
+ * 3. Range queries and point updates execute in O(log N) time.
+ */
+
+let nextSegNodeId = 1;
+
+class SegmentTreeNode {
+  constructor(L, R, sum = 0) {
+    this.id = nextSegNodeId++;
+    this.L = L;
+    this.R = R;
+    this.sum = sum;
+    this.left = null;
+    this.right = null;
+  }
+
+  get isLeaf() {
+    return this.L === this.R;
+  }
+}
+
+class SegmentTree {
+  constructor() {
+    this.root = null;
+    this.array = [];
+    this.steps = [];
+  }
+
+  clear() {
+    this.root = null;
+    this.array = [];
+    this.steps = [];
+  }
+
+  cloneTree(node = this.root) {
+    if (!node) return null;
+    return {
+      id: node.id,
+      L: node.L,
+      R: node.R,
+      sum: node.sum,
+      isLeaf: node.isLeaf,
+      left: this.cloneTree(node.left),
+      right: this.cloneTree(node.right)
+    };
+  }
+
+  recordStep({
+    type = 'info',
+    message = '',
+    highlightedNodes = {}
+  }) {
+    this.steps.push({
+      stepNumber: this.steps.length + 1,
+      type,
+      message,
+      treeSnapshot: this.cloneTree(),
+      highlightedNodes: { ...highlightedNodes }
+    });
+  }
+
+  // --- BUILD FROM ARRAY ---
+  build(arr) {
+    this.steps = [];
+    if (!arr || !Array.isArray(arr) || arr.length === 0) return { success: false, steps: [] };
+    this.array = arr.map(Number);
+
+    this.recordStep({
+      type: 'info',
+      message: `Building Segment Tree over array of size ${this.array.length}: [${this.array.join(', ')}].`
+    });
+
+    this.root = this._buildRecursive(0, this.array.length - 1);
+
+    this.recordStep({
+      type: 'success',
+      message: `Segment Tree successfully constructed! Root Node #${this.root.id} covers total range [0..${this.array.length - 1}] with Total Sum = ${this.root.sum}.`,
+      highlightedNodes: { [this.root.id]: 'success' }
+    });
+
+    return { success: true, steps: this.steps };
+  }
+
+  _buildRecursive(L, R) {
+    const node = new SegmentTreeNode(L, R, 0);
+
+    if (L === R) {
+      node.sum = this.array[L];
+      this.recordStep({
+        type: 'insert',
+        message: `Created leaf Node #${node.id} for index [${L}]: value = ${node.sum}.`,
+        highlightedNodes: { [node.id]: 'active' }
+      });
+      return node;
+    }
+
+    const mid = Math.floor((L + R) / 2);
+    node.left = this._buildRecursive(L, mid);
+    node.right = this._buildRecursive(mid + 1, R);
+    node.sum = node.left.sum + node.right.sum;
+
+    this.recordStep({
+      type: 'split',
+      message: `Merged intervals [${L}..${mid}] (sum ${node.left.sum}) and [${mid + 1}..${R}] (sum ${node.right.sum}) into parent Node #${node.id} [${L}..${R}]: Sum = ${node.sum}.`,
+      highlightedNodes: { [node.id]: 'active', [node.left.id]: 'visited', [node.right.id]: 'visited' }
+    });
+
+    return node;
+  }
+
+  // --- RANGE SUM QUERY ---
+  rangeQuery(qL, qR) {
+    this.steps = [];
+    qL = Number(qL);
+    qR = Number(qR);
+    if (isNaN(qL) || isNaN(qR) || !this.root) return { sum: 0, steps: [] };
+
+    qL = Math.max(0, qL);
+    qR = Math.min(this.array.length - 1, qR);
+
+    this.recordStep({
+      type: 'search',
+      message: `Executing Range Sum Query for interval [${qL} .. ${qR}] starting at root.`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    const sum = this._queryRecursive(this.root, qL, qR);
+
+    this.recordStep({
+      type: 'success',
+      message: `Range Query for [${qL} .. ${qR}] complete! Total Aggregate Sum = ${sum}.`,
+      highlightedNodes: { [this.root.id]: 'success' }
+    });
+
+    return { sum, steps: this.steps };
+  }
+
+  _queryRecursive(node, qL, qR) {
+    if (!node) return 0;
+
+    // Case 1: Total Overlap
+    if (qL <= node.L && node.R <= qR) {
+      this.recordStep({
+        type: 'success',
+        message: `Node #${node.id} [${node.L}..${node.R}] is completely inside query [${qL}..${qR}] (TOTAL OVERLAP). Adding sum = ${node.sum}.`,
+        highlightedNodes: { [node.id]: 'success' }
+      });
+      return node.sum;
+    }
+
+    // Case 2: No Overlap
+    if (node.R < qL || node.L > qR) {
+      this.recordStep({
+        type: 'error',
+        message: `Node #${node.id} [${node.L}..${node.R}] has NO OVERLAP with query [${qL}..${qR}]. Returning 0.`,
+        highlightedNodes: { [node.id]: 'error' }
+      });
+      return 0;
+    }
+
+    // Case 3: Partial Overlap -> Recurse into children
+    this.recordStep({
+      type: 'search',
+      message: `Node #${node.id} [${node.L}..${node.R}] has PARTIAL OVERLAP with [${qL}..${qR}]. Splitting into left & right sub-ranges.`,
+      highlightedNodes: { [node.id]: 'active' }
+    });
+
+    const leftSum = this._queryRecursive(node.left, qL, qR);
+    const rightSum = this._queryRecursive(node.right, qL, qR);
+    return leftSum + rightSum;
+  }
+
+  // --- POINT UPDATE ---
+  updatePoint(index, newValue) {
+    this.steps = [];
+    index = Number(index);
+    newValue = Number(newValue);
+    if (isNaN(index) || isNaN(newValue) || !this.root) return { success: false, steps: [] };
+
+    if (index < 0 || index >= this.array.length) {
+      this.recordStep({
+        type: 'error',
+        message: `Index ${index} out of bounds (Array size is ${this.array.length}).`
+      });
+      return { success: false, steps: this.steps };
+    }
+
+    const oldValue = this.array[index];
+    this.array[index] = newValue;
+
+    this.recordStep({
+      type: 'info',
+      message: `Updating array index ${index}: ${oldValue} ➔ ${newValue}. Backtracking to update segment sums...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    this._updateRecursive(this.root, index, newValue);
+
+    this.recordStep({
+      type: 'success',
+      message: `Point update complete! Array: [${this.array.join(', ')}]. All ancestor segment sums updated.`,
+      highlightedNodes: { [this.root.id]: 'success' }
+    });
+
+    return { success: true, steps: this.steps };
+  }
+
+  _updateRecursive(node, index, newValue) {
+    if (!node) return;
+
+    if (node.isLeaf && node.L === index) {
+      node.sum = newValue;
+      this.recordStep({
+        type: 'insert',
+        message: `Updated target leaf Node #${node.id} [${index}]: new sum = ${newValue}.`,
+        highlightedNodes: { [node.id]: 'success' }
+      });
+      return;
+    }
+
+    const mid = Math.floor((node.L + node.R) / 2);
+    if (index <= mid) {
+      this.recordStep({
+        type: 'search',
+        message: `Index ${index} <= mid (${mid}): traversing left child Node #${node.left.id}.`,
+        highlightedNodes: { [node.id]: 'visited', [node.left.id]: 'active' }
+      });
+      this._updateRecursive(node.left, index, newValue);
+    } else {
+      this.recordStep({
+        type: 'search',
+        message: `Index ${index} > mid (${mid}): traversing right child Node #${node.right.id}.`,
+        highlightedNodes: { [node.id]: 'visited', [node.right.id]: 'active' }
+      });
+      this._updateRecursive(node.right, index, newValue);
+    }
+
+    node.sum = node.left.sum + node.right.sum;
+    this.recordStep({
+      type: 'split',
+      message: `Recalculated Node #${node.id} [${node.L}..${node.R}]: Sum = ${node.left.sum} + ${node.right.sum} = ${node.sum}.`,
+      highlightedNodes: { [node.id]: 'active' }
+    });
+  }
+
+  buildDirect(arr) {
+    this.build(arr);
+    this.steps = [];
+  }
+
+  getStats() {
+    if (!this.root) return { arraySize: 0, height: 0, totalNodes: 0, totalSum: 0 };
+    let count = 0;
+    const calc = (n) => {
+      if (!n) return 0;
+      count++;
+      return 1 + Math.max(calc(n.left), calc(n.right));
+    };
+    const h = calc(this.root);
+    return {
+      arraySize: this.array.length,
+      height: h,
+      totalNodes: count,
+      totalSum: this.root.sum
+    };
+  }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { SegmentTree, SegmentTreeNode };
+}
+
+
+// ==========================================
+// suffixtree.js
+// ==========================================
+/**
+ * Suffix Tree Implementation with Step-by-Step Animation Recording
+ * Properties:
+ * 1. Represents all suffixes of a string S ending with a sentinel '$'.
+ * 2. Edges are labeled with substrings.
+ * 3. Leaves correspond to suffix starting indices (0 to N-1).
+ * 4. Path from root to leaf i yields suffix S[i..N-1].
+ * 5. Solves pattern matching, longest repeated substring, and motif discovery in O(M) time.
+ */
+
+let nextSuffixNodeId = 1;
+
+class SuffixTreeNode {
+  constructor(edgeLabel = '', suffixIndex = null) {
+    this.id = nextSuffixNodeId++;
+    this.edgeLabel = edgeLabel;
+    this.suffixIndex = suffixIndex; // Integer index if leaf, null if internal node
+    this.children = {}; // { 'a': SuffixTreeNode, 'b': SuffixTreeNode, ... }
+  }
+
+  get isLeaf() {
+    return this.suffixIndex !== null;
+  }
+}
+
+class SuffixTree {
+  constructor() {
+    this.root = new SuffixTreeNode('');
+    this.text = '';
+    this.steps = [];
+  }
+
+  clear() {
+    this.root = new SuffixTreeNode('');
+    this.text = '';
+    this.steps = [];
+  }
+
+  cloneTree(node = this.root) {
+    if (!node) return null;
+    const clonedChildren = {};
+    for (const [ch, child] of Object.entries(node.children)) {
+      clonedChildren[ch] = this.cloneTree(child);
+    }
+    return {
+      id: node.id,
+      edgeLabel: node.edgeLabel,
+      suffixIndex: node.suffixIndex,
+      isLeaf: node.isLeaf,
+      children: clonedChildren
+    };
+  }
+
+  recordStep({
+    type = 'info',
+    message = '',
+    highlightedNodes = {}
+  }) {
+    this.steps.push({
+      stepNumber: this.steps.length + 1,
+      type,
+      message,
+      treeSnapshot: this.cloneTree(),
+      highlightedNodes: { ...highlightedNodes }
+    });
+  }
+
+  // --- BUILD SUFFIX TREE ---
+  build(text) {
+    this.steps = [];
+    if (!text || typeof text !== 'string') return { success: false, steps: [] };
+    text = text.trim();
+    if (!text.endsWith('$')) text += '$';
+    this.text = text;
+    this.root = new SuffixTreeNode('');
+
+    this.recordStep({
+      type: 'info',
+      message: `Building Suffix Tree for string "${this.text}" (Length: ${this.text.length}). Inserting all ${this.text.length} suffixes...`
+    });
+
+    for (let i = 0; i < this.text.length; i++) {
+      const suffix = this.text.slice(i);
+      this._insertSuffix(suffix, i);
+    }
+
+    this.recordStep({
+      type: 'success',
+      message: `Suffix Tree construction complete for "${this.text}"! All suffixes indexed with terminal leaves.`,
+      highlightedNodes: { [this.root.id]: 'success' }
+    });
+
+    return { success: true, steps: this.steps };
+  }
+
+  _insertSuffix(suffix, suffixIndex) {
+    this.recordStep({
+      type: 'insert',
+      message: `Inserting suffix #${suffixIndex}: "${suffix}"`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let curr = this.root;
+    let s = suffix;
+
+    while (s.length > 0) {
+      const firstChar = s[0];
+
+      if (!curr.children[firstChar]) {
+        // No edge starting with firstChar: create direct leaf
+        const leaf = new SuffixTreeNode(s, suffixIndex);
+        curr.children[firstChar] = leaf;
+        this.recordStep({
+          type: 'insert',
+          message: `Created edge "${s}" leading to Leaf #${leaf.id} [Suffix index ${suffixIndex}].`,
+          highlightedNodes: { [curr.id]: 'visited', [leaf.id]: 'active' }
+        });
+        return;
+      }
+
+      // Edge exists: find common prefix length
+      const child = curr.children[firstChar];
+      const edge = child.edgeLabel;
+      let matchLen = 0;
+      while (matchLen < edge.length && matchLen < s.length && edge[matchLen] === s[matchLen]) {
+        matchLen++;
+      }
+
+      if (matchLen === edge.length) {
+        // Traversed entire edge
+        curr = child;
+        s = s.slice(matchLen);
+      } else {
+        // Edge needs to be split!
+        const commonPrefix = edge.slice(0, matchLen);
+        const edgeRemainder = edge.slice(matchLen);
+        const suffixRemainder = s.slice(matchLen);
+
+        // 1. Create intermediate branch node
+        const branch = new SuffixTreeNode(commonPrefix, null);
+        curr.children[firstChar] = branch;
+
+        // 2. Attach existing child under branch with remaining edge
+        child.edgeLabel = edgeRemainder;
+        branch.children[edgeRemainder[0]] = child;
+
+        // 3. Create new leaf for remaining suffix
+        const newLeaf = new SuffixTreeNode(suffixRemainder, suffixIndex);
+        branch.children[suffixRemainder[0]] = newLeaf;
+
+        this.recordStep({
+          type: 'split',
+          message: `Split edge at common prefix "${commonPrefix}". Created Branch #${branch.id} with paths "${edgeRemainder}" and "${suffixRemainder}" [Leaf #${newLeaf.id}].`,
+          highlightedNodes: { [branch.id]: 'split', [newLeaf.id]: 'active' }
+        });
+        return;
+      }
+    }
+  }
+
+  // --- SEARCH PATTERN ---
+  searchPattern(pattern) {
+    this.steps = [];
+    if (!pattern) return { found: false, occurrences: [], steps: [] };
+    pattern = pattern.trim();
+
+    this.recordStep({
+      type: 'search',
+      message: `Searching for pattern "${pattern}" in Suffix Tree of "${this.text}"...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let curr = this.root;
+    let p = pattern;
+
+    while (p.length > 0) {
+      const firstChar = p[0];
+      if (!curr.children[firstChar]) {
+        this.recordStep({
+          type: 'error',
+          message: `Character '${firstChar}' has no outgoing edge from Node #${curr.id}. Pattern "${pattern}" NOT found in text.`,
+          highlightedNodes: { [curr.id]: 'error' }
+        });
+        return { found: false, occurrences: [], steps: this.steps };
+      }
+
+      const child = curr.children[firstChar];
+      const edge = child.edgeLabel;
+
+      let matchLen = 0;
+      while (matchLen < edge.length && matchLen < p.length && edge[matchLen] === p[matchLen]) {
+        matchLen++;
+      }
+
+      this.recordStep({
+        type: 'search',
+        message: `Matched "${edge.slice(0, matchLen)}" along edge leading to Node #${child.id}.`,
+        highlightedNodes: { [curr.id]: 'visited', [child.id]: 'active' }
+      });
+
+      if (matchLen === p.length) {
+        // Pattern matched completely! Collect all leaves in subtree
+        const occurrences = [];
+        this._collectLeaves(child, occurrences);
+
+        this.recordStep({
+          type: 'success',
+          message: `Pattern "${pattern}" matched! Found ${occurrences.length} occurrence(s) at start indices: [${occurrences.join(', ')}].`,
+          highlightedNodes: { [child.id]: 'success' }
+        });
+        return { found: true, occurrences, steps: this.steps };
+      } else if (matchLen === edge.length) {
+        p = p.slice(matchLen);
+        curr = child;
+      } else {
+        this.recordStep({
+          type: 'error',
+          message: `Mismatch on edge "${edge}": expected '${p[matchLen]}', but edge has '${edge[matchLen]}'. Pattern not found.`,
+          highlightedNodes: { [child.id]: 'error' }
+        });
+        return { found: false, occurrences: [], steps: this.steps };
+      }
+    }
+
+    return { found: false, occurrences: [], steps: this.steps };
+  }
+
+  _collectLeaves(node, list) {
+    if (!node) return;
+    if (node.isLeaf) list.push(node.suffixIndex);
+    for (const child of Object.values(node.children)) {
+      this._collectLeaves(child, list);
+    }
+  }
+
+  buildDirect(text) {
+    this.build(text);
+    this.steps = [];
+  }
+
+  getStats() {
+    let nodeCount = 0;
+    let leafCount = 0;
+    const traverse = (n) => {
+      if (!n) return;
+      nodeCount++;
+      if (n.isLeaf) leafCount++;
+      for (const child of Object.values(n.children)) traverse(child);
+    };
+    traverse(this.root);
+    return { textLength: this.text.length, nodeCount, leafCount };
+  }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { SuffixTree, SuffixTreeNode };
+}
+
+
+// ==========================================
+// kdtree.js
+// ==========================================
+/**
+ * 2D K-D Tree (k-Dimensional Tree) Implementation with Step-by-Step Animation Recording
+ * Properties:
+ * 1. Partitions 2-dimensional points (X, Y).
+ * 2. Levels alternate splitting axis: Depth % 2 == 0 splits on X, Depth % 2 == 1 splits on Y.
+ * 3. Left subtree contains points with smaller coordinate on active axis; Right contains greater or equal.
+ * 4. Enables efficient multidimensional search and Nearest Neighbor Query with geometric pruning.
+ */
+
+let nextKDNodeId = 1;
+
+class KDNode {
+  constructor(point, axis = 0) {
+    this.id = nextKDNodeId++;
+    this.point = point; // [x, y]
+    this.axis = axis; // 0 for X, 1 for Y
+    this.left = null;
+    this.right = null;
+  }
+
+  get axisName() {
+    return this.axis === 0 ? 'X' : 'Y';
+  }
+}
+
+class KDTree {
+  constructor() {
+    this.root = null;
+    this.steps = [];
+  }
+
+  clear() {
+    this.root = null;
+    this.steps = [];
+  }
+
+  cloneTree(node = this.root) {
+    if (!node) return null;
+    return {
+      id: node.id,
+      point: [...node.point],
+      axis: node.axis,
+      axisName: node.axisName,
+      left: this.cloneTree(node.left),
+      right: this.cloneTree(node.right)
+    };
+  }
+
+  recordStep({
+    type = 'info',
+    message = '',
+    highlightedNodes = {}
+  }) {
+    this.steps.push({
+      stepNumber: this.steps.length + 1,
+      type,
+      message,
+      treeSnapshot: this.cloneTree(),
+      highlightedNodes: { ...highlightedNodes }
+    });
+  }
+
+  // --- INSERT POINT ---
+  insert(point) {
+    this.steps = [];
+    if (!Array.isArray(point) || point.length !== 2) return { success: false, steps: [] };
+    const p = [Number(point[0]), Number(point[1])];
+    if (isNaN(p[0]) || isNaN(p[1])) return { success: false, steps: [] };
+
+    if (!this.root) {
+      this.root = new KDNode(p, 0); // Root splits on X
+      this.recordStep({
+        type: 'insert',
+        message: `Tree was empty. Inserted point (${p[0]}, ${p[1]}) as root Node #${this.root.id} splitting on X-axis.`,
+        highlightedNodes: { [this.root.id]: 'success' }
+      });
+      return { success: true, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'insert',
+      message: `Inserting point (${p[0]}, ${p[1]}). Starting at root splitting on X-axis...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    this.root = this._insertRecursive(this.root, p, 0);
+
+    this.recordStep({
+      type: 'success',
+      message: `Point (${p[0]}, ${p[1]}) successfully placed in 2D K-D Tree!`,
+      highlightedNodes: { [this.root.id]: 'success' }
+    });
+
+    return { success: true, steps: this.steps };
+  }
+
+  _insertRecursive(node, p, depth) {
+    const axis = depth % 2; // 0 for X, 1 for Y
+    const axisName = axis === 0 ? 'X' : 'Y';
+
+    if (node.point[0] === p[0] && node.point[1] === p[1]) {
+      this.recordStep({
+        type: 'error',
+        message: `Point (${p[0]}, ${p[1]}) already exists in Node #${node.id}. Duplicate points not inserted.`,
+        highlightedNodes: { [node.id]: 'error' }
+      });
+      return node;
+    }
+
+    if (p[axis] < node.point[axis]) {
+      if (!node.left) {
+        const nextAxis = (axis + 1) % 2;
+        node.left = new KDNode(p, nextAxis);
+        this.recordStep({
+          type: 'insert',
+          message: `${axisName}-coord ${p[axis]} < ${node.point[axis]}: inserted (${p[0]}, ${p[1]}) as LEFT child Node #${node.left.id} splitting on ${nextAxis === 0 ? 'X' : 'Y'}-axis.`,
+          highlightedNodes: { [node.id]: 'visited', [node.left.id]: 'active' }
+        });
+      } else {
+        this.recordStep({
+          type: 'search',
+          message: `${axisName}-coord ${p[axis]} < ${node.point[axis]}: navigating LEFT into subtree.`,
+          highlightedNodes: { [node.id]: 'visited', [node.left.id]: 'active' }
+        });
+        this._insertRecursive(node.left, p, depth + 1);
+      }
+    } else {
+      if (!node.right) {
+        const nextAxis = (axis + 1) % 2;
+        node.right = new KDNode(p, nextAxis);
+        this.recordStep({
+          type: 'insert',
+          message: `${axisName}-coord ${p[axis]} >= ${node.point[axis]}: inserted (${p[0]}, ${p[1]}) as RIGHT child Node #${node.right.id} splitting on ${nextAxis === 0 ? 'X' : 'Y'}-axis.`,
+          highlightedNodes: { [node.id]: 'visited', [node.right.id]: 'active' }
+        });
+      } else {
+        this.recordStep({
+          type: 'search',
+          message: `${axisName}-coord ${p[axis]} >= ${node.point[axis]}: navigating RIGHT into subtree.`,
+          highlightedNodes: { [node.id]: 'visited', [node.right.id]: 'active' }
+        });
+        this._insertRecursive(node.right, p, depth + 1);
+      }
+    }
+
+    return node;
+  }
+
+  // --- SEARCH EXACT POINT ---
+  search(point) {
+    this.steps = [];
+    if (!Array.isArray(point) || !this.root) return { found: false, steps: [] };
+    const p = [Number(point[0]), Number(point[1])];
+
+    this.recordStep({
+      type: 'search',
+      message: `Searching for point (${p[0]}, ${p[1]}) starting at root...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let curr = this.root;
+    let depth = 0;
+
+    while (curr) {
+      if (curr.point[0] === p[0] && curr.point[1] === p[1]) {
+        this.recordStep({
+          type: 'success',
+          message: `Point (${p[0]}, ${p[1]}) found at Node #${curr.id}! (Split axis: ${curr.axisName})`,
+          highlightedNodes: { [curr.id]: 'success' }
+        });
+        return { found: true, steps: this.steps };
+      }
+
+      const axis = depth % 2;
+      const axisName = axis === 0 ? 'X' : 'Y';
+
+      if (p[axis] < curr.point[axis]) {
+        this.recordStep({
+          type: 'search',
+          message: `${axisName}-coordinate ${p[axis]} < ${curr.point[axis]}: moving LEFT.`,
+          highlightedNodes: { [curr.id]: 'visited' }
+        });
+        curr = curr.left;
+      } else {
+        this.recordStep({
+          type: 'search',
+          message: `${axisName}-coordinate ${p[axis]} >= ${curr.point[axis]}: moving RIGHT.`,
+          highlightedNodes: { [curr.id]: 'visited' }
+        });
+        curr = curr.right;
+      }
+      depth++;
+    }
+
+    this.recordStep({
+      type: 'error',
+      message: `Point (${p[0]}, ${p[1]}) not found in K-D Tree.`,
+      highlightedNodes: {}
+    });
+    return { found: false, steps: this.steps };
+  }
+
+  // --- NEAREST NEIGHBOR QUERY ---
+  nearestNeighbor(target) {
+    this.steps = [];
+    if (!this.root || !Array.isArray(target)) return { nearest: null, distance: Infinity, steps: [] };
+    const t = [Number(target[0]), Number(target[1])];
+
+    this.recordStep({
+      type: 'search',
+      message: `Executing Nearest Neighbor Query for target point (${t[0]}, ${t[1]})...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let best = { node: null, distSq: Infinity };
+
+    const searchNN = (node, depth) => {
+      if (!node) return;
+
+      const dSq = (node.point[0] - t[0]) ** 2 + (node.point[1] - t[1]) ** 2;
+      if (dSq < best.distSq) {
+        best.distSq = dSq;
+        best.node = node;
+        this.recordStep({
+          type: 'borrow',
+          message: `New closest candidate found: Node #${node.id} (${node.point[0]}, ${node.point[1]}), Euclidean Distance = ${Math.sqrt(dSq).toFixed(2)}.`,
+          highlightedNodes: { [node.id]: 'active' }
+        });
+      }
+
+      const axis = depth % 2;
+      const diff = t[axis] - node.point[axis];
+
+      const nearChild = diff < 0 ? node.left : node.right;
+      const farChild = diff < 0 ? node.right : node.left;
+
+      searchNN(nearChild, depth + 1);
+
+      // Geometric pruning check: only search far child if distance to splitting plane < current best distance
+      if (diff * diff < best.distSq) {
+        this.recordStep({
+          type: 'search',
+          message: `Splitting plane at Node #${node.id} (${node.axisName} = ${node.point[axis]}) is closer than current best distance (${Math.sqrt(best.distSq).toFixed(2)}). Checking other branch.`,
+          highlightedNodes: { [node.id]: 'visited' }
+        });
+        searchNN(farChild, depth + 1);
+      } else {
+        this.recordStep({
+          type: 'info',
+          message: `Geometric Pruning: Splitting plane distance (${Math.abs(diff)}) >= best distance (${Math.sqrt(best.distSq).toFixed(2)}). Skipped entire opposite subtree!`,
+          highlightedNodes: { [node.id]: 'visited' }
+        });
+      }
+    };
+
+    searchNN(this.root, 0);
+
+    const finalDist = Math.sqrt(best.distSq);
+    this.recordStep({
+      type: 'success',
+      message: `Nearest Neighbor to (${t[0]}, ${t[1]}) is Node #${best.node.id} (${best.node.point[0]}, ${best.node.point[1]}) with Distance = ${finalDist.toFixed(2)}!`,
+      highlightedNodes: { [best.node.id]: 'success' }
+    });
+
+    return { nearest: best.node.point, distance: finalDist, steps: this.steps };
+  }
+
+  insertDirect(point) {
+    this.insert(point);
+    this.steps = [];
+  }
+
+  getPoints(node = this.root, result = []) {
+    if (!node) return result;
+    this.getPoints(node.left, result);
+    result.push(`(${node.point[0]}, ${node.point[1]})`);
+    this.getPoints(node.right, result);
+    return result;
+  }
+
+  getStats() {
+    if (!this.root) return { height: 0, totalNodes: 0 };
+    let count = 0;
+    const calc = (n) => {
+      if (!n) return 0;
+      count++;
+      return 1 + Math.max(calc(n.left), calc(n.right));
+    };
+    const h = calc(this.root);
+    return { height: h, totalNodes: count };
+  }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { KDTree, KDNode };
+}
+
+
+// ==========================================
+// threadedtree.js
+// ==========================================
+/**
+ * Threaded Binary Tree (Double-Threaded BST) Implementation
+ * Properties:
+ * 1. Null left pointers are replaced with threads pointing to the in-order predecessor.
+ * 2. Null right pointers are replaced with threads pointing to the in-order successor.
+ * 3. Enables full in-order traversal in O(N) time and O(1) auxiliary space (no stack or recursion!).
+ */
+
+let nextThreadedNodeId = 1;
+
+class ThreadedNode {
+  constructor(key) {
+    this.id = nextThreadedNodeId++;
+    this.key = Number(key);
+    this.left = null;
+    this.right = null;
+    this.isLeftThread = true;  // true if left pointer is a thread to in-order predecessor
+    this.isRightThread = true; // true if right pointer is a thread to in-order successor
+  }
+}
+
+class ThreadedBinaryTree {
+  constructor() {
+    this.root = null;
+    this.steps = [];
+  }
+
+  clear() {
+    this.root = null;
+    this.steps = [];
+  }
+
+  cloneTree(node = this.root, visited = new Set()) {
+    if (!node || visited.has(node.id)) return null;
+    visited.add(node.id);
+
+    return {
+      id: node.id,
+      key: node.key,
+      isLeftThread: node.isLeftThread,
+      isRightThread: node.isRightThread,
+      leftTargetId: node.left ? node.left.id : null,
+      rightTargetId: node.right ? node.right.id : null,
+      left: !node.isLeftThread ? this.cloneTree(node.left, visited) : null,
+      right: !node.isRightThread ? this.cloneTree(node.right, visited) : null
+    };
+  }
+
+  recordStep({
+    type = 'info',
+    message = '',
+    highlightedNodes = {}
+  }) {
+    this.steps.push({
+      stepNumber: this.steps.length + 1,
+      type,
+      message,
+      treeSnapshot: this.cloneTree(),
+      highlightedNodes: { ...highlightedNodes }
+    });
+  }
+
+  // --- INSERTION ---
+  insert(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key)) return { success: false, steps: [] };
+
+    const newNode = new ThreadedNode(key);
+
+    if (!this.root) {
+      this.root = newNode;
+      this.recordStep({
+        type: 'insert',
+        message: `Tree was empty. Inserted key ${key} as root Node #${newNode.id}. (Left and right threads point to null).`,
+        highlightedNodes: { [newNode.id]: 'success' }
+      });
+      return { success: true, steps: this.steps };
+    }
+
+    this.recordStep({
+      type: 'insert',
+      message: `Inserting key ${key} into Threaded Binary Tree starting at root...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let parent = null;
+    let curr = this.root;
+
+    while (curr) {
+      if (key === curr.key) {
+        this.recordStep({
+          type: 'error',
+          message: `Key ${key} already exists in Node #${curr.id}. Duplicate keys not allowed.`,
+          highlightedNodes: { [curr.id]: 'error' }
+        });
+        return { success: false, duplicate: true, steps: this.steps };
+      }
+
+      parent = curr;
+      if (key < curr.key) {
+        if (!curr.isLeftThread) {
+          curr = curr.left;
+        } else {
+          break; // Found insertion point
+        }
+      } else {
+        if (!curr.isRightThread) {
+          curr = curr.right;
+        } else {
+          break; // Found insertion point
+        }
+      }
+    }
+
+    if (key < parent.key) {
+      newNode.left = parent.left;
+      newNode.right = parent;
+      parent.isLeftThread = false;
+      parent.left = newNode;
+
+      this.recordStep({
+        type: 'insert',
+        message: `Inserted key ${key} as LEFT child of Node #${parent.id}. Left thread points to predecessor (${newNode.left ? newNode.left.key : 'null'}), right thread points to parent (${parent.key}).`,
+        highlightedNodes: { [parent.id]: 'visited', [newNode.id]: 'active' }
+      });
+    } else {
+      newNode.left = parent;
+      newNode.right = parent.right;
+      parent.isRightThread = false;
+      parent.right = newNode;
+
+      this.recordStep({
+        type: 'insert',
+        message: `Inserted key ${key} as RIGHT child of Node #${parent.id}. Left thread points to parent (${parent.key}), right thread points to successor (${newNode.right ? newNode.right.key : 'null'}).`,
+        highlightedNodes: { [parent.id]: 'visited', [newNode.id]: 'active' }
+      });
+    }
+
+    this.recordStep({
+      type: 'success',
+      message: `Threaded BST insertion complete! In-order threads wired up.`,
+      highlightedNodes: { [newNode.id]: 'success' }
+    });
+
+    return { success: true, steps: this.steps };
+  }
+
+  // --- O(1) AUXILIARY SPACE IN-ORDER TRAVERSAL USING THREADS ---
+  inorderTraversalWithSteps() {
+    this.steps = [];
+    if (!this.root) return { result: [], steps: [] };
+
+    this.recordStep({
+      type: 'info',
+      message: `Starting stackless, recursion-free in-order traversal using threads (O(1) Auxiliary Space).`
+    });
+
+    // 1. Move to leftmost node
+    let curr = this.root;
+    while (!curr.isLeftThread && curr.left) {
+      curr = curr.left;
+    }
+
+    const result = [];
+    while (curr) {
+      result.push(curr.key);
+      this.recordStep({
+        type: 'search',
+        message: `Visited Node #${curr.id} (Key: ${curr.key}). In-order sequence so far: [${result.join(', ')}].`,
+        highlightedNodes: { [curr.id]: 'success' }
+      });
+
+      // If right pointer is a thread, directly follow it to in-order successor!
+      if (curr.isRightThread) {
+        if (curr.right) {
+          this.recordStep({
+            type: 'borrow',
+            message: `Node #${curr.id} has a RIGHT THREAD ➔ Following thread directly to in-order successor Node #${curr.right.id} (${curr.right.key}) without recursion/stack!`,
+            highlightedNodes: { [curr.id]: 'visited', [curr.right.id]: 'active' }
+          });
+        }
+        curr = curr.right;
+      } else {
+        // Normal right subtree: go right, then leftmost in that subtree
+        curr = curr.right;
+        while (curr && !curr.isLeftThread && curr.left) {
+          curr = curr.left;
+        }
+      }
+    }
+
+    this.recordStep({
+      type: 'success',
+      message: `Complete in-order traversal: [${result.join(', ')}]. Finished in O(N) time with O(1) extra space!`,
+      highlightedNodes: {}
+    });
+
+    return { result, steps: this.steps };
+  }
+
+  // --- SEARCH ---
+  search(key) {
+    this.steps = [];
+    key = Number(key);
+    if (isNaN(key) || !this.root) return { found: false, steps: [] };
+
+    this.recordStep({
+      type: 'search',
+      message: `Searching for key ${key} starting at root Node #${this.root.id}...`,
+      highlightedNodes: { [this.root.id]: 'active' }
+    });
+
+    let curr = this.root;
+    while (curr) {
+      if (key === curr.key) {
+        this.recordStep({
+          type: 'success',
+          message: `Key ${key} found at Node #${curr.id}!`,
+          highlightedNodes: { [curr.id]: 'success' }
+        });
+        return { found: true, steps: this.steps };
+      }
+
+      if (key < curr.key) {
+        if (curr.isLeftThread || !curr.left) {
+          break;
+        }
+        curr = curr.left;
+      } else {
+        if (curr.isRightThread || !curr.right) {
+          break;
+        }
+        curr = curr.right;
+      }
+    }
+
+    this.recordStep({
+      type: 'error',
+      message: `Key ${key} not found in Threaded Binary Tree.`,
+      highlightedNodes: {}
+    });
+    return { found: false, steps: this.steps };
+  }
+
+  insertDirect(key) {
+    this.insert(key);
+    this.steps = [];
+  }
+
+  getInorderKeys() {
+    if (!this.root) return [];
+    let curr = this.root;
+    while (!curr.isLeftThread && curr.left) curr = curr.left;
+
+    const res = [];
+    while (curr) {
+      res.push(curr.key);
+      if (curr.isRightThread) {
+        curr = curr.right;
+      } else {
+        curr = curr.right;
+        while (curr && !curr.isLeftThread && curr.left) curr = curr.left;
+      }
+    }
+    return res;
+  }
+
+  getStats() {
+    if (!this.root) return { height: 0, totalNodes: 0, threadCount: 0 };
+    let nodes = 0;
+    let threads = 0;
+    const visited = new Set();
+
+    const traverse = (n) => {
+      if (!n || visited.has(n.id)) return 0;
+      visited.add(n.id);
+      nodes++;
+      if (n.isLeftThread && n.left) threads++;
+      if (n.isRightThread && n.right) threads++;
+
+      const leftH = !n.isLeftThread ? traverse(n.left) : 0;
+      const rightH = !n.isRightThread ? traverse(n.right) : 0;
+      return 1 + Math.max(leftH, rightH);
+    };
+
+    const h = traverse(this.root);
+    return { height: h, totalNodes: nodes, threadCount: threads };
+  }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { ThreadedBinaryTree, ThreadedNode };
+}
+
+
+// ==========================================
+// visualizer.js
+// ==========================================
+/**
+ * Unified Multi-Tree Visualizer - Supports 9 Tree Data Structures:
+ * 1. AVL Tree
+ * 2. Red-Black Tree
+ * 3. B-Tree
+ * 4. B+ Tree
+ * 5. Trie (Prefix Tree)
+ * 6. Segment Tree
+ * 7. Suffix Tree
+ * 8. 2D K-D Tree
+ * 9. Threaded Binary Tree
+ */
+
+// Active Tree Mode
 let currentTreeMode = 'avl';
 
 // Tree Instances
 let avlTree = new AVLTree();
+let rbTree = new RedBlackTree();
 let btree = new BTree(3);
+let bplusTree = new BPlusTree(3);
+let trie = new Trie();
+let segmentTree = new SegmentTree();
+let suffixTree = new SuffixTree();
+let kdTree = new KDTree();
+let threadedTree = new ThreadedBinaryTree();
 
 // Animation / Step player state
 let animationSteps = [];
@@ -3187,9 +5459,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initSVGPanZoom();
   initTheoryTabs();
 
-  // Initialize with AVL mode and default explicit keys
+  // Initialize with AVL mode and default tree
   switchTreeMode('avl');
-  setupInitialTree('avl');
 });
 
 function initDOM() {
@@ -3211,8 +5482,8 @@ function initDOM() {
 }
 
 function initEvents() {
-  // TWO PROMINENT OPTIONS IN MIDDLE OF THE PAGE
-  document.querySelectorAll('.tree-card-option').forEach(btn => {
+  // PROMINENT TREE SELECTOR CARDS IN MIDDLE OF PAGE
+  document.querySelectorAll('.tree-selector-card').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const mode = e.currentTarget.dataset.mode;
       if (mode === currentTreeMode) return;
@@ -3220,37 +5491,35 @@ function initEvents() {
     });
   });
 
-  // B-Tree Order Buttons
+  // B-Tree & B+ Tree Order Buttons
   document.querySelectorAll('.order-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const newOrder = parseInt(e.target.dataset.order);
-      if (newOrder === btree.order) return;
-
       document.querySelectorAll('.order-btn').forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
 
-      btree.setOrder(newOrder);
-      updateStats();
-      addLogEntry(`Changed B-Tree order to M = ${newOrder}`, 'info');
+      if (currentTreeMode === 'btree') {
+        btree.setOrder(newOrder);
+      } else if (currentTreeMode === 'bplustree') {
+        bplusTree.order = newOrder;
+        const keys = bplusTree.getInorderKeys();
+        bplusTree.clear();
+        keys.forEach(k => bplusTree.insertDirect(k));
+      }
 
-      animationSteps = [{
-        stepNumber: 1,
-        type: 'info',
-        message: `B-Tree order changed to M = ${newOrder}. Max keys = ${btree.maxKeys}, Min keys = ${btree.minKeys}.`,
-        treeSnapshot: btree.cloneTree(),
-        highlightedNodes: {},
-        highlightedKeys: {}
-      }];
-      currentStepIdx = 0;
-      renderStep(0);
-      fitToScreen();
+      updateStats();
+      addLogEntry(`Changed order to M = ${newOrder}`, 'info');
+      refreshCurrentTreeSnapshot(`Changed order to M = ${newOrder}`);
     });
   });
 
-  // Single Key Operations
+  // Common Action Buttons
   document.getElementById('btn-insert').addEventListener('click', handleInsert);
   document.getElementById('btn-delete').addEventListener('click', handleDelete);
   document.getElementById('btn-search').addEventListener('click', handleSearch);
+
+  // Specialized Action Buttons
+  document.getElementById('btn-secondary-action').addEventListener('click', handleSecondaryAction);
 
   singleKeyInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') handleInsert();
@@ -3261,7 +5530,6 @@ function initEvents() {
   document.getElementById('btn-bulk-rebuild').addEventListener('click', handleBulkRebuild);
 
   // Generators & Clear
-  document.getElementById('btn-random-key').addEventListener('click', handleRandomKey);
   document.getElementById('btn-random-set').addEventListener('click', handleRandomSet);
   document.getElementById('btn-clear').addEventListener('click', handleClear);
 
@@ -3291,120 +5559,263 @@ function initEvents() {
 
   // Close popover on document click
   document.addEventListener('click', (e) => {
-    if (activePopover && !activePopover.contains(e.target) && !e.target.closest('.key-cell') && !e.target.closest('.avl-node-group')) {
+    if (activePopover && !activePopover.contains(e.target) && !e.target.closest('.key-cell') && !e.target.closest('.tree-node-interactive')) {
       closePopover();
     }
   });
 }
 
-// --- SWITCH TREE MODE (AVL vs B-TREE) ---
+// --- SWITCH TREE MODE ---
 function switchTreeMode(mode) {
   currentTreeMode = mode;
   pause();
   closePopover();
 
-  // Update prominent middle card active states
-  document.querySelectorAll('.tree-card-option').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === mode);
+  // Update card active states
+  document.querySelectorAll('.tree-selector-card').forEach(card => {
+    card.classList.toggle('active', card.dataset.mode === mode);
   });
 
-  const btreeControls = document.getElementById('btree-order-group');
-  const btreeStats = document.getElementById('btree-stats');
-  const avlStats = document.getElementById('avl-stats');
-  const emptyTitle = document.getElementById('empty-title');
+  // Synchronize Theory Tab
+  activateTheoryTab(`${mode}-theory`);
 
-  if (mode === 'avl') {
-    btreeControls.style.display = 'none';
-    btreeStats.style.display = 'none';
-    avlStats.style.display = 'flex';
-    emptyTitle.textContent = 'The AVL Tree is currently empty';
+  // Adapt input labels, buttons, and placeholders to tree type
+  adaptControlsForMode(mode);
 
-    // Synchronize theory tab to AVL
-    activateTheoryTab('avl-theory');
+  // Set default initial data if tree is empty
+  setupInitialTreeForMode(mode);
+}
 
-    // Populate default explicit keys if input is empty
-    if (!bulkKeysInput.value.trim() || bulkKeysInput.value.includes('17')) {
-      bulkKeysInput.value = '30, 20, 10, 40, 50, 25';
-    }
+function adaptControlsForMode(mode) {
+  const orderGroup = document.getElementById('order-control-group');
+  const inputLabel = document.getElementById('input-label');
+  const bulkLabel = document.getElementById('bulk-label');
+  const insertBtn = document.getElementById('btn-insert');
+  const deleteBtn = document.getElementById('btn-delete');
+  const searchBtn = document.getElementById('btn-search');
+  const secondaryBtn = document.getElementById('btn-secondary-action');
+  const inorderBar = document.getElementById('inorder-bar');
+  const inorderLabel = document.getElementById('inorder-label');
 
-    if (!avlTree.root) {
-      setupInitialTree('avl');
-    } else {
-      animationSteps = [{
-        stepNumber: 1,
-        type: 'info',
-        message: `Switched to AVL Tree. Active keys: [${avlTree.getInorderKeys().join(', ')}]. Height: ${avlTree.root.height}.`,
-        treeSnapshot: avlTree.cloneTree(),
-        highlightedNodes: {}
-      }];
-      currentStepIdx = 0;
-      renderStep(0);
-      fitToScreen();
-    }
+  // Default button visibility
+  deleteBtn.style.display = 'inline-flex';
+  searchBtn.style.display = 'inline-flex';
+  secondaryBtn.style.display = 'none';
+  orderGroup.style.display = (mode === 'btree' || mode === 'bplustree') ? 'flex' : 'none';
+  inorderBar.style.display = 'flex';
+  inorderLabel.textContent = 'Sequence / In-Order Traversal:';
 
-  } else {
-    btreeControls.style.display = 'flex';
-    btreeStats.style.display = 'flex';
-    avlStats.style.display = 'none';
-    emptyTitle.textContent = 'The B-Tree is currently empty';
+  switch (mode) {
+    case 'avl':
+      inputLabel.textContent = 'Key';
+      singleKeyInput.type = 'number';
+      singleKeyInput.placeholder = 'e.g. 25';
+      bulkLabel.textContent = 'Numbers List';
+      bulkKeysInput.placeholder = '30, 20, 10, 40, 50, 25';
+      insertBtn.innerHTML = '<span>+</span> Insert';
+      break;
 
-    // Synchronize theory tab to B-Tree
-    activateTheoryTab('btree-theory');
+    case 'rbtree':
+      inputLabel.textContent = 'Key';
+      singleKeyInput.type = 'number';
+      singleKeyInput.placeholder = 'e.g. 25';
+      bulkLabel.textContent = 'Numbers List';
+      bulkKeysInput.placeholder = '10, 20, 30, 15, 25, 5, 1';
+      insertBtn.innerHTML = '<span>+</span> Insert';
+      break;
 
-    // Populate default explicit keys if input is empty
-    if (!bulkKeysInput.value.trim() || bulkKeysInput.value.includes('40, 50')) {
-      bulkKeysInput.value = '10, 20, 5, 6, 12, 30, 7, 17';
-    }
+    case 'btree':
+      inputLabel.textContent = 'Key';
+      singleKeyInput.type = 'number';
+      singleKeyInput.placeholder = 'e.g. 25';
+      bulkLabel.textContent = 'Numbers List';
+      bulkKeysInput.placeholder = '10, 20, 5, 6, 12, 30, 7, 17';
+      insertBtn.innerHTML = '<span>+</span> Insert';
+      break;
 
-    if (!btree.root) {
-      setupInitialTree('btree');
-    } else {
-      animationSteps = [{
-        stepNumber: 1,
-        type: 'info',
-        message: `Switched to B-Tree (Order M = ${btree.order}). Active keys: [${btree.getInorderKeys().join(', ')}].`,
-        treeSnapshot: btree.cloneTree(),
-        highlightedNodes: {},
-        highlightedKeys: {}
-      }];
-      currentStepIdx = 0;
-      renderStep(0);
-      fitToScreen();
-    }
+    case 'bplustree':
+      inputLabel.textContent = 'Key';
+      singleKeyInput.type = 'number';
+      singleKeyInput.placeholder = 'e.g. 25';
+      bulkLabel.textContent = 'Numbers List';
+      bulkKeysInput.placeholder = '10, 20, 5, 6, 12, 30, 7, 17, 3, 25';
+      insertBtn.innerHTML = '<span>+</span> Insert';
+      secondaryBtn.style.display = 'inline-flex';
+      secondaryBtn.innerHTML = '<span>🔗</span> Range [6..20]';
+      break;
+
+    case 'trie':
+      inputLabel.textContent = 'Word';
+      singleKeyInput.type = 'text';
+      singleKeyInput.placeholder = 'e.g. cart';
+      bulkLabel.textContent = 'Words List';
+      bulkKeysInput.placeholder = 'cat, car, cart, dog, door, dart';
+      insertBtn.innerHTML = '<span>+</span> Insert Word';
+      deleteBtn.innerHTML = '<span>−</span> Delete Word';
+      searchBtn.innerHTML = '<span>🔍</span> Search Word';
+      secondaryBtn.style.display = 'inline-flex';
+      secondaryBtn.innerHTML = '<span>🔤</span> StartsWith Prefix';
+      inorderLabel.textContent = 'Stored Words in Trie:';
+      break;
+
+    case 'segmenttree':
+      inputLabel.textContent = 'Index';
+      singleKeyInput.type = 'number';
+      singleKeyInput.placeholder = 'Index (0..N)';
+      bulkLabel.textContent = 'Initial Array';
+      bulkKeysInput.placeholder = '1, 3, 5, 7, 9, 11';
+      insertBtn.innerHTML = '<span>✏️</span> Update Value';
+      deleteBtn.style.display = 'none';
+      searchBtn.innerHTML = '<span>🔍</span> Query [1..4]';
+      inorderLabel.textContent = 'Base Array Elements:';
+      break;
+
+    case 'suffixtree':
+      inputLabel.textContent = 'Pattern';
+      singleKeyInput.type = 'text';
+      singleKeyInput.placeholder = 'e.g. ana';
+      bulkLabel.textContent = 'Target String';
+      bulkKeysInput.placeholder = 'banana$';
+      insertBtn.innerHTML = '<span>🔄</span> Build Suffix Tree';
+      deleteBtn.style.display = 'none';
+      searchBtn.innerHTML = '<span>🔍</span> Find Pattern';
+      inorderLabel.textContent = 'Indexed Suffixes:';
+      break;
+
+    case 'kdtree':
+      inputLabel.textContent = 'Point (X, Y)';
+      singleKeyInput.type = 'text';
+      singleKeyInput.placeholder = 'e.g. 15, 25';
+      bulkLabel.textContent = '2D Points List';
+      bulkKeysInput.placeholder = '(30,40), (5,25), (70,70), (10,12), (50,30)';
+      insertBtn.innerHTML = '<span>+</span> Insert Point';
+      deleteBtn.style.display = 'none';
+      searchBtn.innerHTML = '<span>🔍</span> Search Point';
+      secondaryBtn.style.display = 'inline-flex';
+      secondaryBtn.innerHTML = '<span>🎯</span> Nearest Neighbor';
+      inorderLabel.textContent = 'Indexed Points:';
+      break;
+
+    case 'threadedtree':
+      inputLabel.textContent = 'Key';
+      singleKeyInput.type = 'number';
+      singleKeyInput.placeholder = 'e.g. 25';
+      bulkLabel.textContent = 'Numbers List';
+      bulkKeysInput.placeholder = '20, 10, 30, 5, 15, 25, 35';
+      insertBtn.innerHTML = '<span>+</span> Insert';
+      deleteBtn.style.display = 'none';
+      secondaryBtn.style.display = 'inline-flex';
+      secondaryBtn.innerHTML = '<span>🧵</span> In-Order Threads';
+      break;
   }
 }
 
-function setupInitialTree(mode) {
-  if (mode === 'avl') {
-    avlTree.clear();
-    const keys = [30, 20, 10, 40, 50, 25];
-    keys.forEach(k => avlTree.insertDirect(k));
-    animationSteps = [{
-      stepNumber: 1,
-      type: 'success',
-      message: `Initialized AVL Tree with user keys: [${keys.join(', ')}]. Tree is fully balanced.`,
-      treeSnapshot: avlTree.cloneTree(),
-      highlightedNodes: {}
-    }];
-  } else {
-    btree.clear();
-    const keys = [10, 20, 5, 6, 12, 30, 7, 17];
-    keys.forEach(k => btree.insertDirect(k));
-    animationSteps = [{
-      stepNumber: 1,
-      type: 'success',
-      message: `Initialized B-Tree (Order M = ${btree.order}) with user keys: [${keys.join(', ')}].`,
-      treeSnapshot: btree.cloneTree(),
-      highlightedNodes: {},
-      highlightedKeys: {}
-    }];
+function setupInitialTreeForMode(mode) {
+  switch (mode) {
+    case 'avl':
+      if (!avlTree.root) {
+        bulkKeysInput.value = '30, 20, 10, 40, 50, 25';
+        [30, 20, 10, 40, 50, 25].forEach(k => avlTree.insertDirect(k));
+      }
+      refreshCurrentTreeSnapshot(`Active: AVL Tree (Self-Balancing BST)`);
+      break;
+
+    case 'rbtree':
+      if (!rbTree.root) {
+        bulkKeysInput.value = '10, 20, 30, 15, 25, 5, 1';
+        [10, 20, 30, 15, 25, 5, 1].forEach(k => rbTree.insertDirect(k));
+      }
+      refreshCurrentTreeSnapshot(`Active: Red-Black Tree`);
+      break;
+
+    case 'btree':
+      if (!btree.root) {
+        bulkKeysInput.value = '10, 20, 5, 6, 12, 30, 7, 17';
+        [10, 20, 5, 6, 12, 30, 7, 17].forEach(k => btree.insertDirect(k));
+      }
+      refreshCurrentTreeSnapshot(`Active: B-Tree (Order M = ${btree.order})`);
+      break;
+
+    case 'bplustree':
+      if (!bplusTree.root) {
+        bulkKeysInput.value = '10, 20, 5, 6, 12, 30, 7, 17, 3, 25';
+        [10, 20, 5, 6, 12, 30, 7, 17, 3, 25].forEach(k => bplusTree.insertDirect(k));
+      }
+      refreshCurrentTreeSnapshot(`Active: B+ Tree (Leaf Chain & Range Search)`);
+      break;
+
+    case 'trie':
+      if (Object.keys(trie.root.children).length === 0) {
+        bulkKeysInput.value = 'cat, car, cart, dog, door, dart';
+        ['cat', 'car', 'cart', 'dog', 'door', 'dart'].forEach(w => trie.insertDirect(w));
+      }
+      refreshCurrentTreeSnapshot(`Active: Trie (Prefix Tree)`);
+      break;
+
+    case 'segmenttree':
+      if (!segmentTree.root) {
+        bulkKeysInput.value = '1, 3, 5, 7, 9, 11';
+        segmentTree.buildDirect([1, 3, 5, 7, 9, 11]);
+      }
+      refreshCurrentTreeSnapshot(`Active: Segment Tree (Range Queries & Updates)`);
+      break;
+
+    case 'suffixtree':
+      if (Object.keys(suffixTree.root.children).length === 0) {
+        bulkKeysInput.value = 'banana$';
+        suffixTree.buildDirect('banana$');
+      }
+      refreshCurrentTreeSnapshot(`Active: Suffix Tree (String Pattern Matching)`);
+      break;
+
+    case 'kdtree':
+      if (!kdTree.root) {
+        bulkKeysInput.value = '(30,40), (5,25), (70,70), (10,12), (50,30)';
+        [[30, 40], [5, 25], [70, 70], [10, 12], [50, 30]].forEach(p => kdTree.insertDirect(p));
+      }
+      refreshCurrentTreeSnapshot(`Active: 2D K-D Tree (Spatial Partitioning)`);
+      break;
+
+    case 'threadedtree':
+      if (!threadedTree.root) {
+        bulkKeysInput.value = '20, 10, 30, 5, 15, 25, 35';
+        [20, 10, 30, 5, 15, 25, 35].forEach(k => threadedTree.insertDirect(k));
+      }
+      refreshCurrentTreeSnapshot(`Active: Threaded Binary Tree (O(1) Space Traversal)`);
+      break;
   }
+}
+
+function refreshCurrentTreeSnapshot(msg) {
+  const snapshot = getCurrentTreeSnapshot();
+  animationSteps = [{
+    stepNumber: 1,
+    type: 'info',
+    message: msg,
+    treeSnapshot: snapshot,
+    highlightedNodes: {}
+  }];
   currentStepIdx = 0;
   renderStep(0);
   setTimeout(fitToScreen, 60);
 }
 
-// --- DIRECT THEORY TABS INITIALIZATION ---
+function getCurrentTreeSnapshot() {
+  switch (currentTreeMode) {
+    case 'avl': return avlTree.cloneTree();
+    case 'rbtree': return rbTree.cloneTree();
+    case 'btree': return btree.cloneTree();
+    case 'bplustree': return bplusTree.cloneTree();
+    case 'trie': return trie.cloneTree();
+    case 'segmenttree': return segmentTree.cloneTree();
+    case 'suffixtree': return suffixTree.cloneTree();
+    case 'kdtree': return kdTree.cloneTree();
+    case 'threadedtree': return threadedTree.cloneTree();
+    default: return null;
+  }
+}
+
+// --- THEORY TABS INITIALIZATION ---
 function initTheoryTabs() {
   document.querySelectorAll('.theory-tab-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -3425,7 +5836,7 @@ function activateTheoryTab(tabId) {
 // --- ZOOM & PAN ENGINE ---
 function initSVGPanZoom() {
   svg.addEventListener('mousedown', (e) => {
-    if (e.target.closest('.key-cell') || e.target.closest('.avl-node-group')) return;
+    if (e.target.closest('.key-cell') || e.target.closest('.tree-node-interactive')) return;
     isDragging = true;
     startX = e.clientX - panX;
     startY = e.clientY - panY;
@@ -3451,7 +5862,7 @@ function initSVGPanZoom() {
     const mouseY = e.clientY - rect.top;
 
     const zoomFactor = e.deltaY < 0 ? 1.15 : 0.85;
-    const newScale = Math.min(Math.max(0.12, scale * zoomFactor), 3.5);
+    const newScale = Math.min(Math.max(0.1, scale * zoomFactor), 4.0);
 
     panX = mouseX - (mouseX - panX) * (newScale / scale);
     panY = mouseY - (mouseY - panY) * (newScale / scale);
@@ -3470,7 +5881,7 @@ function zoomBy(factor) {
   const centerX = rect.width / 2;
   const centerY = rect.height / 2;
 
-  const newScale = Math.min(Math.max(0.12, scale * factor), 3.5);
+  const newScale = Math.min(Math.max(0.1, scale * factor), 4.0);
   panX = centerX - (centerX - panX) * (newScale / scale);
   panY = centerY - (centerY - panY) * (newScale / scale);
   scale = newScale;
@@ -3478,8 +5889,8 @@ function zoomBy(factor) {
 }
 
 function fitToScreen() {
-  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
-  if (!currentTree.root) {
+  const snapshot = animationSteps[currentStepIdx] ? animationSteps[currentStepIdx].treeSnapshot : getCurrentTreeSnapshot();
+  if (!snapshot) {
     panX = svg.clientWidth / 2;
     panY = 100;
     scale = 1;
@@ -3487,11 +5898,7 @@ function fitToScreen() {
     return;
   }
 
-  const snapshot = animationSteps[currentStepIdx] ? animationSteps[currentStepIdx].treeSnapshot : currentTree.cloneTree();
-  if (!snapshot) return;
-
-  if (currentTreeMode === 'avl') computeAVLLayout(snapshot);
-  else computeBTreeLayout(snapshot);
+  computeLayoutForSnapshot(snapshot);
 
   const bounds = getTreeBounds(snapshot);
   const padding = 60;
@@ -3513,12 +5920,10 @@ function fitToScreen() {
 }
 
 function centerRoot() {
-  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
-  const snapshot = animationSteps[currentStepIdx] ? animationSteps[currentStepIdx].treeSnapshot : currentTree.cloneTree();
+  const snapshot = animationSteps[currentStepIdx] ? animationSteps[currentStepIdx].treeSnapshot : getCurrentTreeSnapshot();
   if (!snapshot) return;
 
-  if (currentTreeMode === 'avl') computeAVLLayout(snapshot);
-  else computeBTreeLayout(snapshot);
+  computeLayoutForSnapshot(snapshot);
 
   scale = 1;
   panX = svg.clientWidth / 2 - snapshot.x;
@@ -3542,7 +5947,11 @@ function getTreeBounds(node, bounds = { minX: Infinity, maxX: -Infinity, minY: I
   bounds.maxY = Math.max(bounds.maxY, bottom);
 
   if (node.children) {
-    for (const child of node.children) getTreeBounds(child, bounds);
+    if (Array.isArray(node.children)) {
+      for (const c of node.children) getTreeBounds(c, bounds);
+    } else {
+      for (const c of Object.values(node.children)) getTreeBounds(c, bounds);
+    }
   }
   if (node.left) getTreeBounds(node.left, bounds);
   if (node.right) getTreeBounds(node.right, bounds);
@@ -3551,85 +5960,33 @@ function getTreeBounds(node, bounds = { minX: Infinity, maxX: -Infinity, minY: I
 }
 
 // ============================================================
-// B-TREE LAYOUT COMPUTATION
+// UNIVERSAL LAYOUT COMPUTATION
 // ============================================================
-const B_KEY_WIDTH = 48;
-const B_KEY_HEIGHT = 38;
-const B_NODE_PADDING_X = 14;
-const B_NODE_HEIGHT = 46;
-const B_LEVEL_GAP = 100;
-const B_SIBLING_GAP = 32;
-
-function computeBTreeLayout(node) {
-  if (!node) return;
-  computeBTreeSubtreeWidths(node);
-  assignBTreeNodePositions(node, 0, 0);
-}
-
-function computeBTreeSubtreeWidths(node) {
-  node.renderWidth = Math.max(54, node.keys.length * B_KEY_WIDTH + B_NODE_PADDING_X * 2);
-  node.renderHeight = B_NODE_HEIGHT;
-
-  if (!node.children || node.children.length === 0) {
-    node.subtreeWidth = node.renderWidth + B_SIBLING_GAP;
-    return;
-  }
-
-  let childrenSpan = 0;
-  for (const child of node.children) {
-    computeBTreeSubtreeWidths(child);
-    childrenSpan += child.subtreeWidth;
-  }
-
-  if (node.renderWidth + B_SIBLING_GAP > childrenSpan) {
-    const extra = (node.renderWidth + B_SIBLING_GAP - childrenSpan) / node.children.length;
-    for (const child of node.children) {
-      child.subtreeWidth += extra;
-    }
-    childrenSpan = node.renderWidth + B_SIBLING_GAP;
-  }
-
-  node.subtreeWidth = childrenSpan;
-}
-
-function assignBTreeNodePositions(node, xStart, y) {
-  node.y = y;
-
-  if (!node.children || node.children.length === 0) {
-    node.x = xStart + node.subtreeWidth / 2;
-    return;
-  }
-
-  let currX = xStart;
-  const childMidpoints = [];
-
-  for (const child of node.children) {
-    assignBTreeNodePositions(child, currX, y + B_LEVEL_GAP);
-    childMidpoints.push(child.x);
-    currX += child.subtreeWidth;
-  }
-
-  node.x = (childMidpoints[0] + childMidpoints[childMidpoints.length - 1]) / 2;
-}
-
-// ============================================================
-// AVL TREE LAYOUT COMPUTATION (In-Order with Post-Order Centering)
-// ============================================================
-const AVL_NODE_RADIUS = 26;
-const AVL_LEVEL_GAP = 90;
-const AVL_HORIZ_SPACING = 68;
-
-function computeAVLLayout(root) {
+function computeLayoutForSnapshot(root) {
   if (!root) return;
 
+  if (currentTreeMode === 'btree' || currentTreeMode === 'bplustree') {
+    computeMultiwayLayout(root);
+  } else if (currentTreeMode === 'trie' || currentTreeMode === 'suffixtree') {
+    computeNaryTreeLayout(root);
+  } else {
+    // Binary Trees: AVL, Red-Black, Segment Tree, KD-Tree, Threaded Tree
+    computeBinaryTreeLayout(root);
+  }
+}
+
+function computeBinaryTreeLayout(root) {
   let inOrderIndex = 0;
+  const horizSpacing = 68;
+  const levelGap = 90;
+
   function assignInorder(node, depth) {
     if (!node) return;
     assignInorder(node.left, depth + 1);
-    node.x = inOrderIndex++ * AVL_HORIZ_SPACING;
-    node.y = depth * AVL_LEVEL_GAP;
-    node.renderWidth = AVL_NODE_RADIUS * 2;
-    node.renderHeight = AVL_NODE_RADIUS * 2;
+    node.x = inOrderIndex++ * horizSpacing;
+    node.y = depth * levelGap;
+    node.renderWidth = 54;
+    node.renderHeight = 54;
     assignInorder(node.right, depth + 1);
   }
   assignInorder(root, 0);
@@ -3643,6 +6000,101 @@ function computeAVLLayout(root) {
     }
   }
   centerParents(root);
+}
+
+function computeMultiwayLayout(node) {
+  const keyWidth = 48;
+  const paddingX = 14;
+  const levelGap = 100;
+  const siblingGap = 32;
+
+  function computeSubtreeWidth(n) {
+    n.renderWidth = Math.max(54, n.keys.length * keyWidth + paddingX * 2);
+    n.renderHeight = 46;
+
+    if (!n.children || n.children.length === 0) {
+      n.subtreeWidth = n.renderWidth + siblingGap;
+      return;
+    }
+
+    let childrenSpan = 0;
+    for (const child of n.children) {
+      computeSubtreeWidth(child);
+      childrenSpan += child.subtreeWidth;
+    }
+
+    if (n.renderWidth + siblingGap > childrenSpan) {
+      const extra = (n.renderWidth + siblingGap - childrenSpan) / n.children.length;
+      for (const child of n.children) child.subtreeWidth += extra;
+      childrenSpan = n.renderWidth + siblingGap;
+    }
+    n.subtreeWidth = childrenSpan;
+  }
+
+  function assignPositions(n, xStart, y) {
+    n.y = y;
+    if (!n.children || n.children.length === 0) {
+      n.x = xStart + n.subtreeWidth / 2;
+      return;
+    }
+
+    let currX = xStart;
+    const midpoints = [];
+    for (const child of n.children) {
+      assignPositions(child, currX, y + levelGap);
+      midpoints.push(child.x);
+      currX += child.subtreeWidth;
+    }
+    n.x = (midpoints[0] + midpoints[midpoints.length - 1]) / 2;
+  }
+
+  computeSubtreeWidth(node);
+  assignPositions(node, 0, 0);
+}
+
+function computeNaryTreeLayout(root) {
+  const nodeDiameter = 54;
+  const levelGap = 85;
+  const minGap = 20;
+
+  function computeSpan(n) {
+    n.renderWidth = nodeDiameter;
+    n.renderHeight = nodeDiameter;
+
+    const childrenList = Object.values(n.children || {});
+    if (childrenList.length === 0) {
+      n.subtreeWidth = nodeDiameter + minGap;
+      return;
+    }
+
+    let total = 0;
+    for (const c of childrenList) {
+      computeSpan(c);
+      total += c.subtreeWidth;
+    }
+    n.subtreeWidth = Math.max(nodeDiameter + minGap, total);
+  }
+
+  function assignPos(n, xStart, depth) {
+    n.y = depth * levelGap;
+    const childrenList = Object.values(n.children || {});
+    if (childrenList.length === 0) {
+      n.x = xStart + n.subtreeWidth / 2;
+      return;
+    }
+
+    let currX = xStart;
+    const midpoints = [];
+    for (const c of childrenList) {
+      assignPos(c, currX, depth + 1);
+      midpoints.push(c.x);
+      currX += c.subtreeWidth;
+    }
+    n.x = (midpoints[0] + midpoints[midpoints.length - 1]) / 2;
+  }
+
+  computeSpan(root);
+  assignPos(root, 0, 0);
 }
 
 // ============================================================
@@ -3679,7 +6131,7 @@ function renderStep(stepIndex) {
   const step = animationSteps[stepIndex];
   updateStepCallout(step, currentStepNum, totalSteps);
 
-  // Auto-scroll active item in log list into view
+  // Auto-scroll active item in log list
   document.querySelectorAll('.log-item').forEach((item, idx) => {
     const isActive = idx === stepIndex;
     item.classList.toggle('active-step', isActive);
@@ -3700,14 +6152,8 @@ function renderStep(stepIndex) {
   linksGroup.innerHTML = '';
   nodesGroup.innerHTML = '';
 
-  if (currentTreeMode === 'avl') {
-    computeAVLLayout(snapshot);
-    renderAVLTreeSVG(snapshot, step.highlightedNodes || {});
-  } else {
-    computeBTreeLayout(snapshot);
-    renderBTreeSVG(snapshot, step.highlightedNodes || {}, step.highlightedKeys || {});
-  }
-
+  computeLayoutForSnapshot(snapshot);
+  renderTreeGraphics(snapshot, step.highlightedNodes || {}, step.highlightedKeys || {});
   updateStats();
 }
 
@@ -3732,215 +6178,380 @@ function updateStepCallout(step, currentNum = 0, total = 0) {
 }
 
 // ============================================================
-// AVL TREE SVG RENDERER
+// SVG GRAPHICS DISPATCHER
 // ============================================================
-function renderAVLTreeSVG(node, highlightedNodes) {
+function renderTreeGraphics(root, highlightedNodes, highlightedKeys) {
+  switch (currentTreeMode) {
+    case 'avl':
+      renderAVLTreeSVG(root, highlightedNodes);
+      break;
+    case 'rbtree':
+      renderRBTreeSVG(root, highlightedNodes);
+      break;
+    case 'btree':
+      renderBTreeSVG(root, highlightedNodes, highlightedKeys);
+      break;
+    case 'bplustree':
+      renderBPlusTreeSVG(root, highlightedNodes);
+      break;
+    case 'trie':
+      renderTrieSVG(root, highlightedNodes);
+      break;
+    case 'segmenttree':
+      renderSegmentTreeSVG(root, highlightedNodes);
+      break;
+    case 'suffixtree':
+      renderSuffixTreeSVG(root, highlightedNodes);
+      break;
+    case 'kdtree':
+      renderKDTreeSVG(root, highlightedNodes);
+      break;
+    case 'threadedtree':
+      renderThreadedTreeSVG(root, highlightedNodes);
+      break;
+  }
+}
+
+// --- 1. AVL TREE SVG ---
+function renderAVLTreeSVG(node, hl) {
   if (!node) return;
-
   if (node.left) {
-    renderAVLLink(node, node.left, 'L', highlightedNodes);
-    renderAVLTreeSVG(node.left, highlightedNodes);
+    drawBezierLink(node.x, node.y + 52, node.left.x, node.left.y, hl[node.id] && hl[node.left.id], 'L');
+    renderAVLTreeSVG(node.left, hl);
   }
-
   if (node.right) {
-    renderAVLLink(node, node.right, 'R', highlightedNodes);
-    renderAVLTreeSVG(node.right, highlightedNodes);
+    drawBezierLink(node.x, node.y + 52, node.right.x, node.right.y, hl[node.id] && hl[node.right.id], 'R');
+    renderAVLTreeSVG(node.right, hl);
   }
 
-  const nodeG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  nodeG.setAttribute('class', 'avl-node-group');
-  nodeG.dataset.nodeId = node.id;
-  nodeG.dataset.key = node.key;
-
-  if (highlightedNodes[node.id]) {
-    nodeG.classList.add(`node-${highlightedNodes[node.id]}`);
-  }
-
-  const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  circle.setAttribute('cx', node.x);
-  circle.setAttribute('cy', node.y + AVL_NODE_RADIUS);
-  circle.setAttribute('r', AVL_NODE_RADIUS);
-  circle.setAttribute('class', 'avl-node-circle');
-  nodeG.appendChild(circle);
-
-  const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  text.setAttribute('x', node.x);
-  text.setAttribute('y', node.y + AVL_NODE_RADIUS);
-  text.setAttribute('class', 'avl-node-key');
-  text.textContent = node.key;
-  nodeG.appendChild(text);
+  const g = createSVGG('avl-node-group tree-node-interactive', node.id, hl[node.id]);
+  const circle = createSVGCircle(node.x, node.y + 26, 26, 'avl-node-circle');
+  const text = createSVGText(node.x, node.y + 26, node.key, 'avl-node-key');
 
   // Height Badge
-  const hBadgeG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  hBadgeG.setAttribute('class', 'avl-badge-height');
-  const hRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  hRect.setAttribute('x', node.x - AVL_NODE_RADIUS - 16);
-  hRect.setAttribute('y', node.y);
-  hRect.setAttribute('width', 22);
-  hRect.setAttribute('height', 14);
-  hRect.setAttribute('class', 'avl-badge-bg');
-  hBadgeG.appendChild(hRect);
-
-  const hText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  hText.setAttribute('x', node.x - AVL_NODE_RADIUS - 5);
-  hText.setAttribute('y', node.y + 7);
-  hText.setAttribute('class', 'avl-badge-text');
-  hText.textContent = `h:${node.height}`;
-  hBadgeG.appendChild(hText);
-  nodeG.appendChild(hBadgeG);
-
+  const hBadge = createBadge(node.x - 38, node.y, `h:${node.height}`, 'avl-badge-height');
   // Balance Factor Badge
-  const bf = node.balanceFactor !== undefined ? node.balanceFactor : 0;
-  const bfBadgeG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  let bfClass = 'bf-zero';
-  if (Math.abs(bf) > 1) bfClass = 'bf-unbalanced';
-  else if (bf !== 0) bfClass = 'bf-balanced';
+  const bf = node.balanceFactor || 0;
+  let bfClass = bf === 0 ? 'bf-zero' : (Math.abs(bf) > 1 ? 'bf-unbalanced' : 'bf-balanced');
+  const bfBadge = createBadge(node.x + 18, node.y, `BF:${bf > 0 ? '+' : ''}${bf}`, `avl-badge-bf ${bfClass}`);
 
-  bfBadgeG.setAttribute('class', `avl-badge-bf ${bfClass}`);
-  const bfRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  bfRect.setAttribute('x', node.x + AVL_NODE_RADIUS - 6);
-  bfRect.setAttribute('y', node.y);
-  bfRect.setAttribute('width', 28);
-  bfRect.setAttribute('height', 14);
-  bfRect.setAttribute('class', 'avl-badge-bg');
-  bfBadgeG.appendChild(bfRect);
+  g.appendChild(circle);
+  g.appendChild(text);
+  g.appendChild(hBadge);
+  g.appendChild(bfBadge);
 
-  const bfText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  bfText.setAttribute('x', node.x + AVL_NODE_RADIUS + 8);
-  bfText.setAttribute('y', node.y + 7);
-  bfText.setAttribute('class', 'avl-badge-text');
-  bfText.textContent = `BF:${bf > 0 ? '+' : ''}${bf}`;
-  bfBadgeG.appendChild(bfText);
-  nodeG.appendChild(bfBadgeG);
-
-  nodeG.addEventListener('click', (e) => {
+  g.addEventListener('click', (e) => {
     e.stopPropagation();
     openKeyPopover(node.key, e.clientX, e.clientY);
   });
-
-  nodesGroup.appendChild(nodeG);
+  nodesGroup.appendChild(g);
 }
 
-function renderAVLLink(parent, child, side, highlightedNodes) {
-  const pX = parent.x;
-  const pY = parent.y + AVL_NODE_RADIUS * 2;
-  const cX = child.x;
-  const cY = child.y;
-
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  const midY = (pY + cY) / 2;
-  path.setAttribute('d', `M ${pX} ${pY} C ${pX} ${midY}, ${cX} ${midY}, ${cX} ${cY}`);
-  path.setAttribute('class', 'tree-link');
-
-  if (highlightedNodes[parent.id] && highlightedNodes[child.id]) {
-    path.classList.add('active');
-  }
-  linksGroup.appendChild(path);
-
-  const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  label.setAttribute('x', (pX + cX) / 2 + (side === 'L' ? -8 : 8));
-  label.setAttribute('y', midY);
-  label.setAttribute('class', 'avl-branch-label');
-  label.textContent = side;
-  linksGroup.appendChild(label);
-}
-
-// ============================================================
-// B-TREE SVG RENDERER
-// ============================================================
-function renderBTreeSVG(node, highlightedNodes, highlightedKeys) {
+// --- 2. RED-BLACK TREE SVG ---
+function renderRBTreeSVG(node, hl) {
   if (!node) return;
+  if (node.left) {
+    drawBezierLink(node.x, node.y + 52, node.left.x, node.left.y, hl[node.id] && hl[node.left.id], 'L');
+    renderRBTreeSVG(node.left, hl);
+  }
+  if (node.right) {
+    drawBezierLink(node.x, node.y + 52, node.right.x, node.right.y, hl[node.id] && hl[node.right.id], 'R');
+    renderRBTreeSVG(node.right, hl);
+  }
 
+  const g = createSVGG('rb-node-group tree-node-interactive', node.id, hl[node.id]);
+  const isRed = node.color === 'RED';
+  const circle = createSVGCircle(node.x, node.y + 26, 26, isRed ? 'rb-node-circle-red' : 'rb-node-circle-black');
+  const text = createSVGText(node.x, node.y + 26, node.key, 'rb-node-key');
+  const colorBadge = createBadge(node.x - 20, node.y - 12, node.color, isRed ? 'badge-red' : 'badge-black');
+
+  g.appendChild(circle);
+  g.appendChild(text);
+  g.appendChild(colorBadge);
+
+  g.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openKeyPopover(node.key, e.clientX, e.clientY);
+  });
+  nodesGroup.appendChild(g);
+}
+
+// --- 3. B-TREE SVG ---
+function renderBTreeSVG(node, hl, hlKeys) {
+  if (!node) return;
   if (node.children && node.children.length > 0) {
     const parentLeft = node.x - node.renderWidth / 2;
     const numPointers = node.children.length;
-    const pointerSpan = node.renderWidth / numPointers;
+    const span = node.renderWidth / numPointers;
 
     node.children.forEach((child, idx) => {
-      const pX = parentLeft + (idx + 0.5) * pointerSpan;
+      const pX = parentLeft + (idx + 0.5) * span;
       const pY = node.y + node.renderHeight;
-      const cX = child.x;
-      const cY = child.y;
-
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      const midY = (pY + cY) / 2;
-      path.setAttribute('d', `M ${pX} ${pY} C ${pX} ${midY}, ${cX} ${midY}, ${cX} ${cY}`);
-      path.setAttribute('class', 'tree-link');
-
-      if (highlightedNodes[node.id] && highlightedNodes[child.id]) {
-        path.classList.add('active');
-      }
-
-      linksGroup.appendChild(path);
-      renderBTreeSVG(child, highlightedNodes, highlightedKeys);
+      drawBezierLink(pX, pY, child.x, child.y, hl[node.id] && hl[child.id]);
+      renderBTreeSVG(child, hl, hlKeys);
     });
   }
 
-  const nodeG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  nodeG.setAttribute('class', 'node-group');
-  nodeG.dataset.nodeId = node.id;
-
-  if (highlightedNodes[node.id]) {
-    nodeG.classList.add(`node-${highlightedNodes[node.id]}`);
-  }
-
+  const g = createSVGG('node-group', node.id, hl[node.id]);
   const left = node.x - node.renderWidth / 2;
-  const top = node.y;
+  const rect = createSVGRect(left, node.y, node.renderWidth, node.renderHeight, 'node-box');
+  g.appendChild(rect);
 
-  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  rect.setAttribute('x', left);
-  rect.setAttribute('y', top);
-  rect.setAttribute('width', node.renderWidth);
-  rect.setAttribute('height', node.renderHeight);
-  rect.setAttribute('class', 'node-box');
-  nodeG.appendChild(rect);
+  const startX = left + 14;
+  const keyY = node.y + (46 - 38) / 2;
 
-  const startKeyX = left + B_NODE_PADDING_X;
-  const keyY = top + (B_NODE_HEIGHT - B_KEY_HEIGHT) / 2;
-
-  node.keys.forEach((key, keyIdx) => {
-    const keyX = startKeyX + keyIdx * B_KEY_WIDTH;
-
+  node.keys.forEach((key, kIdx) => {
+    const keyX = startX + kIdx * 48;
     const keyG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     keyG.setAttribute('class', 'key-cell');
     keyG.dataset.key = key;
 
-    const keyHighlightKey = `${node.id}_${keyIdx}`;
-    if (highlightedKeys && highlightedKeys[keyHighlightKey]) {
-      keyG.classList.add(`key-${highlightedKeys[keyHighlightKey]}`);
-    }
-
-    const keyRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    keyRect.setAttribute('x', keyX + 2);
-    keyRect.setAttribute('y', keyY);
-    keyRect.setAttribute('width', B_KEY_WIDTH - 4);
-    keyRect.setAttribute('height', B_KEY_HEIGHT);
-    keyRect.setAttribute('class', 'key-box');
-    keyG.appendChild(keyRect);
-
-    const keyText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    keyText.setAttribute('x', keyX + B_KEY_WIDTH / 2);
-    keyText.setAttribute('y', keyY + B_KEY_HEIGHT / 2);
-    keyText.setAttribute('class', 'key-text');
-    keyText.textContent = key;
-    keyG.appendChild(keyText);
+    const kBox = createSVGRect(keyX + 2, keyY, 44, 38, 'key-box');
+    const kText = createSVGText(keyX + 24, keyY + 19, key, 'key-text');
+    keyG.appendChild(kBox);
+    keyG.appendChild(kText);
 
     keyG.addEventListener('click', (e) => {
       e.stopPropagation();
       openKeyPopover(key, e.clientX, e.clientY);
     });
-
-    nodeG.appendChild(keyG);
+    g.appendChild(keyG);
   });
 
-  const idText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  idText.setAttribute('x', node.x);
-  idText.setAttribute('y', top - 6);
-  idText.setAttribute('class', 'node-id-label');
-  idText.textContent = `Node #${node.id}${node.isLeaf ? ' (Leaf)' : ''}`;
-  nodeG.appendChild(idText);
+  nodesGroup.appendChild(g);
+}
 
-  nodesGroup.appendChild(nodeG);
+// --- 4. B+ TREE SVG (WITH LEAF CHAIN LINKS) ---
+function renderBPlusTreeSVG(node, hl) {
+  if (!node) return;
+
+  if (node.children && node.children.length > 0) {
+    const parentLeft = node.x - node.renderWidth / 2;
+    const span = node.renderWidth / node.children.length;
+
+    node.children.forEach((child, idx) => {
+      const pX = parentLeft + (idx + 0.5) * span;
+      drawBezierLink(pX, node.y + node.renderHeight, child.x, child.y, hl[node.id] && hl[child.id]);
+      renderBPlusTreeSVG(child, hl);
+    });
+  }
+
+  const g = createSVGG('bplus-node-group', node.id, hl[node.id]);
+  const left = node.x - node.renderWidth / 2;
+  const rect = createSVGRect(left, node.y, node.renderWidth, node.renderHeight, node.isLeaf ? 'bplus-leaf-box' : 'node-box');
+  g.appendChild(rect);
+
+  const startX = left + 14;
+  const keyY = node.y + (46 - 38) / 2;
+
+  node.keys.forEach((key, kIdx) => {
+    const keyX = startX + kIdx * 48;
+    const kBox = createSVGRect(keyX + 2, keyY, 44, 38, 'key-box');
+    const kText = createSVGText(keyX + 24, keyY + 19, key, 'key-text');
+    g.appendChild(kBox);
+    g.appendChild(kText);
+  });
+
+  const badge = createBadge(node.x - 20, node.y - 12, node.isLeaf ? 'LEAF' : 'ROUTING', node.isLeaf ? 'badge-green' : 'badge-blue');
+  g.appendChild(badge);
+
+  nodesGroup.appendChild(g);
+}
+
+// --- 5. TRIE SVG ---
+function renderTrieSVG(node, hl) {
+  if (!node) return;
+  const children = Object.values(node.children || {});
+
+  children.forEach(child => {
+    drawBezierLink(node.x, node.y + 54, child.x, child.y, hl[node.id] && hl[child.id], child.char);
+    renderTrieSVG(child, hl);
+  });
+
+  const g = createSVGG('trie-node-group tree-node-interactive', node.id, hl[node.id]);
+  const circle = createSVGCircle(node.x, node.y + 27, 25, node.isEndOfWord ? 'trie-node-terminal' : 'avl-node-circle');
+  const label = node.char ? node.char.toUpperCase() : 'ROOT';
+  const text = createSVGText(node.x, node.y + 27, label, 'avl-node-key');
+
+  g.appendChild(circle);
+  g.appendChild(text);
+
+  if (node.isEndOfWord) {
+    const termBadge = createBadge(node.x + 16, node.y, 'END', 'badge-green');
+    g.appendChild(termBadge);
+  }
+
+  nodesGroup.appendChild(g);
+}
+
+// --- 6. SEGMENT TREE SVG ---
+function renderSegmentTreeSVG(node, hl) {
+  if (!node) return;
+  if (node.left) {
+    drawBezierLink(node.x, node.y + 54, node.left.x, node.left.y, hl[node.id] && hl[node.left.id]);
+    renderSegmentTreeSVG(node.left, hl);
+  }
+  if (node.right) {
+    drawBezierLink(node.x, node.y + 54, node.right.x, node.right.y, hl[node.id] && hl[node.right.id]);
+    renderSegmentTreeSVG(node.right, hl);
+  }
+
+  const g = createSVGG('seg-node-group tree-node-interactive', node.id, hl[node.id]);
+  const rect = createSVGRect(node.x - 36, node.y, 72, 48, node.isLeaf ? 'seg-leaf-box' : 'node-box');
+  const rangeText = createSVGText(node.x, node.y + 16, `[${node.L}..${node.R}]`, 'seg-range-text');
+  const sumText = createSVGText(node.x, node.y + 34, `Σ = ${node.sum}`, 'seg-sum-text');
+
+  g.appendChild(rect);
+  g.appendChild(rangeText);
+  g.appendChild(sumText);
+
+  nodesGroup.appendChild(g);
+}
+
+// --- 7. SUFFIX TREE SVG ---
+function renderSuffixTreeSVG(node, hl) {
+  if (!node) return;
+  const children = Object.values(node.children || {});
+
+  children.forEach(child => {
+    drawBezierLink(node.x, node.y + 52, child.x, child.y, hl[node.id] && hl[child.id], child.edgeLabel);
+    renderSuffixTreeSVG(child, hl);
+  });
+
+  const g = createSVGG('suffix-node-group tree-node-interactive', node.id, hl[node.id]);
+  const circle = createSVGCircle(node.x, node.y + 26, node.isLeaf ? 24 : 16, node.isLeaf ? 'trie-node-terminal' : 'avl-node-circle');
+  g.appendChild(circle);
+
+  if (node.isLeaf) {
+    const text = createSVGText(node.x, node.y + 26, `[${node.suffixIndex}]`, 'seg-range-text');
+    g.appendChild(text);
+  }
+
+  nodesGroup.appendChild(g);
+}
+
+// --- 8. 2D K-D TREE SVG ---
+function renderKDTreeSVG(node, hl) {
+  if (!node) return;
+  if (node.left) {
+    drawBezierLink(node.x, node.y + 52, node.left.x, node.left.y, hl[node.id] && hl[node.left.id], 'L');
+    renderKDTreeSVG(node.left, hl);
+  }
+  if (node.right) {
+    drawBezierLink(node.x, node.y + 52, node.right.x, node.right.y, hl[node.id] && hl[node.right.id], 'R');
+    renderKDTreeSVG(node.right, hl);
+  }
+
+  const g = createSVGG('kd-node-group tree-node-interactive', node.id, hl[node.id]);
+  const circle = createSVGCircle(node.x, node.y + 26, 26, 'avl-node-circle');
+  const text = createSVGText(node.x, node.y + 26, `(${node.point[0]},${node.point[1]})`, 'kd-point-text');
+  const axisBadge = createBadge(node.x - 16, node.y - 12, `Axis: ${node.axisName}`, node.axis === 0 ? 'badge-blue' : 'badge-yellow');
+
+  g.appendChild(circle);
+  g.appendChild(text);
+  g.appendChild(axisBadge);
+
+  nodesGroup.appendChild(g);
+}
+
+// --- 9. THREADED BINARY TREE SVG (WITH DASHED GLOWING THREADS) ---
+function renderThreadedTreeSVG(node, hl) {
+  if (!node) return;
+
+  if (node.left) {
+    drawBezierLink(node.x, node.y + 52, node.left.x, node.left.y, hl[node.id] && hl[node.left.id], 'L');
+    renderThreadedTreeSVG(node.left, hl);
+  }
+  if (node.right) {
+    drawBezierLink(node.x, node.y + 52, node.right.x, node.right.y, hl[node.id] && hl[node.right.id], 'R');
+    renderThreadedTreeSVG(node.right, hl);
+  }
+
+  const g = createSVGG('threaded-node-group tree-node-interactive', node.id, hl[node.id]);
+  const circle = createSVGCircle(node.x, node.y + 26, 26, 'avl-node-circle');
+  const text = createSVGText(node.x, node.y + 26, node.key, 'avl-node-key');
+
+  g.appendChild(circle);
+  g.appendChild(text);
+
+  if (node.isRightThread && node.rightTargetId) {
+    const threadBadge = createBadge(node.x + 14, node.y, '🧵➔', 'badge-purple');
+    g.appendChild(threadBadge);
+  }
+
+  g.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openKeyPopover(node.key, e.clientX, e.clientY);
+  });
+  nodesGroup.appendChild(g);
+}
+
+// --- SVG DRAWING HELPERS ---
+function drawBezierLink(x1, y1, x2, y2, isActive = false, label = '') {
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const midY = (y1 + y2) / 2;
+  path.setAttribute('d', `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`);
+  path.setAttribute('class', `tree-link ${isActive ? 'active' : ''}`);
+  linksGroup.appendChild(path);
+
+  if (label) {
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', (x1 + x2) / 2 + 6);
+    t.setAttribute('y', midY);
+    t.setAttribute('class', 'tree-link-label');
+    t.textContent = label;
+    linksGroup.appendChild(t);
+  }
+}
+
+function createSVGG(className, id, hlState) {
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  let fullClass = className;
+  if (hlState) fullClass += ` node-${hlState}`;
+  g.setAttribute('class', fullClass);
+  g.dataset.nodeId = id;
+  return g;
+}
+
+function createSVGCircle(cx, cy, r, className) {
+  const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  c.setAttribute('cx', cx);
+  c.setAttribute('cy', cy);
+  c.setAttribute('r', r);
+  c.setAttribute('class', className);
+  return c;
+}
+
+function createSVGRect(x, y, w, h, className) {
+  const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  r.setAttribute('x', x);
+  r.setAttribute('y', y);
+  r.setAttribute('width', w);
+  r.setAttribute('height', h);
+  r.setAttribute('class', className);
+  return r;
+}
+
+function createSVGText(x, y, str, className) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x);
+  t.setAttribute('y', y);
+  t.setAttribute('class', className);
+  t.textContent = str;
+  return t;
+}
+
+function createBadge(x, y, text, badgeClass) {
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.setAttribute('class', `badge-group ${badgeClass}`);
+  const len = String(text).length;
+  const w = Math.max(24, len * 7 + 10);
+
+  const rect = createSVGRect(x, y, w, 15, 'badge-bg');
+  const t = createSVGText(x + w / 2, y + 8, text, 'badge-text');
+  g.appendChild(rect);
+  g.appendChild(t);
+  return g;
 }
 
 // --- INTERACTIVE KEY POPOVER ---
@@ -3981,7 +6592,7 @@ function closePopover() {
   }
 }
 
-// --- ANIMATION PLAYER CONTROLS ---
+// --- ANIMATION CONTROLLER ---
 function startAnimation(steps) {
   pause();
   animationSteps = steps;
@@ -4057,28 +6668,51 @@ function scheduleNextFrame() {
 }
 
 function updateStats() {
-  if (currentTreeMode === 'avl') {
-    const stats = avlTree.getStats();
-    document.getElementById('avl-stat-height').textContent = stats.height;
-    document.getElementById('avl-stat-nodes').textContent = stats.totalNodes;
-
-    const balanceElem = document.getElementById('avl-stat-balance');
-    balanceElem.textContent = stats.isBalanced ? 'Balanced' : 'Unbalanced';
-    balanceElem.className = `stat-value ${stats.isBalanced ? 'balanced' : 'unbalanced'}`;
-
-    const inorder = avlTree.getInorderKeys();
-    inorderKeysElem.textContent = inorder.length === 0 ? '[ Empty ]' : `[ ${inorder.join(', ')} ]`;
-  } else {
-    const stats = btree.getStats();
-    document.getElementById('stat-order').textContent = stats.order;
-    document.getElementById('stat-height').textContent = stats.height;
-    document.getElementById('stat-keys').textContent = stats.totalKeys;
-    document.getElementById('stat-nodes').textContent = stats.totalNodes;
-    document.getElementById('stat-min-keys').textContent = stats.minKeys;
-    document.getElementById('stat-max-keys').textContent = stats.maxKeys;
-
-    const inorder = btree.getInorderKeys();
-    inorderKeysElem.textContent = inorder.length === 0 ? '[ Empty ]' : `[ ${inorder.join(', ')} ]`;
+  const statsElem = document.getElementById('inorder-keys');
+  switch (currentTreeMode) {
+    case 'avl': {
+      const keys = avlTree.getInorderKeys();
+      statsElem.textContent = keys.length ? `[ ${keys.join(', ')} ]` : '[ Empty ]';
+      break;
+    }
+    case 'rbtree': {
+      const keys = rbTree.getInorderKeys();
+      statsElem.textContent = keys.length ? `[ ${keys.join(', ')} ]` : '[ Empty ]';
+      break;
+    }
+    case 'btree': {
+      const keys = btree.getInorderKeys();
+      statsElem.textContent = keys.length ? `[ ${keys.join(', ')} ]` : '[ Empty ]';
+      break;
+    }
+    case 'bplustree': {
+      const keys = bplusTree.getInorderKeys();
+      statsElem.textContent = keys.length ? `[ ${keys.join(' ➔ ')} ]` : '[ Empty ]';
+      break;
+    }
+    case 'trie': {
+      const words = trie.getAllWords();
+      statsElem.textContent = words.length ? `[ ${words.join(', ')} ]` : '[ Empty ]';
+      break;
+    }
+    case 'segmenttree': {
+      statsElem.textContent = segmentTree.array.length ? `[ ${segmentTree.array.join(', ')} ]` : '[ Empty ]';
+      break;
+    }
+    case 'suffixtree': {
+      statsElem.textContent = suffixTree.text ? `"${suffixTree.text}"` : '[ Empty ]';
+      break;
+    }
+    case 'kdtree': {
+      const pts = kdTree.getPoints();
+      statsElem.textContent = pts.length ? `[ ${pts.join(', ')} ]` : '[ Empty ]';
+      break;
+    }
+    case 'threadedtree': {
+      const keys = threadedTree.getInorderKeys();
+      statsElem.textContent = keys.length ? `[ ${keys.join(' ➔ ')} ]` : '[ Empty ]';
+      break;
+    }
   }
 }
 
@@ -4094,106 +6728,208 @@ function addLogEntry(text, type = 'info') {
   logList.prepend(item);
 }
 
-// --- USER EXPLICIT OPERATIONS ---
+// --- OPERATION HANDLERS ---
 function handleInsert() {
   const raw = singleKeyInput.value.trim();
   if (!raw) return;
-  const key = parseInt(raw, 10);
-  if (isNaN(key)) return;
 
-  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
-  const result = currentTree.insert(key);
+  let res = null;
+  switch (currentTreeMode) {
+    case 'avl': res = avlTree.insert(Number(raw)); break;
+    case 'rbtree': res = rbTree.insert(Number(raw)); break;
+    case 'btree': res = btree.insert(Number(raw)); break;
+    case 'bplustree': res = bplusTree.insert(Number(raw)); break;
+    case 'trie': res = trie.insert(raw); break;
+    case 'segmenttree': {
+      const idx = Number(raw);
+      const val = Math.floor(Math.random() * 50) + 1;
+      res = segmentTree.updatePoint(idx, val);
+      break;
+    }
+    case 'suffixtree': res = suffixTree.build(raw); break;
+    case 'kdtree': {
+      const parts = raw.split(/[\s,]+/).map(Number);
+      if (parts.length >= 2) res = kdTree.insert([parts[0], parts[1]]);
+      break;
+    }
+    case 'threadedtree': res = threadedTree.insert(Number(raw)); break;
+  }
+
   singleKeyInput.value = '';
-  startAnimation(result.steps);
+  if (res && res.steps) startAnimation(res.steps);
 }
 
 function handleDelete() {
   const raw = singleKeyInput.value.trim();
   if (!raw) return;
-  const key = parseInt(raw, 10);
-  if (isNaN(key)) return;
 
-  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
-  const result = currentTree.delete(key);
+  let res = null;
+  switch (currentTreeMode) {
+    case 'avl': res = avlTree.delete(Number(raw)); break;
+    case 'rbtree': res = rbTree.delete(Number(raw)); break;
+    case 'btree': res = btree.delete(Number(raw)); break;
+    case 'bplustree': res = bplusTree.delete(Number(raw)); break;
+    case 'trie': res = trie.delete(raw); break;
+  }
+
   singleKeyInput.value = '';
-  startAnimation(result.steps);
+  if (res && res.steps) startAnimation(res.steps);
 }
 
 function handleSearch() {
   const raw = singleKeyInput.value.trim();
   if (!raw) return;
-  const key = parseInt(raw, 10);
-  if (isNaN(key)) return;
 
-  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
-  const result = currentTree.search(key);
-  startAnimation(result.steps);
+  let res = null;
+  switch (currentTreeMode) {
+    case 'avl': res = avlTree.search(Number(raw)); break;
+    case 'rbtree': res = rbTree.search(Number(raw)); break;
+    case 'btree': res = btree.search(Number(raw)); break;
+    case 'bplustree': res = bplusTree.search(Number(raw)); break;
+    case 'trie': res = trie.search(raw); break;
+    case 'segmenttree': res = segmentTree.rangeQuery(1, 4); break;
+    case 'suffixtree': res = suffixTree.searchPattern(raw); break;
+    case 'kdtree': {
+      const parts = raw.split(/[\s,]+/).map(Number);
+      if (parts.length >= 2) res = kdTree.search([parts[0], parts[1]]);
+      break;
+    }
+    case 'threadedtree': res = threadedTree.search(Number(raw)); break;
+  }
+
+  if (res && res.steps) startAnimation(res.steps);
+}
+
+function handleSecondaryAction() {
+  let res = null;
+  switch (currentTreeMode) {
+    case 'bplustree':
+      res = bplusTree.rangeQuery(6, 20);
+      break;
+    case 'trie': {
+      const prefix = singleKeyInput.value.trim() || 'ca';
+      res = trie.startsWith(prefix);
+      break;
+    }
+    case 'kdtree': {
+      const target = [15, 25];
+      res = kdTree.nearestNeighbor(target);
+      break;
+    }
+    case 'threadedtree':
+      res = threadedTree.inorderTraversalWithSteps();
+      break;
+  }
+  if (res && res.steps) startAnimation(res.steps);
 }
 
 function handleBulkInsert() {
   const raw = bulkKeysInput.value.trim();
   if (!raw) return;
 
-  const keys = raw.split(/[\s,]+/).map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
-  if (keys.length === 0) return;
+  if (currentTreeMode === 'suffixtree') {
+    const res = suffixTree.build(raw);
+    startAnimation(res.steps);
+    return;
+  }
 
-  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
+  if (currentTreeMode === 'segmenttree') {
+    const arr = raw.split(/[\s,]+/).map(Number).filter(n => !isNaN(n));
+    const res = segmentTree.build(arr);
+    startAnimation(res.steps);
+    return;
+  }
+
+  if (currentTreeMode === 'trie') {
+    const words = raw.split(/[\s,]+/).map(s => s.trim()).filter(Boolean);
+    let allSteps = [];
+    words.forEach(w => {
+      const r = trie.insert(w);
+      allSteps = allSteps.concat(r.steps);
+    });
+    startAnimation(allSteps);
+    return;
+  }
+
+  if (currentTreeMode === 'kdtree') {
+    // Parse point tuples like (30,40), (5,25)
+    const matches = raw.match(/\(?\s*(-?\d+)\s*,\s*(-?\d+)\s*\)?/g);
+    if (matches) {
+      let allSteps = [];
+      matches.forEach(m => {
+        const nums = m.replace(/[()]/g, '').split(',').map(Number);
+        const r = kdTree.insert(nums);
+        allSteps = allSteps.concat(r.steps);
+      });
+      startAnimation(allSteps);
+    }
+    return;
+  }
+
+  // Number lists
+  const keys = raw.split(/[\s,]+/).map(Number).filter(n => !isNaN(n));
   let allSteps = [];
   keys.forEach(k => {
-    const res = currentTree.insert(k);
-    allSteps = allSteps.concat(res.steps);
+    let r = null;
+    if (currentTreeMode === 'avl') r = avlTree.insert(k);
+    else if (currentTreeMode === 'rbtree') r = rbTree.insert(k);
+    else if (currentTreeMode === 'btree') r = btree.insert(k);
+    else if (currentTreeMode === 'bplustree') r = bplusTree.insert(k);
+    else if (currentTreeMode === 'threadedtree') r = threadedTree.insert(k);
+    if (r && r.steps) allSteps = allSteps.concat(r.steps);
   });
 
   startAnimation(allSteps);
 }
 
 function handleBulkRebuild() {
-  const raw = bulkKeysInput.value.trim();
-  if (!raw) return;
-
-  const keys = raw.split(/[\s,]+/).map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
-  if (keys.length === 0) return;
-
-  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
-  currentTree.clear();
-
-  let allSteps = [];
-  keys.forEach(k => {
-    const res = currentTree.insert(k);
-    allSteps = allSteps.concat(res.steps);
-  });
-
-  startAnimation(allSteps);
+  handleClear();
+  handleBulkInsert();
   fitToScreen();
 }
 
-function handleRandomKey() {
-  const rand = Math.floor(Math.random() * 99) + 1;
-  singleKeyInput.value = rand;
-  handleInsert();
-}
-
 function handleRandomSet() {
-  const count = 8;
-  const set = new Set();
-  while (set.size < count) {
-    set.add(Math.floor(Math.random() * 95) + 5);
+  switch (currentTreeMode) {
+    case 'trie':
+      bulkKeysInput.value = 'bear, bell, bid, bull, buy, stop, store, stock';
+      break;
+    case 'suffixtree':
+      bulkKeysInput.value = 'mississippi$';
+      break;
+    case 'segmenttree':
+      bulkKeysInput.value = '2, 4, 6, 8, 10, 12, 14, 16';
+      break;
+    case 'kdtree':
+      bulkKeysInput.value = '(10,20), (40,50), (25,80), (70,10), (90,60)';
+      break;
+    default: {
+      const set = new Set();
+      while (set.size < 8) set.add(Math.floor(Math.random() * 90) + 10);
+      bulkKeysInput.value = Array.from(set).join(', ');
+      break;
+    }
   }
-  const keys = Array.from(set);
-  bulkKeysInput.value = keys.join(', ');
   handleBulkRebuild();
 }
 
 function handleClear() {
-  const currentTree = currentTreeMode === 'avl' ? avlTree : btree;
-  currentTree.clear();
+  switch (currentTreeMode) {
+    case 'avl': avlTree.clear(); break;
+    case 'rbtree': rbTree.clear(); break;
+    case 'btree': btree.clear(); break;
+    case 'bplustree': bplusTree.clear(); break;
+    case 'trie': trie.clear(); break;
+    case 'segmenttree': segmentTree.clear(); break;
+    case 'suffixtree': suffixTree.clear(); break;
+    case 'kdtree': kdTree.clear(); break;
+    case 'threadedtree': threadedTree.clear(); break;
+  }
   animationSteps = [];
   currentStepIdx = 0;
   pause();
   renderStep(0);
-  addLogEntry(`Cleared ${currentTreeMode.toUpperCase()} tree.`, 'info');
+  addLogEntry(`Cleared ${currentTreeMode.toUpperCase()}.`, 'info');
 }
-
 
   </script>
 </body>
